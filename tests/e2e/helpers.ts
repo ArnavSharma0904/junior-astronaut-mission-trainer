@@ -2,8 +2,8 @@ import { expect, type Page } from '@playwright/test';
 
 export const SAVE_KEY = 'jamt.save.v1';
 
-export const WIN = ['charge-1', 'drill-2', 'stock-3', 'remote-4', 'scrub-5', 'drill-6'];
-export const WIN_WITHOUT_STOCKING = ['charge-1', 'drill-2', 'drill-3', 'shelter-4', 'scrub-5', 'drill-6'];
+export const WIN = ['charge-1', 'drill-2', 'stock-3', 'remote-4', 'reserve-5', 'drill-6'];
+export const WIN_WITHOUT_STOCKING = ['charge-1', 'drill-2', 'drill-3', 'shelter-4', 'reserve-5', 'drill-6'];
 export const PARTIAL = ['charge-1', 'charge-2', 'grow-3', 'shelter-4', 'rest-5', 'repair-6'];
 export const UNSAFE = ['charge-1', 'drill-2', 'drill-3', 'outside-4'];
 

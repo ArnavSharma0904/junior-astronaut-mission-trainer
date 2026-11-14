@@ -32,7 +32,7 @@ export const turnCopy: Record<string, { title: string; situation: string; lesson
   },
   'storm-continues': {
     title: 'Storm continues',
-    situation: 'The crew is safe behind thick Moon soil. Work is slower in here, and the air needs looking after.',
+    situation: 'The crew is safe behind thick Moon soil. Work is slower in here, and the stored oxygen needs looking after.',
     lesson: 'Shelter keeps the crew safe, but work slows down. Remote tools help.',
   },
   'all-clear': {
@@ -45,22 +45,22 @@ export const turnCopy: Record<string, { title: string; situation: string; lesson
 export const actionCopy: Record<string, { label: string; effect: string; happened: string }> = {
   'drill-1': { label: 'Run the ice drill', effect: 'Dig for an ice sample. The drill is hungry for power.', happened: 'The drill pulled up an ice sample and used a lot of power.' },
   'charge-1': { label: 'Charge the batteries', effect: 'Turn the solar panels to the low Sun and fill up.', happened: 'The panels soaked up sunlight. No drilling got done.' },
-  'grow-1': { label: 'Boost the greenhouse', effect: 'Give the plants more light so they make more oxygen.', happened: 'The plants got extra light and made more oxygen.' },
+  'grow-1': { label: 'Boost the greenhouse', effect: 'Give the plants more light. In this game that adds oxygen right away.', happened: 'The plants got extra light. In this game that adds oxygen right away. Real plants would not fill a base this fast.' },
   'drill-2': { label: 'Keep drilling', effect: 'Get another sample while the sky is still calm.', happened: 'The drill pulled up another sample and used a lot of power.' },
   'stock-2': { label: 'Stock the shelter', effect: 'Move air tanks and tools into the shelter, just in case.', happened: 'The shelter is ready. Moving supplies used some power and air.' },
   'charge-2': { label: 'Charge the batteries', effect: 'Top up power before things get busy.', happened: 'The batteries filled up a bit more. No drilling got done.' },
   'drill-3': { label: 'Keep drilling', effect: 'Trust the later forecast and keep working.', happened: 'The drill pulled up another sample and used a lot of power.' },
-  'grow-3': { label: 'Boost the greenhouse', effect: 'Build up oxygen before the storm.', happened: 'The plants got extra light and made more oxygen.' },
+  'grow-3': { label: 'Boost the greenhouse', effect: 'Give the plants more light before the storm. The oxygen added here is a game unit.', happened: 'The plants got extra light. In this game that adds oxygen right away. Real plants would not fill a base this fast.' },
   'stock-3': { label: 'Stock the shelter', effect: 'Get the shelter ready before the storm.', happened: 'The shelter is ready. Moving supplies used some power and air.' },
   'shelter-4': { label: 'Go to the shelter', effect: 'Stop work and get everyone behind thick Moon soil.', happened: 'Everyone moved into the shelter.' },
   'remote-4': { label: 'Shelter and drill by remote', effect: 'Get safe, then drive the drill from inside.', happened: 'The crew got safe and ran the drill by remote control. That used a lot of power.' },
   'outside-4': { label: 'Keep working outside', effect: 'Stay out to finish the sample. This breaks the storm safety rule.', happened: 'The crew stayed outside during the storm. That breaks the safety rule, so Mission Control brought everyone inside and paused the mission.' },
   'rest-5': { label: 'Rest in low power', effect: 'Save power and wait. The shelter air gets used up.', happened: 'The base ran on low power. The air in the shelter went down.' },
   'remote-5': { label: 'Drill by remote', effect: 'Drive the drill from inside the shelter.', happened: 'The crew ran the drill by remote control. That used a lot of power.' },
-  'scrub-5': { label: 'Run the air scrubbers', effect: 'Clean the shelter air. The scrubbers need power.', happened: 'The scrubbers cleaned the air and used power.' },
+  'reserve-5': { label: 'Release reserve oxygen', effect: 'Open a stored oxygen tank. It uses power, and the amount is a game unit.', happened: 'A stored oxygen tank was opened. Cleaning the air does not make new oxygen. This number is a made-up game unit.' },
   'drill-6': { label: 'Drill on the surface', effect: 'Head back out for one more sample.', happened: 'The crew went back out and drilled one more sample.' },
   'repair-6': { label: 'Repair and recharge', effect: 'Dust off the panels and fill the batteries.', happened: 'The crew cleaned the panels and the batteries filled up.' },
-  'grow-6': { label: 'Restart the greenhouse', effect: 'Get the plants making oxygen again.', happened: 'The greenhouse is running again and made more oxygen.' },
+  'grow-6': { label: 'Restart the greenhouse', effect: 'Turn the plant lights back on. The oxygen added here is a game unit.', happened: 'The greenhouse is running again. In this game that adds oxygen right away. Real plants would not fill a base this fast.' },
 };
 
 export const RUSHED_NOTE = 'The shelter was not stocked, so the crew had to rush. That cost extra power and air.';
@@ -68,7 +68,8 @@ export const UPKEEP_NOTE = 'Every turn the base uses a little power and the crew
 
 export const principleCopy: Record<string, string> = {
   'trade-offs': 'Every choice uses something up. Good engineers decide what matters most right now.',
-  'plants-make-oxygen': 'Plants take in the air we breathe out and give back oxygen. Scientists are still learning how to grow them away from Earth.',
+  'plants-make-oxygen': 'Plants can give back oxygen, but not this fast. Extra light in this game adds oxygen right away, and that speed is made up. The plant study does not measure it.',
+  'reserve-oxygen': 'Cleaning carbon dioxide out of the air does not make new oxygen. Crews also carry stored oxygen. This button opens a made-up reserve tank.',
   'flare-light-is-fast': 'A flare is a burst of light from the Sun. Light takes about eight minutes to get here, so we see a flare soon after it happens.',
   'prepare-early': 'Getting ready before trouble arrives is cheaper than rushing later.',
   'forecasts-change': 'Scientists use computer models to guess when a solar cloud will arrive. New information can change the guess.',

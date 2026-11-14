@@ -72,7 +72,7 @@ describe('mission engine', () => {
   });
 
   it('reaches a full success and reports it in the debrief', () => {
-    const final = playAll(['charge-1', 'drill-2', 'stock-3', 'remote-4', 'scrub-5', 'drill-6']);
+    const final = playAll(['charge-1', 'drill-2', 'stock-3', 'remote-4', 'reserve-5', 'drill-6']);
     expect(final).toMatchObject({ phase: 'ended', outcome: 'success', samples: 3 });
     expect(debrief(final, mission).missing).toEqual({ samples: false, power: false, oxygen: false });
   });
@@ -84,7 +84,7 @@ describe('mission engine', () => {
   });
 
   it('is deterministic: the same choices always give a deeply equal result', () => {
-    const ids = ['drill-1', 'stock-2', 'grow-3', 'remote-4', 'scrub-5', 'drill-6'];
+    const ids = ['drill-1', 'stock-2', 'grow-3', 'remote-4', 'reserve-5', 'drill-6'];
     expect(playAll(ids)).toEqual(playAll(ids));
   });
 

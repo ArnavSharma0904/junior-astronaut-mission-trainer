@@ -83,7 +83,7 @@ export const mission: MissionDef = {
       actions: [
         { id: 'rest-5', delta: { power: -2, oxygen: -6 }, principleId: 'shelter-slows-work', sourceIds: ['assumption-safety-rule'] },
         { id: 'remote-5', delta: { power: -20, samples: 1 }, requires: [{ kind: 'minPower', value: 30 }], principleId: 'shelter-slows-work', sourceIds: ['assumption-safety-rule'] },
-        { id: 'scrub-5', delta: { power: -14, oxygen: 16 }, principleId: 'shelter-slows-work', sourceIds: ['assumption-game-units'] },
+        { id: 'reserve-5', delta: { power: -14, oxygen: 16 }, principleId: 'reserve-oxygen', sourceIds: ['assumption-game-units'] },
       ],
     },
     {

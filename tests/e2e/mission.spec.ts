@@ -52,6 +52,7 @@ test.describe('complete mission', () => {
 
   test('the scene and status chips react to decisions', async ({ page }) => {
     await start(page);
+    await expect(page.getByTestId('scene-caption')).toHaveText('The streaks are a game illustration. You cannot see these particles.');
     const scene = page.locator('.scene');
     await expect(scene).toHaveAttribute('data-stocked', 'false');
     await playThrough(page, ['charge-1']);

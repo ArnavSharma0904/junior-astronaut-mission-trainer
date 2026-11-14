@@ -30,9 +30,9 @@ function moduleFor(actionId: string): SceneModule {
 const bandWord: Record<Band, string> = { strong: 'strong', steady: 'steady', low: 'low' };
 const weatherWord: Record<GameState['spaceWeather'], string> = {
   quiet: 'The sky is quiet.',
-  watch: 'Faint streaks near the Sun show it is active.',
-  storm: 'Streaks cross the sky: a particle storm is under way.',
-  clearing: 'The streaks are thinning as the storm clears.',
+  watch: 'Faint streaks near the Sun are a game illustration of solar activity. You cannot see these particles.',
+  storm: 'Streaks cross the sky as a game illustration of a particle storm. You cannot see these particles. This is not a measured sky or a safety display.',
+  clearing: 'The streaks are thinning. They are a game illustration as the storm clears, not a measured sky.',
 };
 
 export function toSceneModel(state: GameState, mission: MissionDef): SceneModel {

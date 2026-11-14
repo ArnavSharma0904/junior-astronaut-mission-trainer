@@ -273,7 +273,7 @@
       "kind": "game-assumption",
       "originalUnits": null,
       "transformedUnits": null,
-      "supportedClaim": "Power, oxygen and sample numbers are made-up game units chosen to teach trade-offs. They are not real measurements.",
+      "supportedClaim": "Power, oxygen and sample numbers are made-up game units chosen to teach trade-offs. They are not real measurements. Opening stored oxygen is not the same as cleaning carbon dioxide out of the air.",
       "notSupported": [
         "Any real-world fact"
       ],

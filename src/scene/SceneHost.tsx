@@ -9,6 +9,11 @@ export function SceneHost({ model, dimmed = false }: { model: SceneModel; dimmed
   return (
     <div className="scene-frame" data-dimmed={dimmed} data-renderer="2d">
       <Scene2D model={model} />
+      {model.weather !== 'quiet' ? (
+        <p className="scene-caption" data-testid="scene-caption">
+          The streaks are a game illustration. You cannot see these particles.
+        </p>
+      ) : null}
     </div>
   );
 }

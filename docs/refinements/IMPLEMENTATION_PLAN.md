@@ -28,7 +28,7 @@ The six turns follow real archived DONKI records from 9-11 May 2024 (see NASA_DA
 | T2 Flare seen | FLR X2.2, peak 09:13Z 9 May; CME record 09:24Z | watch | Run ice drill: power -18, samples +1. Stock the shelter: power -8, oxygen -6, shelterStocked. Charge batteries: power +16 |
 | T3 Forecast changes | two WSA-ENLIL runs with different Earth-arrival estimates (MODEL OUTPUT) | watch | Run ice drill: power -18, samples +1. Boost greenhouse: power -10, oxygen +18. Stock the shelter (unavailable if already stocked, with reason) |
 | T4 Particle storm | FLR X5.8 peak 01:23Z 11 May; SEP record 02:10Z | storm | Go to shelter: if stocked power -4, else power -14 and oxygen -12 (rushed). Shelter and drive drill by remote: needs stocked and power >= 30; power -24, samples +1. Keep working outside: breaks the storm safety rule, mission paused |
-| T5 Storm continues | STEREO A SEP record 04:07Z (a different place in space) | storm | Rest in low power: power -2, oxygen -6. Remote drill: needs power >= 30; power -24, samples +1. Run air scrubbers: power -12, oxygen +14 |
+| T5 Storm continues | STEREO A SEP record 04:07Z (a different place in space) | storm | Rest in low power: power -2, oxygen -6. Remote drill: needs power >= 30; power -24, samples +1. Release reserve oxygen: power -14, oxygen +16 (made-up game units; not CO2 scrubbing) |
 | T6 All clear | game assumption (the data does not give an "all clear" time; labelled as a game rule) | clearing | Surface drill: power -18, samples +1. Repair and recharge: power +15. Restart greenhouse: power -10, oxygen +18 |
 
 ### Endings
@@ -40,9 +40,9 @@ The six turns follow real archived DONKI records from 9-11 May 2024 (see NASA_DA
 ### Planning-time balance check (enumeration of all 306 terminal paths, run in the planning sandbox)
 10 success, 223 partial, 42 power-out, 7 oxygen-out, 24 safety-rule pauses. No "always pick option k" policy wins.
 Winning strategies differ in kind: prepare early then remote-drill through the storm; or drill early, take the rushed
-shelter and recover with scrubbers. Example wins:
-- charge, drill, stock, shelter+remote, scrubbers, drill (ends power 10, oxygen 24)
-- charge, drill, drill, rushed shelter, scrubbers, drill (ends power 10, oxygen 18)
+shelter and recover by releasing stored oxygen. Example wins:
+- charge, drill, stock, shelter+remote, reserve oxygen, drill (ends power 10, oxygen 24)
+- charge, drill, drill, rushed shelter, reserve oxygen, drill (ends power 10, oxygen 18)
 - drill, charge, stock, shelter, remote, drill (ends power 17, oxygen 10)
 
 Known tuning debt (M02 must fix, test-enforced): no winning path currently uses a greenhouse action, so oxygen
