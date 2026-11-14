@@ -153,6 +153,9 @@ A refused removeItem no longer produces "Saved mission erased." or a reload that
 2. A new request id, not c1-c3-cf02e38. Aside reviews that exact SHA. A FIX needs another commit and another request.
 3. M06 stays skipped until ADR-P1 is approved. Do not claim a visual score, award eligibility, or NASA endorsement.
 
+### Check of 35645d2
+run-1794694670868-kpma9uox failed `test:e2e`. Confirm was inside a clipped panel, so it was not the control under the pointer. The crash screen never appeared because the test flag was removed during the first state setup. At 390px and 200% text, the meter word Strong extended 58px past the viewport. The next commit fixes those three defects. The checked SHA is that commit, not 35645d2. Two earlier runs on 35645d2 did not reach a real browser result and are kept: run-1794694192836-6i0xdykl and run-1794694233272-74habo4f.
+
 ### Processes
 No dev server was left running by this handoff.
 

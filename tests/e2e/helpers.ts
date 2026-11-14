@@ -67,7 +67,7 @@ export async function expectScrolledContentVisible(page: Page, locator: ReturnTy
   await locator.scrollIntoViewIfNeeded();
   const visible = await locator.evaluate((element) => {
     const rect = element.getBoundingClientRect();
-    const dock = document.querySelector('.confirm-bar');
+    const dock = document.querySelector('.decision-dock');
     const limit = dock ? dock.getBoundingClientRect().top : window.innerHeight;
     const top = Math.max(rect.top, 0);
     const bottom = Math.min(rect.bottom, limit - 1);

@@ -16,9 +16,9 @@ interface Props {
  * and explains why it cannot be taken. Confirm is a separate button and is disabled while a decision resolves.
  */
 export function ActionList({ previews, selectedId, resolving, onSelect, onConfirm }: Props) {
-  const selected = previews.find((preview) => preview.action.id === selectedId) ?? null;
   return (
     <form
+      id="decision-form"
       className="actions"
       onSubmit={(event) => {
         event.preventDefault();
@@ -70,11 +70,6 @@ export function ActionList({ previews, selectedId, resolving, onSelect, onConfir
       </fieldset>
       </div>
       <p className="upkeep-note">{UPKEEP_NOTE}</p>
-      <div className="confirm-bar">
-        <button type="submit" className="button button-primary button-confirm" disabled={resolving || !selected} data-testid="confirm">
-          {resolving ? 'Working…' : selected ? `Confirm: ${actionCopy[selected.action.id]!.label}` : 'Pick a choice first'}
-        </button>
-      </div>
     </form>
   );
 }

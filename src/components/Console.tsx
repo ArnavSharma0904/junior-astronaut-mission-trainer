@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { turnCopy, weatherCopy } from '../content/copy';
+import { actionCopy, turnCopy, weatherCopy } from '../content/copy';
 import { actionPreviews, isCritical } from '../game/selectors';
 import type { GameEvent, GameState, MissionDef } from '../game/types';
 import { SceneHost } from '../scene/SceneHost';
@@ -41,6 +41,7 @@ export function Console({ state, mission, dispatch, onOpenSource, onTone }: Prop
         <Timeline state={state} mission={mission} onOpenSource={onOpenSource} />
       </div>
       <div className="console-decision" id="decision">
+        <div className="decision-read">
         <section className="situation" aria-labelledby="situation-title">
           <p className="situation-kicker mono">
             Turn {state.turnIndex + 1} of {mission.turns.length}
@@ -74,8 +75,20 @@ export function Console({ state, mission, dispatch, onOpenSource, onTone }: Prop
             }}
           />
         ) : (
-          <Explanation ref={explanationHeading} state={state} mission={mission} onNext={() => dispatch({ type: 'NEXT' })} onOpenSource={onOpenSource} />
+          <Explanation ref={explanationHeading} state={state} mission={mission} onOpenSource={onOpenSource} />
         )}
+        </div>
+        <div className="decision-dock">
+          {deciding ? (
+            <button type="submit" form="decision-form" className="button button-primary button-confirm" disabled={state.phase === 'resolving' || !state.inspecting} data-testid="confirm">
+              {state.phase === 'resolving' ? 'Working…' : state.inspecting ? `Confirm: ${actionCopy[state.inspecting]!.label}` : 'Pick a choice first'}
+            </button>
+          ) : (
+            <button type="button" className="button button-primary" onClick={() => dispatch({ type: 'NEXT' })} data-testid="next">
+              {state.outcome !== 'in-progress' ? 'See how the mission went' : 'Next turn'} <Icon name="arrow" />
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

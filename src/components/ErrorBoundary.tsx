@@ -1,6 +1,14 @@
 import { Component, type ReactNode } from 'react';
 import { remove, SAVE_KEY } from '../state/storage';
 
+function clearSimulatedCrash() {
+  try {
+    window.sessionStorage.removeItem('jamt.simulate-error');
+  } catch {
+    // Private mode can refuse sessionStorage. The reload still uses the real save result.
+  }
+}
+
 interface State {
   failed: boolean;
   discardFailed: boolean;
@@ -18,6 +26,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
       this.setState({ discardFailed: true });
       return;
     }
+    clearSimulatedCrash();
     window.location.reload();
   };
 
@@ -32,7 +41,14 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
             The saved mission is still on this device. Discard did not work, so this page was not reloaded. You can try again.
           </p>
         ) : null}
-        <button type="button" className="button" onClick={() => window.location.reload()}>
+        <button
+          type="button"
+          className="button"
+          onClick={() => {
+            clearSimulatedCrash();
+            window.location.reload();
+          }}
+        >
           Try again
         </button>
         <button type="button" className="button button-primary" onClick={this.discard} data-testid="discard-save">

@@ -337,10 +337,16 @@
   gap: var(--s3) var(--s4);
 }
 
+.meter {
+  min-width: 0;
+}
+
 .meter-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--s2);
+  min-width: 0;
   font-weight: 700;
 }
 
@@ -1017,8 +1023,25 @@
   }
 }
 
+.decision-dock .button {
+  width: 100%;
+  min-height: 56px;
+  font-size: 1.125rem;
+  white-space: normal;
+  text-align: center;
+}
+
+.decision-read,
+.situation,
+.actions,
+.explanation,
+.evidence-row-text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 @media (max-width: 1100px) {
-  /* One page scroll for the reading. The action stays fixed so Next and Confirm cannot fall past the viewport. */
+  /* One page scroll for the reading. The action is outside the clipped panels so it can stay on screen. */
   .choice-scroll,
   .situation,
   .explanation .evidence-rows,
@@ -1034,31 +1057,19 @@
     scroll-margin-bottom: 11rem;
     scroll-margin-top: 12px;
   }
-  .app[data-app-phase='mission'] .confirm-bar {
+  .app[data-app-phase='mission'] .decision-dock {
     position: fixed;
     z-index: 30;
+    left: 0;
+    right: 0;
     bottom: 0;
+    width: auto;
+    max-width: 100%;
+    box-sizing: border-box;
     margin: 0;
     padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
     background: #10182a;
     border-top: 2px solid var(--cyan);
-  }
-  .app[data-app-phase='mission'] .confirm-bar .button {
-    width: 100%;
-  }
-}
-
-@media (max-width: 720px) {
-  .app[data-app-phase='mission'] .confirm-bar {
-    left: 0;
-    right: 0;
-  }
-}
-
-@media (min-width: 721px) and (max-width: 1100px) {
-  .app[data-app-phase='mission'] .confirm-bar {
-    left: calc(50% + 8px);
-    right: 16px;
   }
 }
 

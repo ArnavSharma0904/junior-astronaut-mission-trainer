@@ -197,12 +197,11 @@
   stroke-dasharray: none;
 }
 
-/* The fixed action must not sit inside a transformed ancestor, or it leaves the viewport. */
+/* A transform or clip on an ancestor would pin the action to that box instead of the viewport. */
 @media (max-width: 1100px) {
-  .console-decision > .actions,
-  .console-decision > .explanation,
-  .console-decision > .situation {
+  .console-decision > .decision-dock {
     animation: none;
+    transform: none;
   }
 }
 

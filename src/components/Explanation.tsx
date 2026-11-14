@@ -11,17 +11,15 @@ const KIND_ICON: Record<string, IconName> = { observation: 'eye', 'curated-analy
 interface Props {
   state: GameState;
   mission: MissionDef;
-  onNext: () => void;
   onOpenSource: (id: string) => void;
 }
 
 /** After each decision: what happened, then what was observed, the science idea, and what is only a game rule. */
-export const Explanation = forwardRef<HTMLHeadingElement, Props>(function Explanation({ state, mission, onNext, onOpenSource }, headingRef) {
+export const Explanation = forwardRef<HTMLHeadingElement, Props>(function Explanation({ state, mission, onOpenSource }, headingRef) {
   const decision = state.decisionLog[state.decisionLog.length - 1]!;
   const turn = mission.turns[decision.turnIndex]!;
   const action = turn.actions.find((item) => item.id === decision.actionId)!;
   const ids = [...new Set([...turn.evidenceIds, ...action.sourceIds, 'assumption-game-units'])];
-  const ended = state.outcome !== 'in-progress';
   return (
     <section className="explanation" aria-labelledby="explanation-title" data-testid="explanation">
       <h2 id="explanation-title" ref={headingRef} tabIndex={-1}>
@@ -62,11 +60,6 @@ export const Explanation = forwardRef<HTMLHeadingElement, Props>(function Explan
         </li>
       </ul>
       <p className="explanation-lesson">{turnCopy[turn.id]?.lesson}</p>
-      <div className="confirm-bar">
-        <button type="button" className="button button-primary" onClick={onNext} data-testid="next">
-          {ended ? 'See how the mission went' : 'Next turn'} <Icon name="arrow" />
-        </button>
-      </div>
     </section>
   );
 });
