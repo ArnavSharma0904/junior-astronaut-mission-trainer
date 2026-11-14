@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { decide, expectNoHorizontalOverflow, expectVisibleUncovered, playThrough, start, UNSAFE, WIN } from './helpers';
+import { decide, expectNoHorizontalOverflow, expectScrolledContentVisible, expectVisibleUncovered, playThrough, start, UNSAFE, WIN } from './helpers';
 
 async function expectNoAxeViolations(page: Page) {
   await page.evaluate(() =>
@@ -179,6 +179,42 @@ test.describe('accessibility and settings', () => {
       await playThrough(page, UNSAFE.slice(1));
       await expectNoHorizontalOverflow(page);
       await page.getByTestId('open-sources').click();
+      await expectNoHorizontalOverflow(page);
+    });
+  }
+
+  for (const viewport of [
+    { width: 1024, height: 768 },
+    { width: 390, height: 844 },
+  ]) {
+    test(`post-decision Next stays reachable for long explanations at ${viewport.width}x${viewport.height}`, async ({ page }) => {
+      test.setTimeout(90_000);
+      await page.setViewportSize(viewport);
+      await page.addInitScript(() => {
+        Storage.prototype.setItem = () => {
+          throw new DOMException('QuotaExceededError', 'QuotaExceededError');
+        };
+      });
+      await page.goto('/');
+      await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
+      await page.getByTestId('start').click();
+      await expect(page.getByTestId('save-failed')).toBeVisible();
+      await decide(page, 'grow-1');
+      await expectNoHorizontalOverflow(page);
+      await expectVisibleUncovered(page, page.getByTestId('next'));
+      await expect(page.getByTestId('explanation')).toContainText('Real plants would not fill a base this fast.');
+      await expectScrolledContentVisible(page, page.locator('.explanation-lesson'));
+      await expectScrolledContentVisible(page, page.locator('.evidence-rows'));
+      await page.getByRole('heading', { name: 'What happened' }).focus();
+      await expect(page.getByRole('heading', { name: 'What happened' })).toBeFocused();
+      await page.getByTestId('next').focus();
+      await expectVisibleUncovered(page, page.getByTestId('next'));
+      await page.getByTestId('next').click();
+      await playThrough(page, ['drill-2', 'drill-3']);
+      await decide(page, 'outside-4');
+      await expect(page.getByTestId('explanation')).toContainText('stayed outside');
+      await expectVisibleUncovered(page, page.getByTestId('next'));
+      await expectScrolledContentVisible(page, page.locator('.explanation-lesson'));
       await expectNoHorizontalOverflow(page);
     });
   }

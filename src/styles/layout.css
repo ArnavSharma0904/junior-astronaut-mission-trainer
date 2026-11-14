@@ -147,63 +147,22 @@ main:focus {
     order: 5;
     color: var(--text);
   }
-  .app[data-app-phase='mission'],
-  .app[data-app-phase='debrief'] {
-    height: 100dvh;
-    overflow: hidden;
-  }
-  .app[data-app-phase='mission'] > main,
-  .app[data-app-phase='debrief'] > main {
-    min-height: 0;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
   .console,
   .debrief {
-    flex: 1 1 auto;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: var(--s4);
     padding: var(--s4);
-    height: auto;
-    min-height: 0;
-    align-items: stretch;
-    overflow: hidden;
+    align-items: start;
   }
   .console-scene {
     position: static;
-    min-height: 0;
-    overflow: auto;
   }
   .console .scene-frame,
   .debrief .scene-frame {
     max-height: 300px;
   }
-  .console-decision {
-    height: 100%;
-    min-height: 0;
-    overflow: hidden;
-    grid-template-rows: auto minmax(0, 1fr);
-  }
-  .debrief-panel {
-    min-height: 0;
-    overflow: auto;
-  }
-  .actions,
-  .explanation {
-    min-height: 0;
-    height: 100%;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-  .explanation .evidence-rows {
-    min-height: 0;
-    overflow: auto;
-  }
-  .confirm-bar {
-    flex: none;
-    margin-top: auto;
+  .app[data-app-phase='mission'] {
+    padding-bottom: 9rem;
   }
 }
 
@@ -228,7 +187,7 @@ main:focus {
   .console,
   .debrief {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    grid-template-rows: auto;
     padding: var(--s3);
     gap: var(--s3);
   }
@@ -244,45 +203,7 @@ main:focus {
     padding: var(--s3);
     place-items: end center;
   }
-  .confirm-bar {
-    position: static;
-    z-index: 1;
-    margin-top: auto;
-    padding-top: var(--s2);
-    background: var(--panel);
-  }
   .app-footer {
     padding: var(--s3);
-  }
-}
-
-/* Phone: the scene column scrolls on its own so meters and the timeline cannot cover the choices. */
-@media (max-width: 720px) {
-  .console,
-  .debrief {
-    grid-template-rows: minmax(96px, 22%) minmax(0, 1fr);
-  }
-  .console-scene {
-    display: grid;
-    min-height: 0;
-    overflow: auto;
-  }
-  .console .scene-frame,
-  .debrief .scene-frame,
-  .console .meters,
-  .debrief .meters,
-  .console-decision,
-  .debrief-panel,
-  .console .timeline {
-    order: unset;
-    position: static;
-  }
-  .console .scene-frame {
-    aspect-ratio: 16 / 9;
-    max-height: 160px;
-  }
-  .console .timeline {
-    max-height: none;
-    overflow: visible;
   }
 }

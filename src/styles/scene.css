@@ -82,6 +82,11 @@
   fill: #1b2034;
 }
 
+.scene[data-power='low'] .hab-window-0,
+.scene[data-power='low'] .airlock-light {
+  fill: #ffb020;
+}
+
 .scene[data-power='low'] .conduit {
   stroke-dasharray: 10 14;
   opacity: 0.45;
@@ -115,6 +120,37 @@
 .scene[data-oxygen='steady'] .plant-1,
 .scene[data-oxygen='steady'] .plant-4 {
   opacity: 0;
+}
+
+.hab-glow,
+.dome-warm {
+  opacity: 0.5;
+  transition: opacity var(--slow) var(--ease);
+}
+
+.scene[data-power='steady'] .hab-glow {
+  opacity: 0.22;
+}
+
+.scene[data-power='low'] .hab-glow {
+  opacity: 0.06;
+}
+
+.scene[data-oxygen='steady'] .dome-warm {
+  opacity: 0.22;
+}
+
+.scene[data-oxygen='low'] .dome-warm,
+.scene[data-oxygen='low'] .dome-glow {
+  opacity: 0.12;
+}
+
+.scene[data-weather='storm'] .scene-rim {
+  stroke: #d7c6ff;
+}
+
+.scene[data-weather='storm'] .scene-sun-glow {
+  opacity: 0.2;
 }
 
 .scene[data-oxygen='low'] .dome-glow {

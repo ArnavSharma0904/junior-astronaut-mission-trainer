@@ -26,10 +26,15 @@ export function writeJson(key: string, value: unknown): boolean {
   }
 }
 
-export function remove(key: string): void {
+/**
+ * Returns false when the browser refuses the delete or the value is still stored.
+ * Callers must not claim the save is gone unless this returns true.
+ */
+export function remove(key: string): boolean {
   try {
     window.localStorage.removeItem(key);
+    return window.localStorage.getItem(key) === null;
   } catch {
-    // Nothing to do.
+    return false;
   }
 }

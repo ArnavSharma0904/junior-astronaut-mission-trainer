@@ -89,8 +89,9 @@ export function useMission(reducedMotion: boolean) {
     setAppPhase(saved.phase === 'ended' ? 'debrief' : 'mission');
   }, [apply, saved]);
 
-  const resetSave = useCallback(() => {
-    remove(SAVE_KEY);
+  const resetSave = useCallback((): boolean => {
+    // A refused delete must leave the in-memory mission and the bookkeeping that a save still exists.
+    if (!remove(SAVE_KEY)) return false;
     setSaved(null);
     setSaveStatus('none');
     setLastEvents([]);
@@ -98,6 +99,7 @@ export function useMission(reducedMotion: boolean) {
     latest.current = createInitialState(mission, SNAPSHOT_VERSION);
     setGame(latest.current);
     setAppPhase('briefing');
+    return true;
   }, []);
 
   const toBriefing = useCallback(() => setAppPhase('briefing'), []);

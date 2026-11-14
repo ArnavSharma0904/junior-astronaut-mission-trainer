@@ -30,7 +30,19 @@ function announce(events: ConsequenceEvent[], state: GameState): string {
   return parts.join(' ');
 }
 
+/** One-shot crash used by the recovery test. Production play never sets this flag. */
+function consumeSimulatedCrash(): boolean {
+  try {
+    if (window.sessionStorage.getItem('jamt.simulate-error') !== '1') return false;
+    window.sessionStorage.removeItem('jamt.simulate-error');
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function App() {
+  const [simulatedCrash] = useState(consumeSimulatedCrash);
   const { settings, reducedMotion, update } = useSettings();
   const game = useMission(reducedMotion);
   const [drawer, setDrawer] = useState<DrawerName>(null);
@@ -57,6 +69,7 @@ export function App() {
   }, []);
   const tone = useCallback((name: 'select' | 'confirm') => void playTone(name, settings.muted), [settings.muted]);
   const inMission = game.appPhase === 'mission';
+  if (simulatedCrash) throw new Error('Simulated mission failure');
 
   return (
     <div className="app" data-app-phase={game.appPhase}>

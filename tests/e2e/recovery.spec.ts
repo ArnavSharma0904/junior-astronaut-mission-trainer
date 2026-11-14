@@ -121,6 +121,74 @@ test.describe('save, resume and recovery', () => {
     expect(await page.evaluate((key) => window.localStorage.getItem(key), SAVE_KEY)).toBeNull();
   });
 
+  test('a refused erase leaves the saved mission and the game in progress', async ({ page }) => {
+    await start(page);
+    await playThrough(page, ['charge-1']);
+    const power = await value(page, 'power');
+    await page.evaluate(() => {
+      const original = Storage.prototype.removeItem;
+      Storage.prototype.removeItem = function (this: Storage, key: string) {
+        if (key === 'jamt.save.v1') throw new DOMException('SecurityError', 'SecurityError');
+        return original.call(this, key);
+      };
+    });
+    await page.getByTestId('open-settings').click();
+    await page.getByRole('button', { name: 'Erase saved mission' }).click();
+    await page.getByRole('button', { name: 'Yes, erase it' }).click();
+    await expect(page.getByTestId('erase-failed')).toBeVisible();
+    await expect(page.getByText('Saved mission erased.')).toHaveCount(0);
+    expect(await page.evaluate((key) => window.localStorage.getItem(key), SAVE_KEY)).not.toBeNull();
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('heading', { name: 'Flare seen' })).toBeVisible();
+    expect(await value(page, 'power')).toBe(power);
+    await page.reload();
+    await page.getByTestId('resume').click();
+    await expect(page.getByRole('heading', { name: 'Flare seen' })).toBeVisible();
+    expect(await value(page, 'power')).toBe(power);
+  });
+
+  test('a crash discard reloads only after the save is actually gone', async ({ page }) => {
+    const fresh = JSON.stringify(toSave(createInitialState(mission, SNAPSHOT_VERSION)));
+    await page.addInitScript((raw) => {
+      if (window.sessionStorage.getItem('jamt.simulate-armed') === '1') return;
+      window.sessionStorage.setItem('jamt.simulate-armed', '1');
+      window.sessionStorage.setItem('jamt.simulate-error', '1');
+      window.localStorage.setItem('jamt.save.v1', raw);
+    }, fresh);
+    await page.goto('/');
+    await expect(page.getByRole('heading', { name: 'Something went wrong' })).toBeVisible();
+    await page.getByTestId('discard-save').click();
+    await expect(page.getByTestId('start')).toBeVisible();
+    await expect(page.getByTestId('resume')).toHaveCount(0);
+    expect(await page.evaluate((key) => window.localStorage.getItem(key), SAVE_KEY)).toBeNull();
+  });
+
+  test('a refused crash discard does not reload or claim the save is gone', async ({ page }) => {
+    const fresh = JSON.stringify(toSave(createInitialState(mission, SNAPSHOT_VERSION)));
+    await page.addInitScript((raw) => {
+      if (window.sessionStorage.getItem('jamt.simulate-armed') !== '1') {
+        window.sessionStorage.setItem('jamt.simulate-armed', '1');
+        window.sessionStorage.setItem('jamt.simulate-error', '1');
+        window.localStorage.setItem('jamt.save.v1', raw);
+      }
+      const original = Storage.prototype.removeItem;
+      Storage.prototype.removeItem = function (this: Storage, key: string) {
+        if (key === 'jamt.save.v1') throw new DOMException('SecurityError', 'SecurityError');
+        return original.call(this, key);
+      };
+    }, fresh);
+    await page.goto('/');
+    await expect(page.getByRole('heading', { name: 'Something went wrong' })).toBeVisible();
+    await page.getByTestId('discard-save').click();
+    await expect(page.getByTestId('discard-failed')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Something went wrong' })).toBeVisible();
+    await expect(page.getByText('Saved mission erased.')).toHaveCount(0);
+    expect(await page.evaluate((key) => window.localStorage.getItem(key), SAVE_KEY)).toBe(fresh);
+    await page.getByRole('button', { name: 'Try again' }).click();
+    await expect(page.getByTestId('resume')).toBeVisible();
+    expect(await page.evaluate((key) => window.localStorage.getItem(key), SAVE_KEY)).toBe(fresh);
+  });
+
   test('when a later save is denied, reload restores the last write that worked', async ({ page }) => {
     await page.addInitScript(() => {
       const original = Storage.prototype.setItem;

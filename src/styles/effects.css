@@ -197,6 +197,15 @@
   stroke-dasharray: none;
 }
 
+/* The fixed action must not sit inside a transformed ancestor, or it leaves the viewport. */
+@media (max-width: 1100px) {
+  .console-decision > .actions,
+  .console-decision > .explanation,
+  .console-decision > .situation {
+    animation: none;
+  }
+}
+
 /* Until the app has set data-motion, honour the device setting. */
 @media (prefers-reduced-motion: reduce) {
   :root:not([data-motion='full']) * {

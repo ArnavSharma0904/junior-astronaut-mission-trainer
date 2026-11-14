@@ -1,21 +1,25 @@
 import { Component, type ReactNode } from 'react';
-import { SAVE_KEY } from '../state/storage';
+import { remove, SAVE_KEY } from '../state/storage';
 
-function discardSaveAndReload() {
-  try {
-    window.localStorage.removeItem(SAVE_KEY);
-  } catch {
-    // Private mode can throw. Reloading still leaves the in-memory page.
-  }
-  window.location.reload();
+interface State {
+  failed: boolean;
+  discardFailed: boolean;
 }
 
-export class ErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
-  state = { failed: false };
+export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
+  state: State = { failed: false, discardFailed: false };
 
-  static getDerivedStateFromError() {
-    return { failed: true };
+  static getDerivedStateFromError(): State {
+    return { failed: true, discardFailed: false };
   }
+
+  private discard = () => {
+    if (!remove(SAVE_KEY)) {
+      this.setState({ discardFailed: true });
+      return;
+    }
+    window.location.reload();
+  };
 
   render() {
     if (!this.state.failed) return this.props.children;
@@ -23,10 +27,15 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, { failed: 
       <main id="main" className="fatal">
         <h1>Something went wrong</h1>
         <p>The mission could not be shown. A saved mission on this device can cause the same screen again after a reload.</p>
+        {this.state.discardFailed ? (
+          <p role="status" data-testid="discard-failed">
+            The saved mission is still on this device. Discard did not work, so this page was not reloaded. You can try again.
+          </p>
+        ) : null}
         <button type="button" className="button" onClick={() => window.location.reload()}>
           Try again
         </button>
-        <button type="button" className="button button-primary" onClick={discardSaveAndReload} data-testid="discard-save">
+        <button type="button" className="button button-primary" onClick={this.discard} data-testid="discard-save">
           Discard saved mission and start fresh
         </button>
       </main>

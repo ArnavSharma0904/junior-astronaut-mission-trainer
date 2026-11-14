@@ -1018,19 +1018,47 @@
 }
 
 @media (max-width: 1100px) {
-  /* A fieldset will not flex-grow in Chrome, so the scrollport is the div around it. Confirm stays below that. */
-  .choice-scroll {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow: auto;
+  /* One page scroll for the reading. The action stays fixed so Next and Confirm cannot fall past the viewport. */
+  .choice-scroll,
+  .situation,
+  .explanation .evidence-rows,
+  .actions,
+  .explanation {
+    max-height: none;
+    overflow: visible;
   }
-  .confirm-bar {
-    flex: none;
-    margin-top: var(--s3);
+  .situation :focus,
+  .actions :focus,
+  .explanation :focus,
+  .explanation-lesson {
+    scroll-margin-bottom: 11rem;
+    scroll-margin-top: 12px;
   }
-  .situation {
-    max-height: 8.5rem;
-    overflow: auto;
+  .app[data-app-phase='mission'] .confirm-bar {
+    position: fixed;
+    z-index: 30;
+    bottom: 0;
+    margin: 0;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    background: #10182a;
+    border-top: 2px solid var(--cyan);
+  }
+  .app[data-app-phase='mission'] .confirm-bar .button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 720px) {
+  .app[data-app-phase='mission'] .confirm-bar {
+    left: 0;
+    right: 0;
+  }
+}
+
+@media (min-width: 721px) and (max-width: 1100px) {
+  .app[data-app-phase='mission'] .confirm-bar {
+    left: calc(50% + 8px);
+    right: 16px;
   }
 }
 

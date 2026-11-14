@@ -60,3 +60,22 @@ export async function expectVisibleUncovered(page: Page, locator: ReturnType<Pag
   });
   expect(uncovered).toBe(true);
 }
+
+/** Scroll the learning text into view and confirm the fixed action does not cover it. */
+export async function expectScrolledContentVisible(page: Page, locator: ReturnType<Page['locator']>) {
+  expect(page.viewportSize()).not.toBeNull();
+  await locator.scrollIntoViewIfNeeded();
+  const visible = await locator.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    const dock = document.querySelector('.confirm-bar');
+    const limit = dock ? dock.getBoundingClientRect().top : window.innerHeight;
+    const top = Math.max(rect.top, 0);
+    const bottom = Math.min(rect.bottom, limit - 1);
+    if (rect.width < 8 || bottom - top < 8) return false;
+    const y = top + Math.min(16, (bottom - top) / 2);
+    const x = rect.left + Math.min(28, rect.width / 2);
+    const hit = document.elementFromPoint(x, y);
+    return hit !== null && (hit === element || element.contains(hit));
+  });
+  expect(visible).toBe(true);
+}

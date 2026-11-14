@@ -8,16 +8,16 @@ interface Props {
   onClose: () => void;
   settings: Settings;
   update: (patch: Partial<Settings>) => void;
-  onReset: () => void;
+  onReset: () => boolean;
   hasSave: boolean;
   saveStatus: SaveStatus;
 }
 
 export function SettingsDrawer({ open, onClose, settings, update, onReset, hasSave, saveStatus }: Props) {
   const [confirming, setConfirming] = useState(false);
-  const [erased, setErased] = useState(false);
+  const [eraseNotice, setEraseNotice] = useState<'erased' | 'still-there' | null>(null);
   return (
-    <Drawer open={open} onClose={() => { setConfirming(false); setErased(false); onClose(); }} title="Settings" id="settings-drawer">
+    <Drawer open={open} onClose={() => { setConfirming(false); setEraseNotice(null); onClose(); }} title="Settings" id="settings-drawer">
       <div className="setting">
         <label className="switch">
           <input type="checkbox" role="switch" checked={!settings.muted} onChange={(event) => update({ muted: !event.target.checked })} />
@@ -57,11 +57,24 @@ export function SettingsDrawer({ open, onClose, settings, update, onReset, hasSa
               ? 'Your mission is saved on this device only. Nothing is sent anywhere.'
               : 'Nothing is sent anywhere.'}
         </p>
-        {erased ? <p role="status">Saved mission erased.</p> : null}
+        {eraseNotice === 'erased' ? <p role="status">Saved mission erased.</p> : null}
+        {eraseNotice === 'still-there' ? (
+          <p role="status" data-testid="erase-failed">
+            The saved mission is still on this device. Erase did not work. You can keep playing and try again.
+          </p>
+        ) : null}
         {confirming ? (
           <div className="confirm-row">
             <p>Erase the saved mission and go back to the start?</p>
-            <button type="button" className="button button-danger" onClick={() => { onReset(); setConfirming(false); setErased(true); }}>
+            <button
+              type="button"
+              className="button button-danger"
+              onClick={() => {
+                const removed = onReset();
+                setConfirming(false);
+                setEraseNotice(removed ? 'erased' : 'still-there');
+              }}
+            >
               Yes, erase it
             </button>
             <button type="button" className="button" onClick={() => setConfirming(false)}>
@@ -69,11 +82,11 @@ export function SettingsDrawer({ open, onClose, settings, update, onReset, hasSa
             </button>
           </div>
         ) : (
-          <button type="button" className="button" disabled={!hasSave} onClick={() => { setErased(false); setConfirming(true); }}>
+          <button type="button" className="button" disabled={!hasSave} onClick={() => { setEraseNotice(null); setConfirming(true); }}>
             Erase saved mission
           </button>
         )}
-        {!hasSave && !erased ? <p>There is no saved mission right now.</p> : null}
+        {!hasSave && eraseNotice !== 'erased' ? <p>There is no saved mission right now.</p> : null}
       </div>
     </Drawer>
   );
