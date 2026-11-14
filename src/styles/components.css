@@ -380,6 +380,7 @@
 .meter-unit {
   color: var(--text-2);
   font-size: 1rem;
+  min-width: 0;
 }
 
 .meter-preview {
@@ -1081,8 +1082,10 @@
   .meter-number {
     font-size: 1.5rem;
   }
-  .meter-unit {
-    flex-basis: 100%;
-    order: 3;
+  .meter-segment {
+    height: 8px;
+  }
+  .status-chip {
+    padding: 2px 8px;
   }
 }

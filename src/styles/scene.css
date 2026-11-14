@@ -36,13 +36,13 @@
 }
 
 .scene-frame[data-dimmed='true'] .scene-dim {
-  opacity: 0.45;
+  opacity: 0.2;
 }
 
 /* Power: base lights */
 .hab-window,
 .airlock-light {
-  fill: #ffe9b8;
+  fill: #ffe7a2;
   transition: fill var(--slow) var(--ease), opacity var(--slow) var(--ease);
 }
 
@@ -124,7 +124,7 @@
 
 .hab-glow,
 .dome-warm {
-  opacity: 0.5;
+  opacity: 0.72;
   transition: opacity var(--slow) var(--ease);
 }
 

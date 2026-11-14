@@ -27,12 +27,14 @@ const STREAKS = Array.from({ length: 34 }, (_, index) => ({
 const WINDOWS = [0, 1, 2, 3, 4];
 const PLANTS = [0, 1, 2, 3, 4, 5];
 
-export function Scene2D({ model }: { model: SceneModel }) {
+export function Scene2D({ model, frame = 'wide' }: { model: SceneModel; frame?: 'wide' | 'base' }) {
   const rack = Array.from({ length: Math.max(model.goalSamples, model.samples) }, (_, index) => index < model.samples);
+  // Phone shows the outpost band: solar, habitat, greenhouse and the drill. Sky and empty foreground stay out of frame.
+  const viewBox = frame === 'base' ? '40 450 1200 530' : '0 0 1600 900';
   return (
     <svg
       className="scene"
-      viewBox="0 0 1600 900"
+      viewBox={viewBox}
       preserveAspectRatio="xMidYMid slice"
       role="img"
       aria-label={model.description}
@@ -73,10 +75,10 @@ export function Scene2D({ model }: { model: SceneModel }) {
           <stop offset="1" stopColor="#2a241c" />
         </linearGradient>
         <pattern id="cells" width="16" height="20" patternUnits="userSpaceOnUse">
-          <rect width="16" height="20" fill="#14324c" />
-          <rect x="1" y="1" width="14" height="8" fill="#3c86b0" />
-          <rect x="1" y="11" width="14" height="8" fill="#245878" />
-          <path d="M 0 0 H 16 M 0 10 H 16 M 0 0 V 20 M 8 0 V 20" stroke="#d7f4ff" strokeOpacity="0.28" strokeWidth="0.6" />
+          <rect width="16" height="20" fill="#0c3278" />
+          <rect x="1" y="1" width="14" height="8" fill="#4aa3ff" />
+          <rect x="1" y="11" width="14" height="8" fill="#1d6ec4" />
+          <path d="M 0 0 H 16 M 0 10 H 16 M 0 0 V 20 M 8 0 V 20" stroke="#d7f4ff" strokeOpacity="0.55" strokeWidth="0.7" />
         </pattern>
         <pattern id="dust" width="90" height="54" patternUnits="userSpaceOnUse">
           <circle cx="12" cy="16" r="1.5" fill="#1a1816" />
@@ -174,9 +176,9 @@ export function Scene2D({ model }: { model: SceneModel }) {
       <rect x="0" y="430" width="1600" height="120" fill="url(#horizonCool)" />
 
       {/* Low polar Sun behind the left ridge. The glow stays on the horizon so it does not wash the base. */}
-      <circle className="scene-sun-glow" cx="70" cy="518" r="240" fill="url(#sunGlow)" opacity="0.85" />
-      <circle className="scene-sun" cx="70" cy="518" r="28" fill="#fff8e6" />
-      <path className="scene-rays" d="M 70 518 L 420 430 L 430 448 Z M 70 518 L 360 560 L 348 574 Z" fill="#ffe2b0" opacity="0.16" />
+      <circle className="scene-sun-glow" cx="150" cy="500" r="170" fill="url(#sunGlow)" opacity="0.9" />
+      <circle className="scene-sun" cx="150" cy="500" r="26" fill="#fff8e6" />
+      <path className="scene-rays" d="M 150 500 L 460 430 L 470 448 Z M 150 500 L 420 560 L 408 574 Z" fill="#ffe2b0" opacity="0.32" />
 
       {/* Far crater wall: small, cool, and behind the outpost. */}
       <g className="scene-far">
@@ -203,7 +205,7 @@ export function Scene2D({ model }: { model: SceneModel }) {
       </g>
 
       {/* Long shadows raking right from the low Sun */}
-      <g className="scene-shadows" fill="#04050d" opacity="0.66">
+      <g className="scene-shadows" fill="#04050d" opacity="0.82">
         <path d="M 226 628 L 640 664 L 640 676 L 226 642 Z" />
         <path d="M 330 690 L 1220 690 L 1600 742 L 1600 800 L 1180 740 L 360 720 Z" />
         <path d="M 1180 668 L 1600 700 L 1600 716 L 1180 690 Z" />
@@ -234,6 +236,8 @@ export function Scene2D({ model }: { model: SceneModel }) {
 
       {/* Central cluster, drawn large: shelter, Hab-1 and greenhouse */}
       <g transform="translate(700 676) scale(1.4) translate(-760 -676)">
+      <ellipse cx="660" cy="712" rx="200" ry="16" fill="#05060e" />
+      <ellipse cx="980" cy="686" rx="150" ry="14" fill="#05060e" />
       {/* Regolith-covered shelter behind the habitat */}
       <g className="module module-shelter">
         <path d="M 600 590 C 640 500 800 486 880 560 C 900 580 910 592 916 600 Z" fill="url(#berm)" />
@@ -291,9 +295,9 @@ export function Scene2D({ model }: { model: SceneModel }) {
             </g>
           ))}
         </g>
-        <path d="M 868 668 A 112 112 0 0 1 1092 668" fill="none" stroke="#e8f6ff" strokeOpacity="0.8" strokeWidth="3" />
-        <path d="M 980 556 L 980 668 M 924 574 L 924 668 M 1036 574 L 1036 668" stroke="#e8f6ff" strokeOpacity="0.25" strokeWidth="2" />
-        <path d="M 890 610 A 100 100 0 0 1 950 566" fill="none" stroke="#fff" strokeOpacity="0.55" strokeWidth="4" strokeLinecap="round" />
+        <path d="M 868 668 A 112 112 0 0 1 1092 668" fill="none" stroke="#e8f6ff" strokeOpacity="1" strokeWidth="6" />
+        <path d="M 980 556 L 980 668 M 924 574 L 924 668 M 1036 574 L 1036 668" stroke="#e8f6ff" strokeOpacity="0.45" strokeWidth="2" />
+        <path d="M 890 620 A 96 78 0 0 1 980 558" fill="none" stroke="#fff" strokeOpacity="0.8" strokeWidth="6" strokeLinecap="round" />
         <rect className="module-outline" x="852" y="544" width="256" height="146" rx="12" />
       </g>
       </g>

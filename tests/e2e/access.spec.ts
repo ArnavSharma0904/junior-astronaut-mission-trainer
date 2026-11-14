@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { decide, expectNoHorizontalOverflow, expectScrolledContentVisible, expectVisibleUncovered, playThrough, start, UNSAFE, WIN } from './helpers';
+import { decide, expectEntirelyReachable, expectNoHorizontalOverflow, expectScrolledContentVisible, expectVisibleUncovered, playThrough, start, UNSAFE, WIN } from './helpers';
 
 async function expectNoAxeViolations(page: Page) {
   await page.evaluate(() =>
@@ -199,23 +199,129 @@ test.describe('accessibility and settings', () => {
       await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
       await page.getByTestId('start').click();
       await expect(page.getByTestId('save-failed')).toBeVisible();
-      await decide(page, 'grow-1');
+      await page.getByTestId('choice-grow-1').click();
+      await expectVisibleUncovered(page, page.getByTestId('confirm'));
+      await page.getByTestId('confirm').click();
+      await expect(page.getByTestId('explanation')).toBeVisible();
       await expectNoHorizontalOverflow(page);
       await expectVisibleUncovered(page, page.getByTestId('next'));
       await expect(page.getByTestId('explanation')).toContainText('Real plants would not fill a base this fast.');
       await expectScrolledContentVisible(page, page.locator('.explanation-lesson'));
       await expectScrolledContentVisible(page, page.locator('.evidence-rows'));
+      await expectEvidenceFullyReachable(page);
       await page.getByRole('heading', { name: 'What happened' }).focus();
       await expect(page.getByRole('heading', { name: 'What happened' })).toBeFocused();
       await page.getByTestId('next').focus();
       await expectVisibleUncovered(page, page.getByTestId('next'));
       await page.getByTestId('next').click();
       await playThrough(page, ['drill-2', 'drill-3']);
-      await decide(page, 'outside-4');
+      await page.getByTestId('choice-outside-4').click();
+      await expectVisibleUncovered(page, page.getByTestId('confirm'));
+      await page.getByTestId('confirm').click();
+      await expect(page.getByTestId('explanation')).toBeVisible();
       await expect(page.getByTestId('explanation')).toContainText('stayed outside');
       await expectVisibleUncovered(page, page.getByTestId('next'));
       await expectScrolledContentVisible(page, page.locator('.explanation-lesson'));
+      await expectEvidenceFullyReachable(page);
       await expectNoHorizontalOverflow(page);
     });
   }
+
+  for (const viewport of [
+    { width: 1440, height: 900 },
+    { width: 1024, height: 768 },
+  ]) {
+    test(`briefing leaves the habitat and greenhouse beside the card at ${viewport.width}x${viewport.height}`, async ({ page }) => {
+      await page.setViewportSize(viewport);
+      await page.goto('/');
+      const layout = await page.evaluate(() => {
+        const card = document.querySelector('.briefing-card')?.getBoundingClientRect();
+        const frame = document.querySelector('.briefing .scene-frame')?.getBoundingClientRect();
+        const visibleInFrame = (selector: string) => {
+          const node = document.querySelector(selector);
+          const rect = node?.getBoundingClientRect();
+          if (!card || !frame || !node || !rect) return { width: 0, height: 0, clear: false };
+          const left = Math.max(rect.left, frame.left);
+          const right = Math.min(rect.right, frame.right);
+          const top = Math.max(rect.top, frame.top);
+          const bottom = Math.min(rect.bottom, frame.bottom);
+          const width = Math.max(0, right - left);
+          const height = Math.max(0, bottom - top);
+          const hit = width > 0 && height > 0 ? document.elementFromPoint(left + width / 2, top + height / 2) : null;
+          const clear = hit !== null && !document.querySelector('.briefing-card')?.contains(hit);
+          return { width, height, clear };
+        };
+        return {
+          gap: frame && card ? frame.left - card.right : 0,
+          hab: visibleInFrame('.module-hab'),
+          dome: visibleInFrame('.module-dome'),
+        };
+      });
+      expect(layout.gap).toBeGreaterThan(12);
+      expect(layout.hab.width).toBeGreaterThan(120);
+      expect(layout.hab.height).toBeGreaterThan(28);
+      expect(layout.hab.clear).toBe(true);
+      expect(layout.dome.width).toBeGreaterThan(80);
+      expect(layout.dome.clear).toBe(true);
+    });
+  }
+
+  test('mobile scene frame fills the column and shows the outpost large', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/');
+    await page.getByTestId('start').click();
+    await page.evaluate(() => window.scrollTo(0, 0));
+    const layout = await page.evaluate(() => {
+      const frame = document.querySelector('.console .scene-frame')?.getBoundingClientRect();
+      const column = document.querySelector('.meters')?.getBoundingClientRect();
+      const visibleInFrame = (selector: string) => {
+        const node = document.querySelector(selector);
+        const rect = node?.getBoundingClientRect();
+        if (!frame || !node || !rect) return { width: 0, height: 0, seen: false };
+        const left = Math.max(rect.left, frame.left);
+        const right = Math.min(rect.right, frame.right);
+        const top = Math.max(rect.top, frame.top);
+        const bottom = Math.min(rect.bottom, frame.bottom);
+        const width = Math.max(0, right - left);
+        const height = Math.max(0, bottom - top);
+        const hit = width > 0 && height > 0 ? document.elementFromPoint(left + width / 2, top + height / 2) : null;
+        const seen = hit !== null && (hit === node || node.contains(hit) || Boolean(hit.closest('svg')));
+        return { width, height, seen };
+      };
+      return {
+        frameWidth: frame?.width ?? 0,
+        columnWidth: column?.width ?? 0,
+        inset: frame && column ? Math.abs(frame.left - column.left) : 99,
+        frameMode: document.querySelector('.console .scene-frame')?.getAttribute('data-frame'),
+        hab: visibleInFrame('.module-hab'),
+        dome: visibleInFrame('.module-dome'),
+        solar: visibleInFrame('.module-array'),
+        drill: visibleInFrame('.module-drill'),
+      };
+    });
+    expect(layout.frameMode).toBe('base');
+    expect(layout.frameWidth).toBeGreaterThan(layout.columnWidth - 8);
+    expect(layout.inset).toBeLessThan(4);
+    expect(layout.hab.width).toBeGreaterThan(100);
+    expect(layout.hab.height).toBeGreaterThan(24);
+    expect(layout.hab.seen).toBe(true);
+    expect(layout.dome.width).toBeGreaterThan(70);
+    expect(layout.dome.seen).toBe(true);
+    expect(layout.solar.width).toBeGreaterThan(36);
+    expect(layout.solar.seen).toBe(true);
+    expect(layout.drill.width).toBeGreaterThan(24);
+    expect(layout.drill.seen).toBe(true);
+  });
 });
+
+async function expectEvidenceFullyReachable(page: Page) {
+  const rows = page.locator('.evidence-row');
+  const count = await rows.count();
+  expect(count).toBeGreaterThan(1);
+  for (let index = 0; index < count; index += 1) {
+    const row = rows.nth(index);
+    await expectEntirelyReachable(page, row.locator('.evidence-row-text'));
+    const source = row.getByRole('button', { name: /^Source/ });
+    if ((await source.count()) > 0) await expectEntirelyReachable(page, source);
+  }
+}

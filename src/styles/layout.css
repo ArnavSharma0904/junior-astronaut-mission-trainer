@@ -135,6 +135,32 @@ main:focus {
   clip-path: none;
 }
 
+/* Desktop and tablet: the card takes the left column so the habitat and greenhouse stay in the open frame. */
+@media (min-width: 900px) {
+  .briefing {
+    grid-template-columns: minmax(300px, 440px) minmax(0, 1fr);
+    place-items: center stretch;
+    align-items: center;
+    gap: var(--s5);
+    overflow: visible;
+  }
+  .briefing > .scene-frame {
+    position: relative;
+    inset: auto;
+    grid-column: 2;
+    grid-row: 1;
+    height: min(640px, calc(100vh - 160px));
+    min-height: 420px;
+    border: 1px solid var(--edge);
+    border-radius: var(--r2);
+  }
+  .briefing-card {
+    grid-column: 1;
+    grid-row: 1;
+    width: auto;
+  }
+}
+
 @media (max-width: 1100px) {
   .app-header {
     flex-wrap: wrap;
@@ -168,13 +194,32 @@ main:focus {
 
 @media (max-width: 720px) {
   .app-header {
-    flex-wrap: wrap;
-    min-height: 56px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 4px 8px;
+    min-height: 0;
+    padding: 8px 12px;
   }
   .app-title {
-    font-size: 0.9375rem;
+    grid-column: 1;
+    grid-row: 1;
+    font-size: 1rem;
     white-space: normal;
-    flex: 1;
+  }
+  .app-tools {
+    grid-column: 2;
+    grid-row: 1;
+    margin-left: 0;
+  }
+  .turn-pips {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .app-objective {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    order: 0;
   }
   .app-tools .button span {
     position: absolute;
@@ -192,12 +237,28 @@ main:focus {
     gap: var(--s3);
   }
   .console-scene {
-    position: static;
-    gap: var(--s3);
+    display: contents;
   }
   .console .scene-frame {
+    order: 1;
+  }
+  .console .meters {
+    order: 2;
+  }
+  .console-decision {
+    order: 3;
+  }
+  .console .timeline {
+    order: 4;
+  }
+  .console .scene-frame,
+  .debrief .scene-frame {
     position: static;
-    max-height: 168px;
+    width: 100%;
+    max-width: 100%;
+    max-height: none;
+    aspect-ratio: 1200 / 530;
+    height: auto;
   }
   .briefing {
     padding: var(--s3);

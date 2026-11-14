@@ -61,6 +61,80 @@ export async function expectVisibleUncovered(page: Page, locator: ReturnType<Pag
   expect(uncovered).toBe(true);
 }
 
+/**
+ * Every line of a claim, and the whole source control, can be scrolled fully above the dock and hit at its start and end.
+ * A short uncovered slice of a parent list is not enough.
+ */
+export async function expectEntirelyReachable(page: Page, locator: ReturnType<Page['locator']>) {
+  expect(page.viewportSize()).not.toBeNull();
+  const reached = await locator.evaluate((element) => {
+    const fail = (reason: string) => ({ ok: false as const, reason });
+    const dockTop = () => {
+      const dock = document.querySelector('.decision-dock');
+      return dock ? dock.getBoundingClientRect().top : window.innerHeight;
+    };
+    const textRects = () => {
+      const range = document.createRange();
+      const found: DOMRect[] = [];
+      const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+      let node = walker.nextNode();
+      while (node) {
+        const text = node.textContent ?? '';
+        const hidden = node.parentElement?.closest('.visually-hidden');
+        if (!hidden && text.trim().length > 0) {
+          range.setStart(node, 0);
+          range.setEnd(node, text.length);
+          found.push(...Array.from(range.getClientRects()));
+        }
+        node = walker.nextNode();
+      }
+      return found.filter((rect) => rect.width >= 8 && rect.height >= 8);
+    };
+    const place = (rect: DOMRect) => {
+      const limit = dockTop();
+      const overflow = rect.bottom - (limit - 2);
+      if (overflow > 0) window.scrollBy(0, overflow);
+      const follow = rect.top < 2 ? rect.top - 2 : 0;
+      if (follow !== 0) window.scrollBy(0, follow);
+    };
+    const hit = (rect: DOMRect) => {
+      const limit = dockTop();
+      const inside = rect.top >= -1 && rect.left >= -1 && rect.bottom <= limit + 1 && rect.right <= window.innerWidth + 1;
+      const inset = Math.min(16, Math.max(4, rect.width / 4));
+      const points = [
+        [rect.left + inset, rect.top + rect.height / 2],
+        [rect.left + rect.width / 2, rect.top + rect.height / 2],
+        [rect.right - inset, rect.top + rect.height / 2],
+      ];
+      const hits = points.map(([x, y]) => {
+        const node = document.elementFromPoint(x ?? 0, y ?? 0);
+        return node !== null && (node === element || element.contains(node));
+      });
+      return inside && hits.every(Boolean);
+    };
+    const lines = textRects();
+    if (lines.length === 0) return fail('no text rects');
+    for (let index = 0; index < lines.length; index += 1) {
+      const before = textRects()[index];
+      if (!before) return fail(`missing line ${index}`);
+      place(before);
+      const after = textRects()[index];
+      if (!after) return fail(`line ${index} vanished`);
+      if (!hit(after)) {
+        return fail(`line ${index} top=${after.top.toFixed(0)} bottom=${after.bottom.toFixed(0)} left=${after.left.toFixed(0)} right=${after.right.toFixed(0)} limit=${dockTop().toFixed(0)} text=${element.textContent?.slice(0, 80)}`);
+      }
+    }
+    const box = element.getBoundingClientRect();
+    if (element.getClientRects().length <= 1 && box.height <= dockTop() - 8 && box.height >= 8) {
+      place(box);
+      const again = element.getBoundingClientRect();
+      if (!hit(again)) return fail(`box top=${again.top.toFixed(0)} bottom=${again.bottom.toFixed(0)} right=${again.right.toFixed(0)} limit=${dockTop().toFixed(0)} text=${element.textContent?.slice(0, 80)}`);
+    }
+    return { ok: true as const, reason: '' };
+  });
+  expect(reached.ok, reached.reason).toBe(true);
+}
+
 /** Scroll the learning text into view and confirm the fixed action does not cover it. */
 export async function expectScrolledContentVisible(page: Page, locator: ReturnType<Page['locator']>) {
   expect(page.viewportSize()).not.toBeNull();
