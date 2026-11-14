@@ -2,13 +2,19 @@ import { describe, expect, it } from 'vitest';
 import { mission, TRAP_ACTION_IDS } from '../../src/content/mission';
 import { hasLegalAction } from '../../src/game/selectors';
 import type { GameState } from '../../src/game/types';
-import { enumerate, play, start } from './helpers';
+import { enumerate, ignoreIllegalAction, play, RejectedAction, start } from './helpers';
 
 const paths = enumerate();
 const wins = paths.filter((path) => path.final.outcome === 'success');
 const allActionIds = mission.turns.flatMap((turn) => turn.actions.map((action) => action.id));
 
 describe('mission balance (every legal path enumerated)', () => {
+  it('does not swallow an assertion failure while skipping an illegal action', () => {
+    expect(() => play(start(), 'drill-2')).toThrow(RejectedAction);
+    expect(() => ignoreIllegalAction(new RejectedAction('drill-2', 'requirement'))).not.toThrow();
+    expect(() => ignoreIllegalAction(new Error('expected true to be false'))).toThrow(/expected true/);
+  });
+
   it('has a manageable, fully explored decision tree', () => {
     expect(paths.length).toBeGreaterThan(50);
     expect(paths.length).toBeLessThan(729);
@@ -33,8 +39,8 @@ describe('mission balance (every legal path enumerated)', () => {
       for (const action of mission.turns[state.turnIndex]!.actions) {
         try {
           visit(play(state, action.id));
-        } catch {
-          // Illegal in this state: covered by the engine tests.
+        } catch (error) {
+          ignoreIllegalAction(error);
         }
       }
     };
@@ -57,7 +63,8 @@ describe('mission balance (every legal path enumerated)', () => {
         const pick = actions[Math.min(slot, actions.length - 1)]!;
         try {
           state = play(state, pick.id);
-        } catch {
+        } catch (error) {
+          ignoreIllegalAction(error);
           break;
         }
       }

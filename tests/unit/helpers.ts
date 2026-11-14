@@ -6,10 +6,24 @@ import type { GameState } from '../../src/game/types';
 export const SNAPSHOT = 'test-snapshot';
 export const start = (): GameState => createInitialState(mission, SNAPSHOT);
 
+/** An action the rules reject. Distinct from an assertion failure so the balance search can ignore only this. */
+export class RejectedAction extends Error {
+  readonly actionId: string;
+  constructor(actionId: string, detail: string) {
+    super(`Rejected ${actionId}: ${detail}`);
+    this.name = 'RejectedAction';
+    this.actionId = actionId;
+  }
+}
+
+export function ignoreIllegalAction(error: unknown): void {
+  if (!(error instanceof RejectedAction)) throw error;
+}
+
 /** Commits one action and advances to the next situation (or the end). Throws if the engine rejects it. */
 export function play(state: GameState, actionId: string): GameState {
   const committed = resolve(state, { type: 'COMMIT', actionId }, mission);
-  if (committed.rejected) throw new Error(`Rejected ${actionId}: ${JSON.stringify(committed.rejected)}`);
+  if (committed.rejected) throw new RejectedAction(actionId, JSON.stringify(committed.rejected));
   const shown = resolve(committed.state, { type: 'RESOLUTION_SHOWN' }, mission).state;
   return resolve(shown, { type: 'NEXT' }, mission).state;
 }

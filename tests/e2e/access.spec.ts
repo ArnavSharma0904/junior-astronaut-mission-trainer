@@ -97,11 +97,17 @@ test.describe('accessibility and settings', () => {
   test('motion and low-effects settings apply at once and persist', async ({ page }) => {
     await start(page);
     await expect(page.locator('html')).toHaveAttribute('data-motion', 'full');
+    const scanBefore = await page.locator('.scene-frame').evaluate((element) => getComputedStyle(element, '::after').display);
+    expect(scanBefore).not.toBe('none');
     await page.getByTestId('open-settings').click();
     await page.getByRole('radio', { name: 'Reduce motion' }).check();
     await expect(page.locator('html')).toHaveAttribute('data-motion', 'reduced');
     await page.getByRole('switch', { name: 'Low effects' }).check();
     await expect(page.locator('html')).toHaveAttribute('data-effects', 'low');
+    const scanAfter = await page.locator('.scene-frame').evaluate((element) => getComputedStyle(element, '::after').display);
+    const conduit = await page.locator('.scene .conduit').first().evaluate((element) => getComputedStyle(element).animationName);
+    expect(scanAfter).toBe('none');
+    expect(conduit).toBe('none');
     await page.keyboard.press('Escape');
     await expect(page.getByTestId('open-settings')).toBeFocused();
     await page.reload();
