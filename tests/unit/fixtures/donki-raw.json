@@ -1,0 +1,500 @@
+{
+  "note": "Raw-shaped DONKI records reconstructed from field values read out of the real responses on 2026-11-14. They are test fixtures, not saved raw bytes; links are placeholders.",
+  "flr": [
+    {
+      "flrID": "2024-05-09T08:45:00-FLR-001",
+      "catalog": "M2M_CATALOG",
+      "instruments": [
+        {
+          "displayName": "GOES-P: EXIS 1.0-8.0"
+        }
+      ],
+      "beginTime": "2024-05-09T08:45Z",
+      "peakTime": "2024-05-09T09:13Z",
+      "endTime": "2024-05-09T09:36Z",
+      "classType": "X2.2",
+      "sourceLocation": "S20W25",
+      "activeRegionNum": 13664,
+      "note": "",
+      "submissionTime": "2024-05-11T00:00Z",
+      "versionId": 2,
+      "link": "https://example.invalid/fixture",
+      "linkedEvents": [
+        {
+          "activityID": "2024-05-09T09:24:00-CME-001"
+        }
+      ],
+      "sentNotifications": [
+        {
+          "messageID": "x",
+          "messageIssueTime": "2024-05-09T10:00Z",
+          "messageURL": "https://example.invalid/n"
+        }
+      ]
+    },
+    {
+      "flrID": "2024-05-09T17:23:00-FLR-001",
+      "catalog": "M2M_CATALOG",
+      "instruments": [
+        {
+          "displayName": "GOES-P: EXIS 1.0-8.0"
+        }
+      ],
+      "beginTime": "2024-05-09T17:23Z",
+      "peakTime": "2024-05-09T17:44Z",
+      "endTime": "2024-05-09T18:00Z",
+      "classType": "X1.1",
+      "sourceLocation": "S18W29",
+      "activeRegionNum": 13664,
+      "note": "",
+      "submissionTime": "2024-05-11T00:00Z",
+      "versionId": 3,
+      "link": "https://example.invalid/fixture",
+      "linkedEvents": null,
+      "sentNotifications": [
+        {
+          "messageID": "x",
+          "messageIssueTime": "2024-05-09T10:00Z",
+          "messageURL": "https://example.invalid/n"
+        }
+      ]
+    },
+    {
+      "flrID": "2024-05-10T06:27:00-FLR-001",
+      "catalog": "M2M_CATALOG",
+      "instruments": [
+        {
+          "displayName": "GOES-P: EXIS 1.0-8.0"
+        }
+      ],
+      "beginTime": "2024-05-10T06:27Z",
+      "peakTime": "2024-05-10T06:54Z",
+      "endTime": "2024-05-10T07:06Z",
+      "classType": "X3.9",
+      "sourceLocation": "S18W37",
+      "activeRegionNum": 13664,
+      "note": "",
+      "submissionTime": "2024-05-11T00:00Z",
+      "versionId": 2,
+      "link": "https://example.invalid/fixture",
+      "linkedEvents": [
+        {
+          "activityID": "2024-05-09T09:24:00-CME-001"
+        }
+      ],
+      "sentNotifications": [
+        {
+          "messageID": "x",
+          "messageIssueTime": "2024-05-09T10:00Z",
+          "messageURL": "https://example.invalid/n"
+        }
+      ]
+    },
+    {
+      "flrID": "2024-05-11T01:10:00-FLR-001",
+      "catalog": "M2M_CATALOG",
+      "instruments": [
+        {
+          "displayName": "GOES-P: EXIS 1.0-8.0"
+        }
+      ],
+      "beginTime": "2024-05-11T01:10Z",
+      "peakTime": "2024-05-11T01:23Z",
+      "endTime": "2024-05-11T01:39Z",
+      "classType": "X5.8",
+      "sourceLocation": "S17W47",
+      "activeRegionNum": 13664,
+      "note": "",
+      "submissionTime": "2024-05-11T00:00Z",
+      "versionId": 3,
+      "link": "https://example.invalid/fixture",
+      "linkedEvents": null,
+      "sentNotifications": [
+        {
+          "messageID": "x",
+          "messageIssueTime": "2024-05-09T10:00Z",
+          "messageURL": "https://example.invalid/n"
+        }
+      ]
+    },
+    {
+      "flrID": "2024-05-11T11:15:00-FLR-001",
+      "catalog": "M2M_CATALOG",
+      "instruments": [
+        {
+          "displayName": "GOES-P: EXIS 1.0-8.0"
+        }
+      ],
+      "beginTime": "2024-05-11T11:15Z",
+      "peakTime": "2024-05-11T11:44Z",
+      "endTime": "2024-05-11T12:05Z",
+      "classType": "X1.5",
+      "sourceLocation": "S19W60",
+      "activeRegionNum": 13664,
+      "note": "",
+      "submissionTime": "2024-05-11T00:00Z",
+      "versionId": 2,
+      "link": "https://example.invalid/fixture",
+      "linkedEvents": [
+        {
+          "activityID": "2024-05-09T09:24:00-CME-001"
+        }
+      ],
+      "sentNotifications": [
+        {
+          "messageID": "x",
+          "messageIssueTime": "2024-05-09T10:00Z",
+          "messageURL": "https://example.invalid/n"
+        }
+      ]
+    }
+  ],
+  "sep": [
+    {
+      "sepID": "2024-05-09T13:59:00-SEP-001",
+      "eventTime": "2024-05-09T13:59Z",
+      "instruments": [
+        {
+          "displayName": "MODEL: REleASE:ACE/EPAM 15.8-39.8 MeV"
+        }
+      ],
+      "submissionTime": "2024-05-11T05:00Z",
+      "versionId": 1,
+      "link": "https://example.invalid/fixture",
+      "linkedEvents": [
+        {
+          "activityID": "2024-05-09T08:45:00-FLR-001"
+        }
+      ],
+      "sentNotifications": null
+    },
+    {
+      "sepID": "2024-05-09T14:25:00-SEP-001",
+      "eventTime": "2024-05-09T14:25Z",
+      "instruments": [
+        {
+          "displayName": "MODEL: REleASE:SOHO/EPHIN 15.8-39.8 MeV"
+        }
+      ],
+      "submissionTime": "2024-05-11T05:00Z",
+      "versionId": 2,
+      "link": "https://example.invalid/fixture",
+      "linkedEvents": [
+        {
+          "activityID": "2024-05-09T08:45:00-FLR-001"
+        }
+      ],
+      "sentNotifications": null
+    },
+    {
+      "sepID": "2024-05-10T12:59:00-SEP-001",
+      "eventTime": "2024-05-10T12:59Z",
+      "instruments": [
+        {
+          "displayName": "SOHO: COSTEP 15.8-39.8 MeV"
+        }
+      ],
+      "submissionTime": "2024-05-11T05:00Z",
+      "versionId": 1,
+      "link": "https://example.invalid/fixture",
+      "linkedEvents": [
+        {
+          "activityID": "2024-05-09T08:45:00-FLR-001"
+        }
+      ],
+      "sentNotifications": null
+    },
+    {
+      "sepID": "2024-05-10T13:02:00-SEP-001",
+      "eventTime": "2024-05-10T13:02Z",
+      "instruments": [
+        {
+          "displayName": "SOHO: COSTEP 28.2-50.1 MeV"
+        }
+      ],
+      "submissionTime": "2024-05-11T05:00Z",
+      "versionId": 1,
+      "link": "https://example.invalid/fixture",
+      "linkedEvents": [
+        {
+          "activityID": "2024-05-09T08:45:00-FLR-001"
+        }
+      ],
+      "sentNotifications": null
+    },
+    {
+      "sepID": "2024-05-10T13:35:00-SEP-001",
+      "eventTime": "2024-05-10T13:35Z",
+      "instruments": [
+        {
+          "displayName": "GOES-P: SEISS >10 MeV"
+        }
+      ],
+      "submissionTime": "2024-05-11T05:00Z",
+      "versionId": 1,
+      "link": "https://example.invalid/fixture",
+      "linkedEvents": [
+        {
+          "activityID": "2024-05-09T08:45:00-FLR-001"
+        }
+      ],
+      "sentNotifications": null
+    },
+    {
+      "sepID": "2024-05-10T14:50:00-SEP-001",
+      "eventTime": "2024-05-10T14:50Z",
+      "instruments": [
+        {
+          "displayName": "STEREO A: IMPACT 13-100 MeV"
+        }
+      ],
+      "submissionTime": "2024-05-11T05:00Z",
+      "versionId": 1,
+      "link": "https://example.invalid/fixture",
+      "linkedEvents": [
+        {
+          "activityID": "2024-05-09T08:45:00-FLR-001"
+        }
+      ],
+      "sentNotifications": null
+    },
+    {
+      "sepID": "2024-05-11T02:10:00-SEP-001",
+      "eventTime": "2024-05-11T02:10Z",
+      "instruments": [
+        {
+          "displayName": "GOES-P: SEISS >100 MeV"
+        }
+      ],
+      "submissionTime": "2024-05-11T05:00Z",
+      "versionId": 1,
+      "link": "https://example.invalid/fixture",
+      "linkedEvents": [
+        {
+          "activityID": "2024-05-11T01:10:00-FLR-001"
+        },
+        {
+          "activityID": "2024-05-11T01:36:00-CME-001"
+        }
+      ],
+      "sentNotifications": null
+    },
+    {
+      "sepID": "2024-05-11T04:07:00-SEP-001",
+      "eventTime": "2024-05-11T04:07Z",
+      "instruments": [
+        {
+          "displayName": "STEREO A: IMPACT 13-100 MeV"
+        }
+      ],
+      "submissionTime": "2024-05-11T05:00Z",
+      "versionId": 1,
+      "link": "https://example.invalid/fixture",
+      "linkedEvents": [
+        {
+          "activityID": "2024-05-11T01:10:00-FLR-001"
+        },
+        {
+          "activityID": "2024-05-11T01:36:00-CME-001"
+        }
+      ],
+      "sentNotifications": null
+    }
+  ],
+  "cme": [
+    {
+      "activityID": "2024-05-09T09:24:00-CME-001",
+      "catalog": "M2M_CATALOG",
+      "startTime": "2024-05-09T09:24Z",
+      "instruments": [
+        {
+          "displayName": "SOHO: LASCO/C2"
+        }
+      ],
+      "sourceLocation": "",
+      "activeRegionNum": 13664,
+      "note": "",
+      "versionId": 1,
+      "link": "https://example.invalid/fixture",
+      "cmeAnalyses": [
+        {
+          "isMostAccurate": true,
+          "time21_5": "2024-05-09T11:56Z",
+          "latitude": -10.0,
+          "longitude": 20.0,
+          "halfAngle": 45,
+          "speed": 1330,
+          "type": "O",
+          "enlilList": []
+        },
+        {
+          "isMostAccurate": true,
+          "time21_5": "2024-05-09T11:21Z",
+          "latitude": -10.0,
+          "longitude": 20.0,
+          "halfAngle": 45,
+          "speed": 1561,
+          "type": "O",
+          "enlilList": []
+        }
+      ],
+      "linkedEvents": null
+    },
+    {
+      "activityID": "2024-05-11T01:36:00-CME-001",
+      "catalog": "M2M_CATALOG",
+      "startTime": "2024-05-11T01:36Z",
+      "instruments": [
+        {
+          "displayName": "SOHO: LASCO/C2"
+        }
+      ],
+      "sourceLocation": "",
+      "activeRegionNum": 13664,
+      "note": "",
+      "versionId": 1,
+      "link": "https://example.invalid/fixture",
+      "cmeAnalyses": [
+        {
+          "isMostAccurate": false,
+          "time21_5": "2024-05-11T04:15Z",
+          "latitude": -10.0,
+          "longitude": 20.0,
+          "halfAngle": 49,
+          "speed": 1372,
+          "type": "O",
+          "enlilList": []
+        },
+        {
+          "isMostAccurate": true,
+          "time21_5": "2024-05-11T04:22Z",
+          "latitude": -10.0,
+          "longitude": 20.0,
+          "halfAngle": 51,
+          "speed": 1263,
+          "type": "O",
+          "enlilList": []
+        },
+        {
+          "isMostAccurate": true,
+          "time21_5": "2024-05-11T03:24Z",
+          "latitude": -10.0,
+          "longitude": 20.0,
+          "halfAngle": 48,
+          "speed": 1820,
+          "type": "O",
+          "enlilList": []
+        }
+      ],
+      "linkedEvents": null
+    },
+    {
+      "activityID": "2024-05-10T07:12:00-CME-001",
+      "startTime": "2024-05-10T07:12Z",
+      "versionId": 1,
+      "cmeAnalyses": null,
+      "linkedEvents": null
+    }
+  ],
+  "enlil": [
+    {
+      "simulationID": "WSA-ENLIL/30626/1",
+      "modelCompletionTime": "2024-05-09T16:43Z",
+      "au": 2.0,
+      "estimatedShockArrivalTime": "2024-05-11T05:02Z",
+      "estimatedDuration": 27.2,
+      "rmin_re": null,
+      "kp_18": null,
+      "kp_90": 7,
+      "isEarthGB": false,
+      "link": "https://example.invalid/fixture",
+      "impactList": null,
+      "cmeInputs": [
+        {
+          "cmeStartTime": "2024-05-09T09:24Z",
+          "speed": 1330.0
+        }
+      ]
+    },
+    {
+      "simulationID": "WSA-ENLIL/30633/1",
+      "modelCompletionTime": "2024-05-09T17:00Z",
+      "au": 2.0,
+      "estimatedShockArrivalTime": "2024-05-11T05:04Z",
+      "estimatedDuration": 26.2,
+      "rmin_re": null,
+      "kp_18": null,
+      "kp_90": 7,
+      "isEarthGB": false,
+      "link": "https://example.invalid/fixture",
+      "impactList": null,
+      "cmeInputs": [
+        {
+          "cmeStartTime": "2024-05-09T09:24Z",
+          "speed": 1330.0
+        }
+      ]
+    },
+    {
+      "simulationID": "WSA-ENLIL/30651/1",
+      "modelCompletionTime": "2024-05-09T20:28Z",
+      "au": 2.0,
+      "estimatedShockArrivalTime": "2024-05-10T13:03Z",
+      "estimatedDuration": 22.4,
+      "rmin_re": null,
+      "kp_18": null,
+      "kp_90": 7,
+      "isEarthGB": false,
+      "link": "https://example.invalid/fixture",
+      "impactList": null,
+      "cmeInputs": [
+        {
+          "cmeStartTime": "2024-05-09T09:24Z",
+          "speed": 1330.0
+        },
+        {
+          "cmeStartTime": "2024-05-08T22:24Z",
+          "speed": 900.0
+        },
+        {
+          "cmeStartTime": "2024-05-08T22:24Z",
+          "speed": 900.0
+        }
+      ]
+    },
+    {
+      "simulationID": "WSA-ENLIL/30652/1",
+      "modelCompletionTime": "2024-05-09T20:46Z",
+      "au": 2.0,
+      "estimatedShockArrivalTime": "2024-05-10T12:50Z",
+      "estimatedDuration": 22.1,
+      "rmin_re": null,
+      "kp_18": null,
+      "kp_90": 7,
+      "isEarthGB": false,
+      "link": "https://example.invalid/fixture",
+      "impactList": null,
+      "cmeInputs": [
+        {
+          "cmeStartTime": "2024-05-09T09:24Z",
+          "speed": 1330.0
+        },
+        {
+          "cmeStartTime": "2024-05-08T22:24Z",
+          "speed": 900.0
+        },
+        {
+          "cmeStartTime": "2024-05-08T22:24Z",
+          "speed": 900.0
+        }
+      ]
+    },
+    {
+      "simulationID": "WSA-ENLIL/30600/1",
+      "modelCompletionTime": "2024-05-09T02:00Z",
+      "estimatedShockArrivalTime": null,
+      "estimatedDuration": null,
+      "cmeInputs": []
+    }
+  ]
+}

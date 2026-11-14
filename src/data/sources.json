@@ -1,0 +1,330 @@
+{
+  "snapshotVersion": "donki-2024-05-09_11-r1",
+  "records": [
+    {
+      "id": "donki-flr-window-2024-05",
+      "agency": "NASA",
+      "provider": "CCMC DONKI",
+      "datasetId": "DONKI",
+      "recordUrl": "https://ccmc.gsfc.nasa.gov/tools/DONKI/",
+      "apiUrl": "https://ccmc.gsfc.nasa.gov/DONKI-API/get/FLR?startDate=2024-05-09&endDate=2024-05-11&class=X",
+      "rawIds": [
+        "2024-05-09T08:45:00-FLR-001",
+        "2024-05-09T17:23:00-FLR-001",
+        "2024-05-10T06:27:00-FLR-001",
+        "2024-05-11T01:10:00-FLR-001",
+        "2024-05-11T11:15:00-FLR-001"
+      ],
+      "retrievedAt": "2026-11-14T18:41:32Z",
+      "observedAt": "2024-05-09T08:45Z",
+      "kind": "observation",
+      "originalUnits": "GOES X-ray flare class (1-8 angstrom)",
+      "transformedUnits": null,
+      "supportedClaim": "NASA's DONKI record lists five X-class solar flares from active region 13664 between 9 and 11 May 2024.",
+      "notSupported": [
+        "Any radiation dose, health effect or safety level",
+        "Conditions on the Moon's surface"
+      ],
+      "usageNotes": "NASA/CCMC DONKI data. Independent project; no NASA endorsement.",
+      "transformationVersion": "1",
+      "contentSha256": "801ebf256dcd5987050bde23b8c2c44407f8897ccae676a0d392f67eeb272add",
+      "status": "snapshot"
+    },
+    {
+      "id": "donki-flr-2024-05-09",
+      "agency": "NASA",
+      "provider": "CCMC DONKI",
+      "datasetId": "DONKI",
+      "recordUrl": "https://ccmc.gsfc.nasa.gov/tools/DONKI/",
+      "apiUrl": "https://ccmc.gsfc.nasa.gov/DONKI-API/get/FLR?startDate=2024-05-09&endDate=2024-05-11&class=X",
+      "rawIds": [
+        "2024-05-09T08:45:00-FLR-001"
+      ],
+      "retrievedAt": "2026-11-14T18:41:32Z",
+      "observedAt": "2024-05-09T09:13Z",
+      "kind": "observation",
+      "originalUnits": "GOES X-ray flare class (1-8 angstrom)",
+      "transformedUnits": null,
+      "supportedClaim": "An X2.2 flare peaked at 09:13 UTC on 9 May 2024.",
+      "notSupported": [
+        "Any radiation dose, health effect or safety level",
+        "Conditions on the Moon's surface"
+      ],
+      "usageNotes": "NASA/CCMC DONKI data. Independent project; no NASA endorsement.",
+      "transformationVersion": "1",
+      "contentSha256": "801ebf256dcd5987050bde23b8c2c44407f8897ccae676a0d392f67eeb272add",
+      "status": "snapshot"
+    },
+    {
+      "id": "donki-cme-2024-05-09",
+      "agency": "NASA",
+      "provider": "CCMC DONKI",
+      "datasetId": "DONKI",
+      "recordUrl": "https://ccmc.gsfc.nasa.gov/tools/DONKI/",
+      "apiUrl": "https://ccmc.gsfc.nasa.gov/DONKI-API/get/CME?startDate=2024-05-09&endDate=2024-05-11",
+      "rawIds": [
+        "2024-05-09T09:24:00-CME-001"
+      ],
+      "retrievedAt": "2026-11-14T18:41:32Z",
+      "observedAt": "2024-05-09T09:24Z",
+      "kind": "curated-analysis",
+      "originalUnits": "km/s",
+      "transformedUnits": null,
+      "supportedClaim": "A coronal mass ejection was recorded starting at 09:24 UTC on 9 May 2024. Forecasters measured its speed at about 1,330 to 1,560 km/s in two analyses.",
+      "notSupported": [
+        "Any radiation dose, health effect or safety level",
+        "Conditions on the Moon's surface",
+        "That this cloud reached or affected the Moon"
+      ],
+      "usageNotes": "NASA/CCMC DONKI data. Independent project; no NASA endorsement.",
+      "transformationVersion": "1",
+      "contentSha256": "a495d35c76dd0fdffe4c223aff7f7f188714129fa1e4c890b0eabd97d9341bc1",
+      "status": "snapshot"
+    },
+    {
+      "id": "donki-enlil-run-a",
+      "agency": "NASA",
+      "provider": "CCMC DONKI",
+      "datasetId": "DONKI",
+      "recordUrl": "https://ccmc.gsfc.nasa.gov/tools/DONKI/",
+      "apiUrl": "https://ccmc.gsfc.nasa.gov/DONKI-API/get/WSAEnlilSimulations?startDate=2024-05-09&endDate=2024-05-10",
+      "rawIds": [
+        "WSA-ENLIL/30626/1"
+      ],
+      "retrievedAt": "2026-11-14T18:41:32Z",
+      "observedAt": "2024-05-09T16:43Z",
+      "kind": "model-output",
+      "originalUnits": "UTC time (model estimate)",
+      "transformedUnits": null,
+      "supportedClaim": "A WSA-ENLIL model run finished at 16:43 UTC on 9 May 2024 estimated the shock would reach Earth at 05:02 UTC on 11 May.",
+      "notSupported": [
+        "Any radiation dose, health effect or safety level",
+        "Conditions on the Moon's surface",
+        "An observed arrival time",
+        "A forecast for the Moon's surface"
+      ],
+      "usageNotes": "NASA/CCMC DONKI data. Independent project; no NASA endorsement.",
+      "transformationVersion": "1",
+      "contentSha256": "01ed4e776bd17639a3b2955055d3a11c059585f3feb8b27f828717cf3962bedc",
+      "status": "snapshot"
+    },
+    {
+      "id": "donki-enlil-run-b",
+      "agency": "NASA",
+      "provider": "CCMC DONKI",
+      "datasetId": "DONKI",
+      "recordUrl": "https://ccmc.gsfc.nasa.gov/tools/DONKI/",
+      "apiUrl": "https://ccmc.gsfc.nasa.gov/DONKI-API/get/WSAEnlilSimulations?startDate=2024-05-09&endDate=2024-05-10",
+      "rawIds": [
+        "WSA-ENLIL/30652/1"
+      ],
+      "retrievedAt": "2026-11-14T18:41:32Z",
+      "observedAt": "2024-05-09T20:46Z",
+      "kind": "model-output",
+      "originalUnits": "UTC time (model estimate)",
+      "transformedUnits": null,
+      "supportedClaim": "A later WSA-ENLIL run finished at 20:46 UTC the same day, which included three clouds, estimated arrival at Earth at 12:50 UTC on 10 May: about 16 hours earlier than the first run.",
+      "notSupported": [
+        "Any radiation dose, health effect or safety level",
+        "Conditions on the Moon's surface",
+        "An observed arrival time",
+        "A forecast for the Moon's surface"
+      ],
+      "usageNotes": "NASA/CCMC DONKI data. Independent project; no NASA endorsement.",
+      "transformationVersion": "1",
+      "contentSha256": "01ed4e776bd17639a3b2955055d3a11c059585f3feb8b27f828717cf3962bedc",
+      "status": "snapshot"
+    },
+    {
+      "id": "donki-flr-2024-05-11",
+      "agency": "NASA",
+      "provider": "CCMC DONKI",
+      "datasetId": "DONKI",
+      "recordUrl": "https://ccmc.gsfc.nasa.gov/tools/DONKI/",
+      "apiUrl": "https://ccmc.gsfc.nasa.gov/DONKI-API/get/FLR?startDate=2024-05-09&endDate=2024-05-11&class=X",
+      "rawIds": [
+        "2024-05-11T01:10:00-FLR-001"
+      ],
+      "retrievedAt": "2026-11-14T18:41:32Z",
+      "observedAt": "2024-05-11T01:23Z",
+      "kind": "observation",
+      "originalUnits": "GOES X-ray flare class (1-8 angstrom)",
+      "transformedUnits": null,
+      "supportedClaim": "An X5.8 flare began at 01:10 UTC and peaked at 01:23 UTC on 11 May 2024.",
+      "notSupported": [
+        "Any radiation dose, health effect or safety level",
+        "Conditions on the Moon's surface"
+      ],
+      "usageNotes": "NASA/CCMC DONKI data. Independent project; no NASA endorsement.",
+      "transformationVersion": "1",
+      "contentSha256": "801ebf256dcd5987050bde23b8c2c44407f8897ccae676a0d392f67eeb272add",
+      "status": "snapshot"
+    },
+    {
+      "id": "donki-sep-2024-05-11",
+      "agency": "NASA",
+      "provider": "CCMC DONKI",
+      "datasetId": "DONKI",
+      "recordUrl": "https://ccmc.gsfc.nasa.gov/tools/DONKI/",
+      "apiUrl": "https://ccmc.gsfc.nasa.gov/DONKI-API/get/SEP?startDate=2024-05-09&endDate=2024-05-11",
+      "rawIds": [
+        "2024-05-11T02:10:00-SEP-001"
+      ],
+      "retrievedAt": "2026-11-14T18:41:32Z",
+      "observedAt": "2024-05-11T02:10Z",
+      "kind": "observation",
+      "originalUnits": "event onset time; instrument channel >100 MeV",
+      "transformedUnits": null,
+      "supportedClaim": "A solar energetic particle event was recorded at 02:10 UTC on 11 May 2024 by the GOES SEISS instrument (protons above 100 MeV), 47 minutes after the flare's peak. NASA's record links it to that flare.",
+      "notSupported": [
+        "Any radiation dose, health effect or safety level",
+        "Conditions on the Moon's surface",
+        "That the flare is proven to have caused the particle event",
+        "A particle count or dose"
+      ],
+      "usageNotes": "NASA/CCMC DONKI data. Independent project; no NASA endorsement.",
+      "transformationVersion": "1",
+      "contentSha256": "17a5b371554d283fdf49379df7886a1df728992a476e9dc32c6e33fb516b5c38",
+      "status": "snapshot"
+    },
+    {
+      "id": "donki-sep-stereo-2024-05-11",
+      "agency": "NASA",
+      "provider": "CCMC DONKI",
+      "datasetId": "DONKI",
+      "recordUrl": "https://ccmc.gsfc.nasa.gov/tools/DONKI/",
+      "apiUrl": "https://ccmc.gsfc.nasa.gov/DONKI-API/get/SEP?startDate=2024-05-09&endDate=2024-05-11",
+      "rawIds": [
+        "2024-05-11T04:07:00-SEP-001"
+      ],
+      "retrievedAt": "2026-11-14T18:41:32Z",
+      "observedAt": "2024-05-11T04:07Z",
+      "kind": "observation",
+      "originalUnits": "event onset time; instrument channel 13-100 MeV",
+      "transformedUnits": null,
+      "supportedClaim": "The STEREO A spacecraft, in a different place in space, recorded a particle event at 04:07 UTC on 11 May 2024.",
+      "notSupported": [
+        "Any radiation dose, health effect or safety level",
+        "Conditions on the Moon's surface"
+      ],
+      "usageNotes": "NASA/CCMC DONKI data. Independent project; no NASA endorsement.",
+      "transformationVersion": "1",
+      "contentSha256": "17a5b371554d283fdf49379df7886a1df728992a476e9dc32c6e33fb516b5c38",
+      "status": "snapshot"
+    },
+    {
+      "id": "osdr-osd-476",
+      "agency": "NASA",
+      "provider": "NASA Open Science Data Repository",
+      "datasetId": "OSD-476",
+      "recordUrl": "https://osdr.nasa.gov/bio/repo/data/studies/OSD-476",
+      "apiUrl": "https://visualization.osdr.nasa.gov/biodata/api/v2/dataset/OSD-476/",
+      "rawIds": [
+        "OSD-476"
+      ],
+      "retrievedAt": "2026-11-14T18:12:00Z",
+      "observedAt": null,
+      "kind": "observation",
+      "originalUnits": null,
+      "transformedUnits": null,
+      "supportedClaim": "In a lab study on Earth, Arabidopsis plants sprouted and grew in real Apollo Moon soil, but more slowly and with more signs of stress than plants in a look-alike test soil.",
+      "notSupported": [
+        "That food has been grown on the Moon",
+        "How much oxygen plants would make in a Moon base",
+        "Any effect on people"
+      ],
+      "usageNotes": "Dataset record seen through an AI web-fetch summary, not raw-verified. Related paper: Paul et al., Communications Biology 2022, doi:10.1038/s42003-022-03334-8.",
+      "transformationVersion": "1",
+      "contentSha256": null,
+      "status": "reference"
+    },
+    {
+      "id": "csa-food-toolkit",
+      "agency": "CSA",
+      "provider": "Canadian Space Agency",
+      "datasetId": "Food production toolkit",
+      "recordUrl": "https://www.asc-csa.gc.ca/eng/youth-educators/toolkits/food-production",
+      "apiUrl": null,
+      "rawIds": [],
+      "retrievedAt": "2026-11-14T18:12:00Z",
+      "observedAt": null,
+      "kind": "educational-resource",
+      "originalUnits": null,
+      "transformedUnits": null,
+      "supportedClaim": "Space agencies study how to grow fresh food for crews far from Earth.",
+      "notSupported": [
+        "Any number used in this game"
+      ],
+      "usageNotes": "Credit: Canadian Space Agency. Linked, not copied. No endorsement implied.",
+      "transformationVersion": "1",
+      "contentSha256": null,
+      "status": "reference"
+    },
+    {
+      "id": "assumption-game-units",
+      "agency": null,
+      "provider": "This game",
+      "datasetId": null,
+      "recordUrl": null,
+      "apiUrl": null,
+      "rawIds": [],
+      "retrievedAt": null,
+      "observedAt": null,
+      "kind": "game-assumption",
+      "originalUnits": null,
+      "transformedUnits": null,
+      "supportedClaim": "Power, oxygen and sample numbers are made-up game units chosen to teach trade-offs. They are not real measurements.",
+      "notSupported": [
+        "Any real-world fact"
+      ],
+      "usageNotes": "Authored for the game.",
+      "transformationVersion": "1",
+      "contentSha256": null,
+      "status": "reference"
+    },
+    {
+      "id": "assumption-safety-rule",
+      "agency": null,
+      "provider": "This game",
+      "datasetId": null,
+      "recordUrl": null,
+      "apiUrl": null,
+      "rawIds": [],
+      "retrievedAt": null,
+      "observedAt": null,
+      "kind": "game-assumption",
+      "originalUnits": null,
+      "transformedUnits": null,
+      "supportedClaim": "In this game the crew must be in the shelter during a particle storm. Real missions plan to shelter crews behind thick material, but this exact rule and its costs are invented for the game.",
+      "notSupported": [
+        "Any real-world fact"
+      ],
+      "usageNotes": "Authored for the game.",
+      "transformationVersion": "1",
+      "contentSha256": null,
+      "status": "reference"
+    },
+    {
+      "id": "assumption-all-clear",
+      "agency": null,
+      "provider": "This game",
+      "datasetId": null,
+      "recordUrl": null,
+      "apiUrl": null,
+      "rawIds": [],
+      "retrievedAt": null,
+      "observedAt": null,
+      "kind": "game-assumption",
+      "originalUnits": null,
+      "transformedUnits": null,
+      "supportedClaim": "The data does not say when it was safe to go back outside. The 'all clear' turn is a game rule.",
+      "notSupported": [
+        "Any real-world fact"
+      ],
+      "usageNotes": "Authored for the game.",
+      "transformationVersion": "1",
+      "contentSha256": null,
+      "status": "reference"
+    }
+  ]
+}

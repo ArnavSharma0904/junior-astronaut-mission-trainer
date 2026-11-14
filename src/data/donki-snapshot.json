@@ -1,0 +1,315 @@
+{
+  "snapshotVersion": "donki-2024-05-09_11-r1",
+  "createdAt": "2026-11-14T18:41:32Z",
+  "tool": "In-page fetch in the owner's Chrome (Claude in Chrome). Response status, content type, byte length and SHA-256 were computed in the page from the raw body. Raw bodies were not written to disk; run `npm run data:fetch` to save them and `npm run data:validate` to compare.",
+  "transformationVersion": "1",
+  "queries": [
+    {
+      "id": "flr",
+      "url": "https://ccmc.gsfc.nasa.gov/DONKI-API/get/FLR?startDate=2024-05-09&endDate=2024-05-11&class=X",
+      "httpStatus": 200,
+      "contentType": "application/json",
+      "bytes": 4489,
+      "sha256": "801ebf256dcd5987050bde23b8c2c44407f8897ccae676a0d392f67eeb272add",
+      "retrievedAt": "2026-11-14T18:41:31.405Z",
+      "recordCount": 5
+    },
+    {
+      "id": "sep",
+      "url": "https://ccmc.gsfc.nasa.gov/DONKI-API/get/SEP?startDate=2024-05-09&endDate=2024-05-11",
+      "httpStatus": 200,
+      "contentType": "application/json",
+      "bytes": 5378,
+      "sha256": "17a5b371554d283fdf49379df7886a1df728992a476e9dc32c6e33fb516b5c38",
+      "retrievedAt": "2026-11-14T18:41:31.542Z",
+      "recordCount": 8
+    },
+    {
+      "id": "cme",
+      "url": "https://ccmc.gsfc.nasa.gov/DONKI-API/get/CME?startDate=2024-05-09&endDate=2024-05-11",
+      "httpStatus": 200,
+      "contentType": "application/json",
+      "bytes": 39534,
+      "sha256": "a495d35c76dd0fdffe4c223aff7f7f188714129fa1e4c890b0eabd97d9341bc1",
+      "retrievedAt": "2026-11-14T18:41:31.829Z",
+      "recordCount": 13
+    },
+    {
+      "id": "enlil",
+      "url": "https://ccmc.gsfc.nasa.gov/DONKI-API/get/WSAEnlilSimulations?startDate=2024-05-09&endDate=2024-05-10",
+      "httpStatus": 200,
+      "contentType": "application/json",
+      "bytes": 19325,
+      "sha256": "01ed4e776bd17639a3b2955055d3a11c059585f3feb8b27f828717cf3962bedc",
+      "retrievedAt": "2026-11-14T18:41:31.948Z",
+      "recordCount": 17
+    }
+  ],
+  "events": [
+    {
+      "type": "FLR",
+      "rawId": "2024-05-09T08:45:00-FLR-001",
+      "queryId": "flr",
+      "timeUtc": "2024-05-09T08:45Z",
+      "peakTimeUtc": "2024-05-09T09:13Z",
+      "endTimeUtc": "2024-05-09T09:36Z",
+      "classType": "X2.2",
+      "sourceLocation": "S20W25",
+      "activeRegionNum": 13664,
+      "instrument": "GOES-P: EXIS 1.0-8.0",
+      "isModelDerived": false,
+      "upstreamVersionId": 2
+    },
+    {
+      "type": "FLR",
+      "rawId": "2024-05-09T17:23:00-FLR-001",
+      "queryId": "flr",
+      "timeUtc": "2024-05-09T17:23Z",
+      "peakTimeUtc": "2024-05-09T17:44Z",
+      "endTimeUtc": "2024-05-09T18:00Z",
+      "classType": "X1.1",
+      "sourceLocation": "S18W29",
+      "activeRegionNum": 13664,
+      "instrument": "GOES-P: EXIS 1.0-8.0",
+      "isModelDerived": false,
+      "upstreamVersionId": 3
+    },
+    {
+      "type": "FLR",
+      "rawId": "2024-05-10T06:27:00-FLR-001",
+      "queryId": "flr",
+      "timeUtc": "2024-05-10T06:27Z",
+      "peakTimeUtc": "2024-05-10T06:54Z",
+      "endTimeUtc": "2024-05-10T07:06Z",
+      "classType": "X3.9",
+      "sourceLocation": "S18W37",
+      "activeRegionNum": 13664,
+      "instrument": "GOES-P: EXIS 1.0-8.0",
+      "isModelDerived": false,
+      "upstreamVersionId": 2
+    },
+    {
+      "type": "FLR",
+      "rawId": "2024-05-11T01:10:00-FLR-001",
+      "queryId": "flr",
+      "timeUtc": "2024-05-11T01:10Z",
+      "peakTimeUtc": "2024-05-11T01:23Z",
+      "endTimeUtc": "2024-05-11T01:39Z",
+      "classType": "X5.8",
+      "sourceLocation": "S17W47",
+      "activeRegionNum": 13664,
+      "instrument": "GOES-P: EXIS 1.0-8.0",
+      "isModelDerived": false,
+      "upstreamVersionId": 3
+    },
+    {
+      "type": "FLR",
+      "rawId": "2024-05-11T11:15:00-FLR-001",
+      "queryId": "flr",
+      "timeUtc": "2024-05-11T11:15Z",
+      "peakTimeUtc": "2024-05-11T11:44Z",
+      "endTimeUtc": "2024-05-11T12:05Z",
+      "classType": "X1.5",
+      "sourceLocation": "S19W60",
+      "activeRegionNum": 13664,
+      "instrument": "GOES-P: EXIS 1.0-8.0",
+      "isModelDerived": false,
+      "upstreamVersionId": 2
+    },
+    {
+      "type": "SEP",
+      "rawId": "2024-05-09T13:59:00-SEP-001",
+      "queryId": "sep",
+      "timeUtc": "2024-05-09T13:59Z",
+      "instrument": "MODEL: REleASE:ACE/EPAM 15.8-39.8 MeV",
+      "isModelDerived": true,
+      "upstreamVersionId": 1
+    },
+    {
+      "type": "SEP",
+      "rawId": "2024-05-09T14:25:00-SEP-001",
+      "queryId": "sep",
+      "timeUtc": "2024-05-09T14:25Z",
+      "instrument": "MODEL: REleASE:SOHO/EPHIN 15.8-39.8 MeV",
+      "isModelDerived": true,
+      "upstreamVersionId": 2
+    },
+    {
+      "type": "SEP",
+      "rawId": "2024-05-10T12:59:00-SEP-001",
+      "queryId": "sep",
+      "timeUtc": "2024-05-10T12:59Z",
+      "instrument": "SOHO: COSTEP 15.8-39.8 MeV",
+      "isModelDerived": false,
+      "upstreamVersionId": 1
+    },
+    {
+      "type": "SEP",
+      "rawId": "2024-05-10T13:02:00-SEP-001",
+      "queryId": "sep",
+      "timeUtc": "2024-05-10T13:02Z",
+      "instrument": "SOHO: COSTEP 28.2-50.1 MeV",
+      "isModelDerived": false,
+      "upstreamVersionId": 1
+    },
+    {
+      "type": "SEP",
+      "rawId": "2024-05-10T13:35:00-SEP-001",
+      "queryId": "sep",
+      "timeUtc": "2024-05-10T13:35Z",
+      "instrument": "GOES-P: SEISS >10 MeV",
+      "isModelDerived": false,
+      "upstreamVersionId": 1
+    },
+    {
+      "type": "SEP",
+      "rawId": "2024-05-10T14:50:00-SEP-001",
+      "queryId": "sep",
+      "timeUtc": "2024-05-10T14:50Z",
+      "instrument": "STEREO A: IMPACT 13-100 MeV",
+      "isModelDerived": false,
+      "upstreamVersionId": 1
+    },
+    {
+      "type": "SEP",
+      "rawId": "2024-05-11T02:10:00-SEP-001",
+      "queryId": "sep",
+      "timeUtc": "2024-05-11T02:10Z",
+      "instrument": "GOES-P: SEISS >100 MeV",
+      "isModelDerived": false,
+      "upstreamVersionId": 1,
+      "linkedRawIds": [
+        "2024-05-11T01:10:00-FLR-001"
+      ],
+      "linkedCount": 2
+    },
+    {
+      "type": "SEP",
+      "rawId": "2024-05-11T04:07:00-SEP-001",
+      "queryId": "sep",
+      "timeUtc": "2024-05-11T04:07Z",
+      "instrument": "STEREO A: IMPACT 13-100 MeV",
+      "isModelDerived": false,
+      "upstreamVersionId": 1,
+      "linkedRawIds": [
+        "2024-05-11T01:10:00-FLR-001"
+      ],
+      "linkedCount": 2
+    },
+    {
+      "type": "CME",
+      "rawId": "2024-05-09T09:24:00-CME-001",
+      "queryId": "cme",
+      "timeUtc": "2024-05-09T09:24Z",
+      "isModelDerived": false,
+      "upstreamVersionId": 1,
+      "analyses": [
+        {
+          "isMostAccurate": true,
+          "time21_5": "2024-05-09T11:56Z",
+          "speedKmS": 1330,
+          "halfAngleDeg": 45,
+          "type": "O"
+        },
+        {
+          "isMostAccurate": true,
+          "time21_5": "2024-05-09T11:21Z",
+          "speedKmS": 1561,
+          "halfAngleDeg": 45,
+          "type": "O"
+        }
+      ]
+    },
+    {
+      "type": "CME",
+      "rawId": "2024-05-11T01:36:00-CME-001",
+      "queryId": "cme",
+      "timeUtc": "2024-05-11T01:36Z",
+      "isModelDerived": false,
+      "upstreamVersionId": 1,
+      "analyses": [
+        {
+          "isMostAccurate": false,
+          "time21_5": "2024-05-11T04:15Z",
+          "speedKmS": 1372,
+          "halfAngleDeg": 49,
+          "type": "O"
+        },
+        {
+          "isMostAccurate": true,
+          "time21_5": "2024-05-11T04:22Z",
+          "speedKmS": 1263,
+          "halfAngleDeg": 51,
+          "type": "O"
+        },
+        {
+          "isMostAccurate": true,
+          "time21_5": "2024-05-11T03:24Z",
+          "speedKmS": 1820,
+          "halfAngleDeg": 48,
+          "type": "O"
+        }
+      ]
+    },
+    {
+      "type": "ENLIL",
+      "rawId": "WSA-ENLIL/30626/1",
+      "queryId": "enlil",
+      "timeUtc": "2024-05-09T16:43Z",
+      "isModelDerived": true,
+      "enlil": {
+        "modelCompletionTime": "2024-05-09T16:43Z",
+        "estimatedShockArrivalTime": "2024-05-11T05:02Z",
+        "estimatedDurationHours": 27.2,
+        "cmeInputCount": 1,
+        "target": "Earth",
+        "includesCmeStart": "2024-05-09T09:24Z"
+      }
+    },
+    {
+      "type": "ENLIL",
+      "rawId": "WSA-ENLIL/30633/1",
+      "queryId": "enlil",
+      "timeUtc": "2024-05-09T17:00Z",
+      "isModelDerived": true,
+      "enlil": {
+        "modelCompletionTime": "2024-05-09T17:00Z",
+        "estimatedShockArrivalTime": "2024-05-11T05:04Z",
+        "estimatedDurationHours": 26.2,
+        "cmeInputCount": 1,
+        "target": "Earth",
+        "includesCmeStart": "2024-05-09T09:24Z"
+      }
+    },
+    {
+      "type": "ENLIL",
+      "rawId": "WSA-ENLIL/30651/1",
+      "queryId": "enlil",
+      "timeUtc": "2024-05-09T20:28Z",
+      "isModelDerived": true,
+      "enlil": {
+        "modelCompletionTime": "2024-05-09T20:28Z",
+        "estimatedShockArrivalTime": "2024-05-10T13:03Z",
+        "estimatedDurationHours": 22.4,
+        "cmeInputCount": 3,
+        "target": "Earth",
+        "includesCmeStart": "2024-05-09T09:24Z"
+      }
+    },
+    {
+      "type": "ENLIL",
+      "rawId": "WSA-ENLIL/30652/1",
+      "queryId": "enlil",
+      "timeUtc": "2024-05-09T20:46Z",
+      "isModelDerived": true,
+      "enlil": {
+        "modelCompletionTime": "2024-05-09T20:46Z",
+        "estimatedShockArrivalTime": "2024-05-10T12:50Z",
+        "estimatedDurationHours": 22.1,
+        "cmeInputCount": 3,
+        "target": "Earth",
+        "includesCmeStart": "2024-05-09T09:24Z"
+      }
+    }
+  ]
+}

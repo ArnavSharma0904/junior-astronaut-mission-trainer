@@ -1,0 +1,109 @@
+import { describe, expect, it } from 'vitest';
+import { DonkiFormatError, minutesBetween, normalizeCmes, normalizeEnlil, normalizeFlares, normalizeSeps, parseDonkiBody } from '../../src/adapters/donki';
+import { mission } from '../../src/content/mission';
+import { eventsForSource, getEvent, getSource, snapshot, sources } from '../../src/data';
+import { snapshotSchema, sourceManifestSchema } from '../../src/data/schema';
+import fixtures from './fixtures/donki-raw.json';
+
+const committed = (type: string) => snapshot.events.filter((event) => event.type === type);
+
+describe('committed NASA snapshot and source manifest', () => {
+  it('parse strictly and share one snapshot version', () => {
+    expect(sources.snapshotVersion).toBe(snapshot.snapshotVersion);
+    expect(snapshot.events.length).toBeGreaterThan(10);
+  });
+
+  it('resolve every evidence and source id used by the mission', () => {
+    const ids = new Set(mission.turns.flatMap((turn) => [...turn.evidenceIds, ...turn.actions.flatMap((action) => action.sourceIds)]));
+    for (const id of ids) expect(() => getSource(id)).not.toThrow();
+  });
+
+  it('back every snapshot source with archived records that exist', () => {
+    for (const record of sources.records.filter((item) => item.status === 'snapshot')) {
+      expect(record.rawIds.length).toBeGreaterThan(0);
+      expect(record.contentSha256).toMatch(/^[a-f0-9]{64}$/);
+      for (const rawId of record.rawIds) expect(() => getEvent(rawId)).not.toThrow();
+    }
+  });
+
+  it('never presents anything as live and always says what a record does not support', () => {
+    for (const record of sources.records) {
+      expect(['snapshot', 'reference']).toContain(record.status);
+      expect(record.notSupported.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('keeps forecast-model records separate from observations', () => {
+    expect(getSource('donki-enlil-run-a').kind).toBe('model-output');
+    expect(getSource('donki-enlil-run-b').kind).toBe('model-output');
+    for (const event of eventsForSource('donki-enlil-run-a')) expect(event.isModelDerived).toBe(true);
+    for (const id of ['donki-flr-2024-05-11', 'donki-sep-2024-05-11']) {
+      for (const event of eventsForSource(id)) expect(event.isModelDerived).toBe(false);
+    }
+    expect(snapshot.events.filter((event) => event.type === 'SEP' && event.isModelDerived).length).toBe(2);
+  });
+
+  it('derives the 47-minute warning gap from the two archived times', () => {
+    const flare = getEvent('2024-05-11T01:10:00-FLR-001');
+    const particles = getEvent('2024-05-11T02:10:00-SEP-001');
+    if (flare.type !== 'FLR') throw new Error('expected a flare');
+    expect(minutesBetween(flare.peakTimeUtc, particles.timeUtc)).toBe(47);
+  });
+
+  it('shows that the forecast changed between two model runs', () => {
+    const [a] = eventsForSource('donki-enlil-run-a');
+    const [b] = eventsForSource('donki-enlil-run-b');
+    if (a?.type !== 'ENLIL' || b?.type !== 'ENLIL') throw new Error('expected model runs');
+    expect(minutesBetween(b.enlil.estimatedShockArrivalTime!, a.enlil.estimatedShockArrivalTime!)).toBe(16 * 60 + 12);
+    expect(minutesBetween(a.timeUtc, b.timeUtc)).toBeGreaterThan(0);
+  });
+
+  it('rejects a snapshot with no events, a wrong model flag, or a live label', () => {
+    expect(snapshotSchema.safeParse({ ...snapshot, events: [] }).success).toBe(false);
+    const first = snapshot.events.find((event) => event.type === 'ENLIL')!;
+    expect(snapshotSchema.safeParse({ ...snapshot, events: [{ ...first, isModelDerived: false }] }).success).toBe(false);
+    const record = { ...sources.records[0]!, status: 'live' };
+    expect(sourceManifestSchema.safeParse({ ...sources, records: [record] }).success).toBe(false);
+  });
+
+  it('rejects records with missing dates, bad units of time, or unknown fields', () => {
+    const flare = snapshot.events[0]!;
+    expect(snapshotSchema.safeParse({ ...snapshot, events: [{ ...flare, peakTimeUtc: undefined }] }).success).toBe(false);
+    expect(snapshotSchema.safeParse({ ...snapshot, events: [{ ...flare, timeUtc: '09/05/2024 08:45' }] }).success).toBe(false);
+    expect(snapshotSchema.safeParse({ ...snapshot, events: [{ ...flare, doseSv: 1 }] }).success).toBe(false);
+  });
+});
+
+describe('DONKI normalizer', () => {
+  it('rebuilds the committed events from raw-shaped records', () => {
+    expect(normalizeFlares(fixtures.flr, 'flr')).toEqual(committed('FLR'));
+    expect(normalizeSeps(fixtures.sep, 'sep', ['2024-05-11T01:10:00-FLR-001'])).toEqual(committed('SEP'));
+    expect(normalizeCmes(fixtures.cme, 'cme', ['2024-05-09T09:24:00-CME-001', '2024-05-11T01:36:00-CME-001'])).toEqual(committed('CME'));
+    expect(normalizeEnlil(fixtures.enlil, 'enlil', '2024-05-09T09:24')).toEqual(committed('ENLIL'));
+  });
+
+  it('drops notifications and links and tolerates null linked events', () => {
+    const [flare] = normalizeFlares(fixtures.flr.slice(1, 2), 'flr');
+    expect(JSON.stringify(flare)).not.toMatch(/sentNotifications|example\.invalid|messageURL/);
+  });
+
+  it('treats an empty array as a valid, empty answer and invents nothing', () => {
+    expect(parseDonkiBody('[]')).toEqual([]);
+    expect(normalizeFlares([], 'flr')).toEqual([]);
+  });
+
+  it.each([
+    ['an HTML error page', '<!doctype html><html><body>503 Service Unavailable</body></html>'],
+    ['malformed JSON', '[{"flrID": '],
+    ['a JSON object instead of an array', '{"error":"OVER_RATE_LIMIT"}'],
+  ])('rejects %s', (_label, body) => {
+    expect(() => parseDonkiBody(body)).toThrow(DonkiFormatError);
+  });
+
+  it('rejects a record that is missing a required time or id', () => {
+    const withoutPeak: Record<string, unknown> = { ...fixtures.flr[0]! };
+    delete withoutPeak.peakTime;
+    expect(() => normalizeFlares([withoutPeak], 'flr')).toThrow(/peakTime/);
+    expect(() => normalizeSeps([{ eventTime: '2024-05-11T02:10Z' }], 'sep')).toThrow(DonkiFormatError);
+  });
+});
