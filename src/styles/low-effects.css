@@ -10,12 +10,8 @@
   box-shadow: none;
 }
 
-:root[data-effects='low'] .hab-window,
-:root[data-effects='low'] .airlock-light,
 :root[data-effects='low'] .beacon,
-:root[data-effects='low'] .shelter-light,
-:root[data-effects='low'] .sample-filled,
-:root[data-effects='low'] .dome-glow {
+:root[data-effects='low'] .shelter-light {
   filter: none;
 }
 

@@ -109,8 +109,9 @@
   }
 }
 
-.scene[data-weather='storm'] .streak,
-.scene[data-weather='clearing'] .streak {
+.scene[data-weather='storm'] .scene-weather,
+.scene[data-weather='clearing'] .scene-weather {
+  /* One animated group instead of thirty-four animated lines. */
   animation: streak-drift 2.8s linear infinite alternate;
 }
 
@@ -168,20 +169,10 @@
 }
 
 /* Glow on containers and scene lights only */
-.hab-window,
-.airlock-light,
+/* Only two small scene lights carry a blur filter. Wider use measurably slowed software rendering. */
 .beacon,
-.shelter-light,
-.sample-filled {
+.shelter-light {
   filter: drop-shadow(0 0 6px currentColor);
-}
-
-.hab-window {
-  color: #ffe9b8;
-}
-
-.dome-glow {
-  filter: drop-shadow(0 0 18px rgba(172, 145, 255, 0.55));
 }
 
 .button-primary:not(:disabled) {

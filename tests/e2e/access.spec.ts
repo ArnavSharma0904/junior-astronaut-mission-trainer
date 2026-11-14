@@ -119,7 +119,7 @@ test.describe('accessibility and settings', () => {
   });
 
   test('no automatic accessibility violations on any screen', async ({ page }) => {
-    test.setTimeout(120_000); // six full axe scans in one flow
+    test.setTimeout(180_000); // six full axe scans in one flow
     await page.goto('/');
     await expectNoAxeViolations(page);
     await page.getByTestId('start').click();

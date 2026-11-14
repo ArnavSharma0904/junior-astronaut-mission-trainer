@@ -11,7 +11,8 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: true,
   retries: 0,
-  timeout: 30_000,
+  // Full missions run six animated turns; 30 s was too tight on a two-core software-rendered runner.
+  timeout: 60_000,
   workers: 3,
   reporter: [['list'], ['html', { outputFolder: 'playwright-report', open: 'never' }]],
   use: { baseURL: 'http://127.0.0.1:4173', trace: 'retain-on-failure' },
