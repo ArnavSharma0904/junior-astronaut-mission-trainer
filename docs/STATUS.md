@@ -82,3 +82,13 @@ Independent review of 5f419e0 was FIX. It was not a two-lane gate PASS. Cursor t
 Check run run-1794689033550-mlsecgte PASS at fd2e381be9f0242d4ea6eba11bb87a713df63d06 on this Mac (Homebrew Node 25.6.0, Playwright Chromium 159). typecheck, lint, 73 unit tests, production build, and 36 browser tests. `npm ci` restored the lockfile's lightningcss and rolldown native binaries and both loaded. Vitest prints an engine warning on Node 25; the suite still passed. This is not a fresh independent or browser-lane PASS, and nothing was pushed.
 
 Still open: visual craft was scored 3/5 on the diagnostic preview of 5f419e0 and has not been re-scored. M06/ADR-P1 is still unapproved. Safari, a physical phone, a screen reader, and device frame rate are still unmeasured. Eligibility still rests on the owner's report.
+
+## Review repair continued 2026-11-14 about 2:10 Pacific (writer: cursor)
+Independent and browser reviews of cf02e38285a0463acfe02bdda170f3d3a6cd7bdc were both FIX (request c1-c3-cf02e38). This is the same repair round, continued after a timeout. It is not a new design pass and not a gate PASS.
+
+Code commit 471529d65e02f130aceab9ba1703f09578cc97b0, parent cf02e38:
+- A refused save delete now stays failed. Storage reports whether removeItem actually removed the key. Settings and the crash screen do not say the save was erased when it is still stored. In-memory play stays. Reload still finds that save. Successful erase and discard tests remain.
+- At 390x844 and 1024x768 the post-decision Next and Confirm controls stay in the viewport, including a long greenhouse or outside explanation, a save-failure banner, and 200% text. The lesson and evidence scroll in the page instead of in several nested panes.
+- The SVG scene adds a cooler far rim, warmer habitat and greenhouse light, regolith grain, and foreground rocks. No WebGL. No NASA snapshot files were changed.
+
+Before that commit, typecheck, lint, and 73 unit tests passed on the dirty tree. That run is not exact-HEAD evidence. The full check runs on the commit that contains this note. Its run id is recorded only in the ignored autonomy result, because a docs-only commit after the check is not part of this order. Nothing was pushed. Visual craft is not self-scored. M06/ADR-P1 stays unapproved. Safari, a physical phone, a screen reader, and device frame rate are still unmeasured. Eligibility still rests on the owner's report.

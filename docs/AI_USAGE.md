@@ -41,3 +41,6 @@ At the owner's direction (D014) the application source, tests, styles, scene art
 
 ## Review fixes 2026-11-14 about 12:20-12:45 Pacific
 Cursor session, model reported as Grok 4.7, after the independent FIX review of 5f419e0. The assistant wrote the repair commits listed in docs/STATUS.md (save validation, honest save failure, storm rescue, reserve oxygen, layout, tests, and the Node 25 JSON import attribute). No image, video, or audio generator was used. The NASA snapshot files were not replaced. Checks: run-1794689033550-mlsecgte PASS at fd2e381 on the owner's Mac. The team still has not played and owned the wording.
+
+## FIX repair continued 2026-11-14 about 1:15-2:10 Pacific
+Same Cursor session, model reported as Grok 4.7, after independent and browser FIX reviews of cf02e38. The assistant wrote commit 471529d: honest refused save deletion, a reachable post-decision Next control, denied-delete and viewport tests, and hand-written SVG/CSS depth and lighting. No image, video, or audio generator was used. No NASA snapshot or protected contract was changed. The full check for the commit that contains this paragraph is not known at the time of writing; a dirty-tree unit run is not that check. The team still has not played and owned the wording.

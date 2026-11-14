@@ -136,3 +136,25 @@ No dev server was left running.
 
 ### Still unauthorized
 Push, deployment, account creation, purchases, protected-contract changes (including ADR-P1), submission.
+
+## HANDOFF 2026-11-14 about 2:10 Pacific: FIX repairs committed, check follows this commit (writer cursor)
+- Tool and model: Cursor session bc402846-4c7a-4814-9831-38cf876ebac8, model reported as Grok 4.7. This continues the round-2 repair after an interrupted run. It is not an additional repair iteration.
+- Repository: /Users/arnavsharma/Downloads/nasa-hackathon-kit 2, branch main. Nothing has been pushed.
+- Code SHA: 471529d65e02f130aceab9ba1703f09578cc97b0. This handoff is committed with the status notes before `node scripts/run-checks.mjs`. The checked SHA is this commit, not 471529d and not cf02e38.
+- Dirty files expected after the commit: none. Lease: cursor/build, released only after the request is filed and the tree is clean.
+- Prior exact-HEAD evidence that must not be reused: run-1794689338032-lnmtoo53 at cf02e38 (73 unit, 36 browser, typecheck, lint, production build) and run-1794689033550-mlsecgte at fd2e381. The dirty-tree typecheck, lint, and 73 unit tests before 471529d are not exact-HEAD evidence.
+- Reviews in force: c1-c3-cf02e38 independent FIX and browser FIX. No self-approval.
+
+### What this repair changes
+A refused removeItem no longer produces "Saved mission erased." or a reload that pretends the crash save was discarded. The current mission stays in memory, and a reload still sees the stored save. Next and Confirm stay inside 390x844 and 1024x768 for the long greenhouse and outside explanations, with the save-failure banner and 200% text. Evidence and the lesson scroll on the page. The 2D scene has a stronger foreground, midground, and background, warm habitat light against a cool lunar rim, and state-linked lamps. SVG/CSS only. The archived NASA events were not edited.
+
+### Next
+1. Full check on this commit. The passing run id, if any, is written to ignored `.agent-bus/autonomy/builder-result.json` with order round-3.
+2. A new request id, not c1-c3-cf02e38. Aside reviews that exact SHA. A FIX needs another commit and another request.
+3. M06 stays skipped until ADR-P1 is approved. Do not claim a visual score, award eligibility, or NASA endorsement.
+
+### Processes
+No dev server was left running by this handoff.
+
+### Still unauthorized
+Push, deployment, account creation, purchases, protected-contract changes (including ADR-P1), submission.
