@@ -137,17 +137,73 @@ main:focus {
 
 @media (max-width: 1100px) {
   .app-header {
+    flex-wrap: wrap;
     gap: var(--s3);
     padding: var(--s2) var(--s4);
   }
   .app-objective {
-    display: none;
+    display: block;
+    flex: 1 0 100%;
+    order: 5;
+    color: var(--text);
+  }
+  .app[data-app-phase='mission'],
+  .app[data-app-phase='debrief'] {
+    height: 100dvh;
+    overflow: hidden;
+  }
+  .app[data-app-phase='mission'] > main,
+  .app[data-app-phase='debrief'] > main {
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
   .console,
   .debrief {
+    flex: 1 1 auto;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: var(--s4);
     padding: var(--s4);
+    height: auto;
+    min-height: 0;
+    align-items: stretch;
+    overflow: hidden;
+  }
+  .console-scene {
+    position: static;
+    min-height: 0;
+    overflow: auto;
+  }
+  .console .scene-frame,
+  .debrief .scene-frame {
+    max-height: 300px;
+  }
+  .console-decision {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+  .debrief-panel {
+    min-height: 0;
+    overflow: auto;
+  }
+  .actions,
+  .explanation {
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .explanation .evidence-rows {
+    min-height: 0;
+    overflow: auto;
+  }
+  .confirm-bar {
+    flex: none;
+    margin-top: auto;
   }
 }
 
@@ -172,6 +228,7 @@ main:focus {
   .console,
   .debrief {
     grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
     padding: var(--s3);
     gap: var(--s3);
   }
@@ -180,48 +237,52 @@ main:focus {
     gap: var(--s3);
   }
   .console .scene-frame {
-    position: sticky;
-    top: 0;
-    z-index: 5;
+    position: static;
+    max-height: 168px;
   }
   .briefing {
     padding: var(--s3);
     place-items: end center;
   }
   .confirm-bar {
-    position: sticky;
-    bottom: 0;
-    z-index: 6;
-    margin: 0 calc(-1 * var(--s3));
-    padding: var(--s2) var(--s3);
-    background: linear-gradient(180deg, transparent, var(--bg) 30%);
+    position: static;
+    z-index: 1;
+    margin-top: auto;
+    padding-top: var(--s2);
+    background: var(--panel);
   }
   .app-footer {
     padding: var(--s3);
   }
 }
 
-/* Phone order: scene, status, the decision, then the timeline as history. */
+/* Phone: the scene column scrolls on its own so meters and the timeline cannot cover the choices. */
 @media (max-width: 720px) {
+  .console,
+  .debrief {
+    grid-template-rows: minmax(96px, 22%) minmax(0, 1fr);
+  }
   .console-scene {
-    display: contents;
+    display: grid;
+    min-height: 0;
+    overflow: auto;
   }
   .console .scene-frame,
-  .debrief .scene-frame {
-    order: 1;
-  }
+  .debrief .scene-frame,
   .console .meters,
-  .debrief .meters {
-    order: 2;
-  }
+  .debrief .meters,
   .console-decision,
-  .debrief-panel {
-    order: 3;
-  }
+  .debrief-panel,
   .console .timeline {
-    order: 4;
+    order: unset;
+    position: static;
   }
   .console .scene-frame {
     aspect-ratio: 16 / 9;
+    max-height: 160px;
+  }
+  .console .timeline {
+    max-height: none;
+    overflow: visible;
   }
 }

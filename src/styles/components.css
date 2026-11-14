@@ -164,6 +164,13 @@
 .actions fieldset {
   display: grid;
   gap: var(--s3);
+  min-width: 0;
+}
+
+.choice-list {
+  display: grid;
+  gap: var(--s3);
+  min-width: 0;
 }
 
 .actions legend {
@@ -1007,6 +1014,23 @@
   }
   .choice[data-selected='true'] {
     outline: 3px solid Highlight;
+  }
+}
+
+@media (max-width: 1100px) {
+  /* A fieldset will not flex-grow in Chrome, so the scrollport is the div around it. Confirm stays below that. */
+  .choice-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+  }
+  .confirm-bar {
+    flex: none;
+    margin-top: var(--s3);
+  }
+  .situation {
+    max-height: 8.5rem;
+    overflow: auto;
   }
 }
 

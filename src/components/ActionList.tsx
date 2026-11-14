@@ -25,8 +25,10 @@ export function ActionList({ previews, selectedId, resolving, onSelect, onConfir
         onConfirm();
       }}
     >
+      <div className="choice-scroll">
       <fieldset disabled={resolving}>
         <legend>Choose one</legend>
+        <div className="choice-list">
         {previews.map((preview) => {
           const copy = actionCopy[preview.action.id]!;
           const id = `action-${preview.action.id}`;
@@ -64,7 +66,9 @@ export function ActionList({ previews, selectedId, resolving, onSelect, onConfir
             </label>
           );
         })}
+        </div>
       </fieldset>
+      </div>
       <p className="upkeep-note">{UPKEEP_NOTE}</p>
       <div className="confirm-bar">
         <button type="submit" className="button button-primary button-confirm" disabled={resolving || !selected} data-testid="confirm">

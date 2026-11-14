@@ -33,3 +33,29 @@ export async function expectNoHorizontalOverflow(page: Page) {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(0);
 }
+
+/** The control is inside the current viewport and is the thing under the pointer, without scrolling it into view first. */
+export async function expectVisibleUncovered(page: Page, locator: ReturnType<Page['locator']>) {
+  await page.evaluate(() => window.scrollTo(0, 0));
+  const box = await locator.boundingBox();
+  expect(box).not.toBeNull();
+  const viewport = page.viewportSize();
+  expect(viewport).not.toBeNull();
+  expect(box!.y).toBeGreaterThanOrEqual(-1);
+  expect(box!.x).toBeGreaterThanOrEqual(-1);
+  expect(box!.y + box!.height).toBeLessThanOrEqual((viewport?.height ?? 0) + 1);
+  expect(box!.x + box!.width).toBeLessThanOrEqual((viewport?.width ?? 0) + 1);
+  const uncovered = await locator.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    const points = [
+      [rect.left + rect.width / 2, rect.top + rect.height / 2],
+      [rect.left + Math.min(12, rect.width / 2), rect.top + Math.min(12, rect.height / 2)],
+      [rect.right - Math.min(12, rect.width / 2), rect.bottom - Math.min(12, rect.height / 2)],
+    ];
+    return points.every(([x, y]) => {
+      const hit = document.elementFromPoint(x, y);
+      return hit !== null && (hit === element || element.contains(hit));
+    });
+  });
+  expect(uncovered).toBe(true);
+}

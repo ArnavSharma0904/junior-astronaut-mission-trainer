@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { decide, expectNoHorizontalOverflow, playThrough, start, UNSAFE, WIN } from './helpers';
+import { decide, expectNoHorizontalOverflow, expectVisibleUncovered, playThrough, start, UNSAFE, WIN } from './helpers';
 
 async function expectNoAxeViolations(page: Page) {
   const results = await new AxeBuilder({ page }).analyze();
@@ -151,8 +151,13 @@ test.describe('accessibility and settings', () => {
       await expect(page.getByTestId('start')).toBeInViewport();
       await page.getByTestId('start').click();
       await expectNoHorizontalOverflow(page);
+      await expect(page.locator('.app-objective')).toBeVisible();
+      await expect(page.locator('.app-objective')).toContainText('Collect ice samples and keep the crew safe.');
+      await expect(page.getByTestId('open-sources')).toHaveAttribute('aria-label', 'Sources');
+      await expect(page.getByTestId('open-settings')).toHaveAttribute('aria-label', 'Settings');
+      await expect(page.getByTestId('sound-toggle')).toHaveAttribute('aria-label', 'Sound: off');
       await page.getByTestId('choice-drill-1').click();
-      if (viewport.width < 720) await expect(page.getByTestId('confirm')).toBeInViewport();
+      await expectVisibleUncovered(page, page.getByTestId('confirm'));
       await page.getByTestId('confirm').click();
       await expect(page.getByTestId('explanation')).toBeVisible();
       await expectNoHorizontalOverflow(page);

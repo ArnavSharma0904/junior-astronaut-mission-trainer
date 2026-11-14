@@ -78,15 +78,16 @@ export function App() {
           </div>
         ) : null}
         <nav className="app-tools" aria-label="Tools">
-          <button type="button" className="button button-quiet" onClick={() => openSource(null)} data-testid="open-sources">
+          <button type="button" className="button button-quiet" aria-label="Sources" onClick={() => openSource(null)} data-testid="open-sources">
             <Icon name="sources" /> <span>Sources</span>
           </button>
-          <button type="button" className="button button-quiet" onClick={() => setDrawer('settings')} data-testid="open-settings">
+          <button type="button" className="button button-quiet" aria-label="Settings" onClick={() => setDrawer('settings')} data-testid="open-settings">
             <Icon name="gear" /> <span>Settings</span>
           </button>
           <button
             type="button"
             className="button button-quiet"
+            aria-label={`Sound: ${settings.muted ? 'off' : 'on'}`}
             aria-pressed={!settings.muted}
             onClick={() => {
               const muted = !settings.muted;
@@ -99,12 +100,12 @@ export function App() {
           </button>
         </nav>
       </header>
-      {game.saveStatus === 'failed' ? (
-        <p className="notice save-banner" role="status" data-testid="save-failed">
-          <Icon name="warning" size={18} /> This progress could not be saved. You can keep playing. Reloading will not keep the latest turn.
-        </p>
-      ) : null}
       <main id="main" tabIndex={-1}>
+        {game.saveStatus === 'failed' ? (
+          <p className="notice save-banner" role="status" data-testid="save-failed">
+            <Icon name="warning" size={18} /> This progress could not be saved. You can keep playing. Reloading will not keep the latest turn.
+          </p>
+        ) : null}
         {game.appPhase === 'briefing' ? <Briefing mission={mission} canResume={game.canResume} saveStatus={game.saveStatus} onStart={game.startNew} onResume={game.resume} /> : null}
         {game.appPhase === 'mission' ? <Console state={game.game} mission={mission} dispatch={game.dispatch} onOpenSource={openSource} onTone={tone} /> : null}
         {game.appPhase === 'debrief' ? <Debrief state={game.game} mission={mission} onReplay={game.startNew} onSources={() => openSource(null)} onHome={game.toBriefing} /> : null}
