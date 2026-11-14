@@ -65,3 +65,7 @@ No dev server, watcher or background process was started in the repository by th
 
 ### Still unauthorized
 Push, deployment, account creation, purchases, governance changes to protected files, submission.
+
+
+## Assignment change 2026-11-14 10:27 Pacific (supersedes the Cursor launch section above until the next handoff)
+The owner directed Claude to continue as the sole implementation writer for M01-M05 (docs/DECISIONS.md D014). Lease: owner `claude`, scope `build`, claimed at b703b5e. Cursor must not claim until a later handoff section in this file says the lease was released.

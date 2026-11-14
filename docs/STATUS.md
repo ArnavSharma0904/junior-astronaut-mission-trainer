@@ -28,3 +28,7 @@ Next planning agent: verify current state; DO NOT clone the empty remote over th
 - Planning output: docs/refinements/IMPLEMENTATION_PLAN.md, NASA_DATA_PLAN.md, VISUAL_SPEC.md; D009-D013 and proposed ADR-P1 in DECISIONS.md.
 - Still not built or proven: game, UI, scene, data snapshot, dependency install, app tests, CI, deployment, review loop, eligibility.
 - Next: Cursor claims the lease and starts M01. See docs/HANDOFF.md.
+
+
+## Assignment change 2026-11-14 10:27 Pacific
+Owner reassigned implementation of M01-M05 to Claude as sole writer (D014). Lease claimed by `claude`, scope `build`, at b703b5e0e50a4f4f015ea1ac148cac414c49dd7a (18:28Z). Cursor did not start. Build environment and its limits: D015.

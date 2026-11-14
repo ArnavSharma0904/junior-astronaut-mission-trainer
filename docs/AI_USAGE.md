@@ -26,3 +26,7 @@ The check was limited to two files, not a full code/design/eligibility audit. No
 - Human decisions: the owner chose to make all commits himself, reported organizer clearance, and set the direction (cyberpunk-accented lunar game for ages 7-12).
 - Checks: workflow tests 20/20 in a sandbox; protected hashes verified; a throwaway enumeration of the proposed mission numbers was run outside the repository and is not committed.
 - No game code, assets, images, audio or data snapshot were generated.
+
+
+## Implementation by AI, from 2026-11-14 10:27 Pacific
+At the owner's direction (D014) the application source, tests, styles, scene artwork (hand-written SVG/CSS, no image generator), data scripts and content for M01-M05 are written by Claude (Claude app session, model reported as Fable 5.2). The owner sets direction and holds the Git identity used for commits; each commit carries a Co-Authored-By line. The team must review this work and record its own changes here.
