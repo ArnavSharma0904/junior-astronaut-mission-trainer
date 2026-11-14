@@ -1,6 +1,6 @@
-import rawSnapshot from './donki-snapshot.json';
+import rawSnapshot from './donki-snapshot.json' with { type: 'json' };
 import { snapshotSchema, sourceManifestSchema, type NormalizedEvent, type SourceRecord } from './schema';
-import rawSources from './sources.json';
+import rawSources from './sources.json' with { type: 'json' };
 
 /**
  * The committed, archived NASA snapshot. Parsed strictly at start-up so a corrupted bundle fails loudly

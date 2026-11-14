@@ -3,7 +3,7 @@ import { DonkiFormatError, minutesBetween, normalizeCmes, normalizeEnlil, normal
 import { mission } from '../../src/content/mission';
 import { eventsForSource, getEvent, getSource, snapshot, sources } from '../../src/data';
 import { snapshotSchema, sourceManifestSchema } from '../../src/data/schema';
-import fixtures from './fixtures/donki-raw.json';
+import fixtures from './fixtures/donki-raw.json' with { type: 'json' };
 
 const committed = (type: string) => snapshot.events.filter((event) => event.type === type);
 
