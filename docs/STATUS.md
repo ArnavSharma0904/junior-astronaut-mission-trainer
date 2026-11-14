@@ -18,3 +18,13 @@ Created empty PRIVATE GitHub repository: https://github.com/ArnavSharma0904/juni
 Initialized this existing project folder as a standalone Git repository on main and configured origin as https://github.com/ArnavSharma0904/junior-astronaut-mission-trainer.git . Installed the existing advisory pre-commit/pre-push gates and protected baseline without overwriting hooks. No initial commit, game implementation or push was made. No blanket publishing approval was configured.
 
 Next planning agent: verify current state; DO NOT clone the empty remote over this folder, reinitialize Git, or rerun install-gates. M00 initial kit commit remains to be made using the full inventory, then acquire the Claude lease. Preserve the verified origin. Normal pushes still require exact-SHA review and explicit publishing approval.
+
+
+## Planning pass complete 2026-11-14 (about 10:10-10:45 Pacific)
+- M00 committed by the owner: 17b0177bcb691dfc933bf0502a04cb0bc4bab82a, author Arnav Sharma (GitHub noreply address), 10:14 Pacific, after the 09:00 build gate and the 10:00 Sonoma work session.
+- Eligibility: the owner reported that organizers cleared the team to proceed. Owner-reported; not independently evidenced here. Not a claim of award eligibility.
+- Claude planning lease claimed at 17b0177 (18:15Z) through the Claude app's sandboxed shell on the owner's machine. Commits are made by the owner in his own terminal because that shell cannot see his Git identity.
+- Workflow tests: 20 passed, 0 failed (Node 22.23.4 in the sandbox, not the owner's Node). verify-protected passed before and after the planning edits.
+- Planning output: docs/refinements/IMPLEMENTATION_PLAN.md, NASA_DATA_PLAN.md, VISUAL_SPEC.md; D009-D013 and proposed ADR-P1 in DECISIONS.md.
+- Still not built or proven: game, UI, scene, data snapshot, dependency install, app tests, CI, deployment, review loop, eligibility.
+- Next: Cursor claims the lease and starts M01. See docs/HANDOFF.md.

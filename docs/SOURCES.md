@@ -18,3 +18,14 @@ Guides/local-event research was inspected earlier November 13-14; new tooling/AP
 - Codex instructions: https://developers.openai.com/codex/agent-configuration/agents-md . AGENTS.md is native guidance, not a sandbox.
 - Codex noninteractive: https://developers.openai.com/codex/noninteractive . codex exec supports read-only sandbox, stdin and output file. Deprecated --full-auto is not used. No CLI invocation or login occurred here.
 - R3F performance: https://r3f.docs.pmnd.rs/advanced/scaling-performance and https://r3f.docs.pmnd.rs/advanced/pitfalls . On-demand rendering, instancing and adaptive effects inform the plan; no device performance has been measured.
+
+## Checked in the planning pass, 2026-11-14 (through an AI web-fetch tool; not raw-byte evidence)
+- DONKI direct FLR, SEP, CME and WSAEnlilSimulations responses for 8-14 May 2024. No gameplay snapshot collected yet.
+- api.nasa.gov DONKI mirror: SEP call returned data with DEMO_KEY; one FLR call failed.
+- OSDR Biological Data API v2 spec and dataset OSD-476 (Arabidopsis in Apollo regolith, ground study).
+- RadLab data API docs page loaded; data endpoint returned server errors. Not integrated.
+- Moon Trek WMTS capabilities for LRO LOLA south-pole shaded relief. Terms unverified.
+- CSA terms of use: https://www.asc-csa.gc.ca/eng/terms.asp .
+- NASA Image and Video Library search endpoint. Optional, per-item credit check required.
+- npm registry versions for the planned dependency set. Not installed.
+Full URLs and limits: docs/refinements/NASA_DATA_PLAN.md.

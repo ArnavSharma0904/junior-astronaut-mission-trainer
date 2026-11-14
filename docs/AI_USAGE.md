@@ -18,3 +18,11 @@ Use an independent-project/non-endorsement statement and clear data attributions
 A small read-only check through provider claude-code, requested model claude-fable-5-2, completed successfully after the user's settings reset. It compared docs/PRD.md against the newly supplied full NASA challenge brief. No critical mismatch was found. This supersedes any implication that all Claude routes are unavailable; the earlier Aside-hosted Sonnet 402 remains a historical failure. The model name is the requested tool route, not an independently attested upstream identity.
 
 The check was limited to two files, not a full code/design/eligibility audit. No local terminal CLI command, game implementation, purchase, account action or video viewing occurred. Priorities: meaningful compounding trade-offs, no free safe choice, and traceable archived NASA evidence tied to actual gameplay without false dose predictions. The kit already includes the required dataset explanation/submission work. Scheduled Aside QA remains paused because the active-routine limit is a separate blocker.
+
+
+## Planning pass 2026-11-14, about 10:10-10:45 Pacific
+- Tool/model as reported: Claude app session using Claude Code, model Fable 5.2 (claude-fable-5-2), plus three read-only specialist contexts of the same model.
+- AI wrote: docs/refinements/IMPLEMENTATION_PLAN.md, NASA_DATA_PLAN.md, VISUAL_SPEC.md and the appended sections of DECISIONS, STATUS, HANDOFF, SOURCES and this file. This includes a proposed mission design, numbers, screen specifications and art direction. These are AI-originated proposals that the team must review, change and own.
+- Human decisions: the owner chose to make all commits himself, reported organizer clearance, and set the direction (cyberpunk-accented lunar game for ages 7-12).
+- Checks: workflow tests 20/20 in a sandbox; protected hashes verified; a throwaway enumeration of the proposed mission numbers was run outside the repository and is not committed.
+- No game code, assets, images, audio or data snapshot were generated.
