@@ -107,8 +107,8 @@
 }
 
 .scene[data-oxygen='low'] .plant {
-  transform: scaleY(0.45) rotate(14deg);
-  opacity: 0.55;
+  transform: scaleY(0.5) rotate(16deg);
+  opacity: 0.7;
 }
 
 .scene[data-oxygen='low'] .plant-1,
@@ -182,7 +182,7 @@
 }
 
 .scene[data-weather='watch'] .streak-0 {
-  opacity: 0.4;
+  opacity: 0.22;
 }
 
 .scene[data-weather='clearing'] .streak-0 {
@@ -204,15 +204,15 @@
 }
 
 .scene[data-weather='storm'] .scene-storm-band {
-  opacity: 0.8;
+  opacity: 0.55;
 }
 
 /* Decision feedback: a steady outline on the module the choice touched. */
 .module-outline {
   fill: none;
   stroke: #66e3ff;
-  stroke-width: 4;
-  stroke-dasharray: 22 10;
+  stroke-width: 3;
+  stroke-dasharray: 14 10;
   opacity: 0;
   transition: opacity var(--base) var(--ease);
 }

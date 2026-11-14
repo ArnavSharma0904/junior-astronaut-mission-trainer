@@ -1,0 +1,215 @@
+/* Motion and glow. Everything here is decoration on top of state that is already shown in text and shape. */
+
+/* Screen transitions */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.console-decision > *,
+.debrief-panel,
+.briefing-card {
+  animation: rise-in 420ms var(--ease) both;
+}
+
+.console-decision > *:nth-child(2) {
+  animation-delay: 60ms;
+}
+
+.console-scene > * {
+  animation: fade-in 600ms var(--ease) both;
+}
+
+.explanation .evidence-row {
+  animation: rise-in 300ms var(--ease) both;
+}
+
+.explanation .evidence-row:nth-child(2) {
+  animation-delay: 60ms;
+}
+
+.explanation .evidence-row:nth-child(3) {
+  animation-delay: 120ms;
+}
+
+.explanation .evidence-row:nth-child(n + 4) {
+  animation-delay: 180ms;
+}
+
+/* Scene frame: a faint scan line on the picture only, never over reading surfaces. */
+.scene-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(180deg, rgba(102, 227, 255, 0.035) 0 1px, transparent 1px 4px);
+}
+
+.scene-frame {
+  box-shadow: 0 0 32px rgba(102, 227, 255, 0.12);
+}
+
+.console[data-critical='true'] .scene-frame {
+  border-color: var(--amber);
+  border-width: 2px;
+}
+
+/* Living base: slow, small loops that stop under reduced motion and low effects. */
+@keyframes conduit-flow {
+  to {
+    stroke-dashoffset: -64;
+  }
+}
+
+.scene[data-power='strong'] .conduit {
+  stroke-dasharray: 40 24;
+  animation: conduit-flow 4s linear infinite;
+}
+
+.scene[data-power='steady'] .conduit {
+  stroke-dasharray: 40 24;
+  animation: conduit-flow 8s linear infinite;
+}
+
+@keyframes beacon {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.beacon {
+  animation: beacon 3.2s ease-in-out infinite;
+}
+
+@keyframes streak-drift {
+  from {
+    transform: translate(-40px, -17px);
+  }
+  to {
+    transform: translate(40px, 17px);
+  }
+}
+
+.scene[data-weather='storm'] .streak,
+.scene[data-weather='clearing'] .streak {
+  animation: streak-drift 2.8s linear infinite alternate;
+}
+
+@keyframes drill-run {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+}
+
+.scene[data-pulse='drill'][data-resolving='true'] .drill-bit {
+  animation: drill-run 300ms ease-in-out 3;
+}
+
+/* Decision feedback: the outline draws itself around the module that changed. */
+@keyframes outline-sweep {
+  from {
+    stroke-dashoffset: 320;
+    opacity: 0;
+  }
+  to {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+.scene[data-pulse='drill'] .module-drill .module-outline,
+.scene[data-pulse='array'] .module-array .module-outline,
+.scene[data-pulse='dome'] .module-dome .module-outline,
+.scene[data-pulse='shelter'] .module-shelter .module-outline,
+.scene[data-pulse='hab'] .module-hab .module-outline {
+  animation: outline-sweep var(--slow) var(--ease) both;
+}
+
+@keyframes glint {
+  0%,
+  70%,
+  100% {
+    opacity: 0.15;
+  }
+  80% {
+    opacity: 0.9;
+  }
+}
+
+.panel-glint {
+  opacity: 0.4;
+}
+
+.scene[data-pulse='array'] .panel-glint {
+  animation: glint 900ms ease-out 1;
+}
+
+/* Glow on containers and scene lights only */
+.hab-window,
+.airlock-light,
+.beacon,
+.shelter-light,
+.sample-filled {
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+.hab-window {
+  color: #ffe9b8;
+}
+
+.dome-glow {
+  filter: drop-shadow(0 0 18px rgba(172, 145, 255, 0.55));
+}
+
+.button-primary:not(:disabled) {
+  box-shadow: 0 0 24px rgba(102, 227, 255, 0.3);
+}
+
+.meter-number {
+  transition: color var(--base) var(--ease);
+}
+
+/* Reduced motion: every change is shown at once. Nothing loops, slides or sweeps. */
+:root[data-motion='reduced'] *,
+:root[data-motion='reduced'] *::before,
+:root[data-motion='reduced'] *::after {
+  animation: none !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+:root[data-motion='reduced'] .scene[data-power='strong'] .conduit,
+:root[data-motion='reduced'] .scene[data-power='steady'] .conduit {
+  stroke-dasharray: none;
+}
+
+/* Until the app has set data-motion, honour the device setting. */
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion='full']) * {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+}

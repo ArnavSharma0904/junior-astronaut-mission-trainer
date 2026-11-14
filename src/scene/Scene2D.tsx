@@ -58,14 +58,14 @@ export function Scene2D({ model }: { model: SceneModel }) {
           <stop offset="1" stopColor="#ffb86b" stopOpacity="0" />
         </radialGradient>
         <linearGradient id="ground" x1="0" y1="0" x2="1" y2="0.35">
-          <stop offset="0" stopColor="#c9bfae" />
-          <stop offset="0.28" stopColor="#8d8a8c" />
-          <stop offset="0.65" stopColor="#4a4d5c" />
-          <stop offset="1" stopColor="#23263a" />
+          <stop offset="0" stopColor="#d8cdb9" />
+          <stop offset="0.3" stopColor="#a39f9f" />
+          <stop offset="0.7" stopColor="#6a6c7c" />
+          <stop offset="1" stopColor="#3a3e56" />
         </linearGradient>
         <linearGradient id="groundDepth" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#000" stopOpacity="0" />
-          <stop offset="1" stopColor="#02030a" stopOpacity="0.72" />
+          <stop offset="1" stopColor="#02030a" stopOpacity="0.5" />
         </linearGradient>
         <linearGradient id="farWall" x1="0" y1="0" x2="1" y2="0">
           <stop offset="0" stopColor="#6f6a6b" />
@@ -124,7 +124,7 @@ export function Scene2D({ model }: { model: SceneModel }) {
       </g>
 
       {/* Earth, half lit by the same Sun */}
-      <g className="scene-earth">
+      <g className="scene-earth" transform="translate(1248 144) scale(1.5) translate(-1248 -144) translate(40 12)">
         <circle cx="1248" cy="144" r="34" fill="#0d1730" />
         <circle cx="1248" cy="144" r="34" fill="#4f8fd8" clipPath="url(#earthLit)" />
         <path d="M 1226 126 q 10 -8 20 2 q -4 12 -16 10 z M 1222 150 q 14 2 20 14 q -12 8 -20 -4 z" fill="#d9f0ff" opacity="0.75" clipPath="url(#earthLit)" />
@@ -147,8 +147,9 @@ export function Scene2D({ model }: { model: SceneModel }) {
       </g>
 
       {/* Low polar Sun behind the left ridge */}
-      <circle className="scene-sun-glow" cx="70" cy="498" r="430" fill="url(#sunGlow)" />
-      <circle className="scene-sun" cx="70" cy="498" r="30" fill="#fff8e6" />
+      <circle className="scene-sun-glow" cx="96" cy="500" r="520" fill="url(#sunGlow)" />
+      <circle className="scene-sun" cx="96" cy="500" r="34" fill="#fff8e6" />
+      <path className="scene-rays" d="M 96 500 L 700 380 L 700 400 Z M 96 500 L 620 560 L 610 574 Z M 96 500 L 520 250 L 532 268 Z" fill="#ffe2b0" opacity="0.07" />
 
       {/* Far crater wall */}
       <path d="M 0 530 L 120 470 L 250 505 L 420 478 L 600 512 L 780 492 L 960 520 L 1160 500 L 1340 530 L 1600 512 L 1600 600 L 0 600 Z" fill="url(#farWall)" />
@@ -167,24 +168,24 @@ export function Scene2D({ model }: { model: SceneModel }) {
       </g>
 
       {/* Long shadows raking right from the low Sun */}
-      <g className="scene-shadows" fill="#05060f" opacity="0.62">
-        <path d="M 250 600 L 760 640 L 760 652 L 250 612 Z" />
-        <path d="M 500 676 L 1380 742 L 1380 772 L 520 700 Z" />
-        <path d="M 1092 668 L 1600 706 L 1600 740 L 1092 690 Z" />
-        <path d="M 1300 640 L 1600 660 L 1600 668 L 1300 648 Z" />
-        <path d="M 1150 790 L 1560 824 L 1560 846 L 1150 812 Z" />
+      <g className="scene-shadows" fill="#04050d" opacity="0.66">
+        <path d="M 226 628 L 640 664 L 640 676 L 226 642 Z" />
+        <path d="M 330 690 L 1220 690 L 1600 742 L 1600 800 L 1180 740 L 360 720 Z" />
+        <path d="M 1180 668 L 1600 700 L 1600 716 L 1180 690 Z" />
+        <path d="M 1452 636 L 1600 646 L 1600 654 L 1452 644 Z" />
+        <path d="M 1190 806 L 1600 846 L 1600 880 L 1190 836 Z" />
+        <path d="M 380 858 L 760 884 L 760 900 L 380 880 Z" />
       </g>
 
       {/* Ground conduits linking the modules */}
       <g className="scene-conduits" fill="none">
-        <path className="conduit" d="M 262 604 C 340 640 420 668 500 668" />
-        <path className="conduit" d="M 830 668 C 850 676 860 676 872 672" />
-        <path className="conduit" d="M 1090 672 C 1160 690 1240 668 1296 644" />
-        <path className="conduit" d="M 980 676 C 1010 720 1060 744 1118 752" />
+        <path className="conduit" d="M 232 632 C 270 676 300 690 330 690" />
+        <path className="conduit" d="M 1196 690 C 1300 716 1400 680 1450 638" />
+        <path className="conduit" d="M 1010 694 C 1060 760 1130 790 1206 796" />
       </g>
 
       {/* Solar array on the left ridge */}
-      <g className="module module-array">
+      <g className="module module-array" transform="translate(-30 20) translate(260 606) scale(1.25) translate(-260 -606)">
         <rect x="256" y="430" width="8" height="176" fill="url(#metalDark)" />
         {[0, 1, 2].map((row) => (
           <g key={row} transform={`translate(260 ${448 + row * 50})`}>
@@ -196,21 +197,23 @@ export function Scene2D({ model }: { model: SceneModel }) {
         <rect className="module-outline" x="136" y="420" width="248" height="196" rx="10" />
       </g>
 
+      {/* Central cluster, drawn large: shelter, Hab-1 and greenhouse */}
+      <g transform="translate(700 676) scale(1.4) translate(-760 -676)">
       {/* Regolith-covered shelter behind the habitat */}
       <g className="module module-shelter">
         <path d="M 600 590 C 640 500 800 486 880 560 C 900 580 910 592 916 600 Z" fill="url(#berm)" />
         <path d="M 600 590 C 640 500 800 486 880 560" fill="none" stroke="#ffe9c4" strokeOpacity="0.6" strokeWidth="2" />
-        <path d="M 838 600 L 838 566 A 22 22 0 0 1 882 566 L 882 600 Z" fill="#141a2c" stroke="#8f93a3" strokeWidth="3" />
-        <circle className="shelter-light" cx="860" cy="548" r="6" />
+        <path d="M 690 592 L 690 556 A 24 24 0 0 1 738 556 L 738 592 Z" fill="#141a2c" stroke="#aeb3c4" strokeWidth="3" />
+        <circle className="shelter-light" cx="714" cy="524" r="6" />
         <g className="shelter-crates">
-          <rect x="890" y="580" width="22" height="20" rx="2" fill="#ffd166" stroke="#3a2f12" strokeWidth="2" />
-          <rect x="914" y="586" width="18" height="14" rx="2" fill="#66e3ff" stroke="#12303a" strokeWidth="2" />
-          <rect x="896" y="564" width="18" height="16" rx="2" fill="#edf4ff" stroke="#2c3145" strokeWidth="2" />
+          <rect x="748" y="572" width="22" height="20" rx="2" fill="#ffd166" stroke="#3a2f12" strokeWidth="2" />
+          <rect x="772" y="578" width="18" height="14" rx="2" fill="#66e3ff" stroke="#12303a" strokeWidth="2" />
+          <rect x="754" y="556" width="18" height="16" rx="2" fill="#edf4ff" stroke="#2c3145" strokeWidth="2" />
         </g>
         <path className="shelter-shield" d="M 584 600 C 620 470 820 452 934 600" fill="none" />
         <g className="crew crew-sheltered">
-          <circle cx="852" cy="584" r="5" />
-          <circle cx="868" cy="584" r="5" />
+          <circle cx="706" cy="572" r="5" />
+          <circle cx="722" cy="572" r="5" />
         </g>
         <rect className="module-outline" x="576" y="470" width="372" height="140" rx="10" />
       </g>
@@ -224,6 +227,8 @@ export function Scene2D({ model }: { model: SceneModel }) {
         </g>
         <rect x="490" y="592" width="330" height="84" rx="42" fill="url(#metal)" />
         <rect x="490" y="640" width="330" height="36" rx="18" fill="#1b2034" opacity="0.45" />
+        <path d="M 532 594 A 42 42 0 0 0 492 634" fill="none" stroke="#fff3d6" strokeWidth="4" strokeLinecap="round" />
+        <path d="M 540 594 L 800 594" fill="none" stroke="#fff3d6" strokeOpacity="0.55" strokeWidth="2" />
         <path d="M 532 592 L 532 676 M 616 592 L 616 676 M 700 592 L 700 676 M 784 592 L 784 676" stroke="#3a4058" strokeWidth="2" opacity="0.7" />
         <path className="hab-seam" d="M 512 634 L 800 634" fill="none" />
         {WINDOWS.map((index) => (
@@ -240,9 +245,11 @@ export function Scene2D({ model }: { model: SceneModel }) {
         <path className="dome-glow" d="M 868 668 A 112 112 0 0 1 1092 668 Z" fill="url(#domeGlow)" />
         <g clipPath="url(#domeClip)">
           {PLANTS.map((index) => (
-            <g key={index} className={`plant plant-${index}`} transform={`translate(${894 + index * 34} 668)`}>
-              <path d="M 0 0 L 0 -34" stroke="#7cf2b0" strokeWidth="3" />
-              <path d="M 0 -18 q -14 -6 -16 -20 q 14 2 16 20 z M 0 -26 q 14 -6 16 -22 q -14 2 -16 22 z" fill="#7cf2b0" />
+            <g key={index} transform={`translate(${894 + index * 34} 668)`}>
+              <g className={`plant plant-${index}`}>
+                <path d="M 0 0 L 0 -34" stroke="#7cf2b0" strokeWidth="3" />
+                <path d="M 0 -18 q -14 -6 -16 -20 q 14 2 16 20 z M 0 -26 q 14 -6 16 -22 q -14 2 -16 22 z" fill="#7cf2b0" />
+              </g>
             </g>
           ))}
         </g>
@@ -251,16 +258,17 @@ export function Scene2D({ model }: { model: SceneModel }) {
         <path d="M 890 610 A 100 100 0 0 1 950 566" fill="none" stroke="#fff" strokeOpacity="0.55" strokeWidth="4" strokeLinecap="round" />
         <rect className="module-outline" x="852" y="544" width="256" height="146" rx="12" />
       </g>
+      </g>
 
       {/* Comms mast */}
-      <g className="module-mast">
+      <g className="module-mast" transform="translate(150 -14)">
         <path d="M 1300 650 L 1300 470 M 1286 650 L 1300 560 L 1314 650 M 1292 600 L 1308 600" stroke="url(#metalDark)" strokeWidth="5" fill="none" />
         <path d="M 1300 486 q -34 -6 -44 -40 q 30 6 44 40 z" fill="url(#metal)" />
         <circle className="beacon" cx="1300" cy="464" r="6" />
       </g>
 
       {/* Drill rig and sample rack in the foreground */}
-      <g className="module module-drill">
+      <g className="module module-drill" transform="translate(1250 790) scale(1.25) translate(-1160 -790)">
         <path d="M 1080 780 L 1120 660 L 1160 780 M 1094 738 L 1146 738" stroke="url(#metal)" strokeWidth="7" fill="none" strokeLinecap="round" />
         <rect x="1110" y="648" width="20" height="26" rx="4" fill="#ffd166" stroke="#3a2f12" strokeWidth="2" />
         <rect className="drill-bit" x="1116" y="676" width="8" height="108" rx="3" fill="#aeb3c4" />
@@ -276,7 +284,7 @@ export function Scene2D({ model }: { model: SceneModel }) {
             <circle cx="0" cy="-26" r="9" />
             <rect x="-8" y="-17" width="16" height="24" rx="6" />
           </g>
-          <g transform="translate(1238 800)">
+          <g transform="translate(1304 806)">
             <circle cx="0" cy="-26" r="9" />
             <rect x="-8" y="-17" width="16" height="24" rx="6" />
           </g>
@@ -285,7 +293,7 @@ export function Scene2D({ model }: { model: SceneModel }) {
       </g>
 
       {/* Rover for scale */}
-      <g className="scene-rover">
+      <g className="scene-rover" transform="translate(-1010 26)">
         <rect x="1380" y="796" width="110" height="30" rx="8" fill="url(#metal)" />
         <rect x="1398" y="776" width="52" height="24" rx="6" fill="#141a2c" stroke="#aeb3c4" strokeWidth="2" />
         <circle cx="1400" cy="832" r="15" fill="#10121d" stroke="#6b7086" strokeWidth="4" />

@@ -1,0 +1,48 @@
+/* Low effects: a crisp, static version of the same design. Glow, scan lines, drifting particles and blur are removed.
+   State is still shown by lights, shapes, hatching and words. */
+:root[data-effects='low'] .scene-frame::after {
+  display: none;
+}
+
+:root[data-effects='low'] .scene-frame,
+:root[data-effects='low'] .button-primary:not(:disabled),
+:root[data-effects='low'] .choice[data-selected='true'] {
+  box-shadow: none;
+}
+
+:root[data-effects='low'] .hab-window,
+:root[data-effects='low'] .airlock-light,
+:root[data-effects='low'] .beacon,
+:root[data-effects='low'] .shelter-light,
+:root[data-effects='low'] .sample-filled,
+:root[data-effects='low'] .dome-glow {
+  filter: none;
+}
+
+:root[data-effects='low'] .scene *,
+:root[data-effects='low'] .console-decision > *,
+:root[data-effects='low'] .console-scene > *,
+:root[data-effects='low'] .debrief-panel,
+:root[data-effects='low'] .briefing-card,
+:root[data-effects='low'] .evidence-row {
+  animation: none !important;
+}
+
+:root[data-effects='low'] .scene[data-power='strong'] .conduit,
+:root[data-effects='low'] .scene[data-power='steady'] .conduit {
+  stroke-dasharray: none;
+}
+
+:root[data-effects='low'] .scene-rays,
+:root[data-effects='low'] .scene-stars circle:nth-child(odd) {
+  display: none;
+}
+
+:root[data-effects='low'] .situation,
+:root[data-effects='low'] .actions,
+:root[data-effects='low'] .explanation,
+:root[data-effects='low'] .debrief-panel,
+:root[data-effects='low'] .meters,
+:root[data-effects='low'] .timeline {
+  background: var(--panel);
+}

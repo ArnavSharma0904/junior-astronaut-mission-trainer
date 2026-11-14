@@ -36,6 +36,8 @@
 }
 
 .button-primary {
+  /* No colour transition: the label must never pass through a low-contrast state. */
+  transition: transform var(--fast) var(--ease);
   background: var(--cyan);
   border-color: var(--cyan);
   color: var(--bg);
@@ -1005,5 +1007,19 @@
   }
   .choice[data-selected='true'] {
     outline: 3px solid Highlight;
+  }
+}
+
+@media (max-width: 720px) {
+  .meters {
+    padding: var(--s3);
+    gap: var(--s2) var(--s3);
+  }
+  .meter-number {
+    font-size: 1.5rem;
+  }
+  .meter-unit {
+    flex-basis: 100%;
+    order: 3;
   }
 }

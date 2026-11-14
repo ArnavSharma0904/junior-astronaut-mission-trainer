@@ -196,3 +196,28 @@ main:focus {
     padding: var(--s3);
   }
 }
+
+/* Phone order: scene, status, the decision, then the timeline as history. */
+@media (max-width: 720px) {
+  .console-scene {
+    display: contents;
+  }
+  .console .scene-frame,
+  .debrief .scene-frame {
+    order: 1;
+  }
+  .console .meters,
+  .debrief .meters {
+    order: 2;
+  }
+  .console-decision,
+  .debrief-panel {
+    order: 3;
+  }
+  .console .timeline {
+    order: 4;
+  }
+  .console .scene-frame {
+    aspect-ratio: 16 / 9;
+  }
+}
