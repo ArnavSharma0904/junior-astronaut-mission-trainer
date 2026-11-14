@@ -78,3 +78,37 @@ The owner directed Claude to continue as the sole implementation writer for M01-
 - Next slice: M03 (NASA snapshot). NASA hosts are unreachable from both sandboxes, so raw responses are being collected through the owner's Chrome and saved byte-for-byte as text; see docs/STATUS.md for the result.
 - To run the checks on the owner's Mac: `npm ci && npx playwright install chromium && node scripts/run-checks.mjs`. The sandbox's node_modules is not in the repository.
 - No server or background process is running in the repository.
+
+
+## HANDOFF 2026-11-14 about 11:30 Pacific: M01-M05 built, reviews blocked (writer claude releasing the lease)
+- Tool and model: Claude app session, model reported as Fable 5.2. Source was written in a cloud scratch clone and applied to this repository as patches; every commit was made here through the pre-commit guard with the repo-local identity (author Arnav Sharma, Co-Authored-By Claude).
+- HEAD: this file is in the handoff commit, the direct child of 4f4f4dab8072edb0f81262fdabd7c91efbc1f0fa. `git log --oneline -1` then `git log --oneline -2 | tail -1` should show 4f4f4da as the parent. Full list in docs/STATUS.md.
+- Dirty files expected: none. Lease: released after this commit; `.agent-bus/locks/writer.json` must be absent before anyone claims.
+- Last passing check run: run-1794684118872-bku9o54e at 4f4f4da (evidence in .agent-bus/runs/, copied unchanged from the cloud container). The handoff commit itself has no check run.
+- Builder screenshots (not review evidence): .agent-bus/evidence/m05-builder/*.png.
+- Pending review ids: m02-r1 (SHA 1328c14) has no verdict and is now stale. No other request exists.
+
+### First thing to do on the Mac
+    cd "/Users/arnavsharma/Downloads/nasa-hackathon-kit 2"
+    npm ci
+    npx playwright install chromium
+    npm run dev            # play it at the printed localhost address
+    npm run data:fetch && npm run data:validate   # confirms the NASA snapshot against live DONKI
+    node scripts/run-checks.mjs                    # needs a clean tree; prints a run id
+node_modules in this folder, if present, was not created by this pass. The sandbox could not install into it.
+
+### Next slice: reviews C1-C3 as one checkpoint at the current HEAD, then M07
+1. Claim: `node scripts/workflow.mjs claim <owner> build`.
+2. `node scripts/run-checks.mjs`, then `node scripts/workflow.mjs request m05-r1 <owner> <run-id> "C1-C3 combined: M01-M05"`.
+3. Independent lane: `sh scripts/codex-review.sh m05-r1` if the codex CLI exists; otherwise a fresh Claude context with prompts/02_CODEX_REVIEW.md, recorded as a substitution. Browser lane: Aside with prompts/03_ASIDE_QA.md (routine is paused; ask it directly). A missing reviewer is BLOCKED.
+4. Import each unchanged verdict with lock, review, unlock. FIX means a new commit and a new request id.
+5. M07 hardening candidates found while building: Confirm is below the fold at 1024x768; on phones the choices scroll under the sticky scene; e2e takes about 2.7 minutes of a 5-minute limit; no test asserts that low-effects removes the scan lines; the scene's shelter outline is large.
+
+### Known limitations to tell reviewers
+Listed under "What is NOT established" in docs/STATUS.md. Do not describe the game as verified, award-eligible or NASA-endorsed.
+
+### Processes
+No server or background process was left running in this repository. The cloud preview servers were stopped.
+
+### Still unauthorized
+Push, deployment, account creation, purchases, protected-contract changes (including ADR-P1), submission.

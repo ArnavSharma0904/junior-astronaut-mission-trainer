@@ -30,3 +30,11 @@ The check was limited to two files, not a full code/design/eligibility audit. No
 
 ## Implementation by AI, from 2026-11-14 10:27 Pacific
 At the owner's direction (D014) the application source, tests, styles, scene artwork (hand-written SVG/CSS, no image generator), data scripts and content for M01-M05 are written by Claude (Claude app session, model reported as Fable 5.2). The owner sets direction and holds the Git identity used for commits; each commit carries a Co-Authored-By line. The team must review this work and record its own changes here.
+
+
+## Implementation record 2026-11-14 10:27-11:30 Pacific
+- Written by Claude (model reported as Fable 5.2) at the owner's direction: everything under src/, tests/, scripts/data/, the app config files, docs/ASSETS.md and the appended STATUS, HANDOFF and DECISIONS sections. Commits d1ecf21, 1328c14, 3d75544, 999c557, f6f04ae, 4f4f4da.
+- Images: the scene, icons and favicon are SVG written as code. No image, video or audio generator was used, so no on-image AI mark applies; the in-game About panel states the AI assistance in words.
+- Data: NASA DONKI values were read by the AI from live responses in the owner's Chrome and typed into the snapshot through a script; see src/data/TRANSFORMS.md for the limits of that method.
+- Human decisions in this period: reassigning the writer role, and choosing to proceed.
+- Not done by a human yet: review of the mission design, numbers, wording, science claims and visuals. The team should play it, change what it wants to own, and record that here.

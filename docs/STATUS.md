@@ -40,3 +40,29 @@ Owner reassigned implementation of M01-M05 to Claude as sole writer (D014). Leas
   40 unit tests; the balance test enumerates every legal path of the mission.
 - C1 review request m02-r1 was created for 1328c14. Two fresh-context reviewers (independent code review and real-browser QA, substituting for Codex and the paused Aside routine) were started and BOTH stopped on the account usage limit before producing a verdict. C1 is therefore BLOCKED, not passed. No verdict file exists. A new request id is needed once reviewers are available (limit resets 14:30 Pacific), covering all changes up to the then-current HEAD.
 - Nothing is playable yet. No NASA snapshot yet. No push.
+
+
+## M01-M05 implemented, reviews BLOCKED: 2026-11-14 about 11:30 Pacific (writer: claude)
+Commits on main after the plan (b703b5e), oldest first:
+- e67c9a7 docs: reassignment note
+- d1ecf21 M01 scaffold. Check run PASS.
+- 1328c14 M02 engine. Check run run-1794681475666-45kv26rh PASS.
+- 6eb48ed docs: progress note
+- 3d75544 M03 NASA snapshot and manifest. (No separate check run; covered by the next run.)
+- 999c557 M04 playable mission. Check run run-1794683049086-611izo1m PASS.
+- f6f04ae M05 visual interface. Check run run-1794683677702-r3f4dxof BLOCKED: two full-mission browser tests timed out at 30 s.
+- 4f4f4da fix for that. Check run run-1794684118872-bku9o54e PASS (typecheck, lint, 68 unit tests, build, 34 browser tests on the built preview).
+- then the commit containing this note (docs only; no check run was made for it).
+
+Where the checks ran: an Anthropic cloud container, on a Git-bundle clone with the identical commit SHA, using its installed Chrome for Testing 153 (PW_CHANNEL=chrome), 2 CPU cores, software rendering. They have NOT been run on the owner's Mac or in GitHub CI.
+
+What exists now: a complete six-turn mission playable from briefing to debrief, with save/resume, sources, settings and about drawers, a state-linked SVG scene, an archived DONKI snapshot (5 X-class flares, 8 particle-event records, 2 CMEs, 4 WSA-ENLIL runs for 9-11 May 2024) and tests.
+
+What is NOT established:
+- No independent review of any kind. C1 (request m02-r1) got no verdict; C2 and C3 were not requested because no reviewer could run: the account usage limit stopped both reviewer contexts (resets 14:30 Pacific). All three checkpoints are BLOCKED. Nothing may be pushed.
+- Visual quality is not scored. The builder looked at real screenshots (1440, 1024 and 390 wide; saved in .agent-bus/evidence/m05-builder/) and fixed what it saw, but a builder cannot grade its own work under the rubric.
+- NASA data: values were read from live DONKI responses in the owner's Chrome and each response's SHA-256 is recorded, but raw bodies were not saved. `npm run data:fetch && npm run data:validate` on the Mac is the pending verification. OSD-476 and the CSA link are unverified references.
+- Device frame rate, WebKit/Safari, real phones, screen readers and manual contrast audit: not tested.
+- The low-effects and reduced-motion styles have behaviour tests but no dedicated screenshots were reviewed.
+- M06 (WebGL) is skipped; ADR-P1 is still unapproved.
+- Eligibility still rests on the owner's report.
