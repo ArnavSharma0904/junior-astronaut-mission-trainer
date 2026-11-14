@@ -16,11 +16,13 @@ export function readJson(key: string): { found: false } | { found: true; value: 
   }
 }
 
-export function writeJson(key: string, value: unknown): void {
+/** Returns false when the browser refuses the write. Callers must not claim the value was stored. */
+export function writeJson(key: string, value: unknown): boolean {
   try {
     window.localStorage.setItem(key, JSON.stringify(value));
+    return true;
   } catch {
-    // Saving is a convenience. The mission keeps working without it.
+    return false;
   }
 }
 

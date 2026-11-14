@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Settings } from '../state/settings';
+import type { SaveStatus } from '../state/useMission';
 import { Drawer } from './Drawer';
 
 interface Props {
@@ -9,9 +10,10 @@ interface Props {
   update: (patch: Partial<Settings>) => void;
   onReset: () => void;
   hasSave: boolean;
+  saveStatus: SaveStatus;
 }
 
-export function SettingsDrawer({ open, onClose, settings, update, onReset, hasSave }: Props) {
+export function SettingsDrawer({ open, onClose, settings, update, onReset, hasSave, saveStatus }: Props) {
   const [confirming, setConfirming] = useState(false);
   const [erased, setErased] = useState(false);
   return (
@@ -48,7 +50,13 @@ export function SettingsDrawer({ open, onClose, settings, update, onReset, hasSa
       </div>
       <div className="setting">
         <h3>Saved mission</h3>
-        <p>Your mission is saved on this device only. Nothing is sent anywhere.</p>
+        <p data-testid="save-status">
+          {saveStatus === 'failed'
+            ? 'The latest progress could not be saved on this device. You can keep playing. A reload keeps only the last save that worked.'
+            : hasSave
+              ? 'Your mission is saved on this device only. Nothing is sent anywhere.'
+              : 'Nothing is sent anywhere.'}
+        </p>
         {erased ? <p role="status">Saved mission erased.</p> : null}
         {confirming ? (
           <div className="confirm-row">

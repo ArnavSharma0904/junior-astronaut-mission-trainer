@@ -99,6 +99,11 @@ export function App() {
           </button>
         </nav>
       </header>
+      {game.saveStatus === 'failed' ? (
+        <p className="notice save-banner" role="status" data-testid="save-failed">
+          <Icon name="warning" size={18} /> This progress could not be saved. You can keep playing. Reloading will not keep the latest turn.
+        </p>
+      ) : null}
       <main id="main" tabIndex={-1}>
         {game.appPhase === 'briefing' ? <Briefing mission={mission} canResume={game.canResume} saveStatus={game.saveStatus} onStart={game.startNew} onResume={game.resume} /> : null}
         {game.appPhase === 'mission' ? <Console state={game.game} mission={mission} dispatch={game.dispatch} onOpenSource={openSource} onTone={tone} /> : null}
@@ -112,7 +117,7 @@ export function App() {
       </footer>
       <LiveRegion message={message} />
       <SourcesDrawer open={drawer === 'sources'} onClose={() => setDrawer(null)} focusId={sourceFocus} />
-      <SettingsDrawer open={drawer === 'settings'} onClose={() => setDrawer(null)} settings={settings} update={update} onReset={game.resetSave} hasSave={game.saveStatus === 'resumable'} />
+      <SettingsDrawer open={drawer === 'settings'} onClose={() => setDrawer(null)} settings={settings} update={update} onReset={game.resetSave} hasSave={game.hasStoredSave} saveStatus={game.saveStatus} />
       <AboutDrawer open={drawer === 'about'} onClose={() => setDrawer(null)} />
     </div>
   );

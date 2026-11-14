@@ -7,7 +7,7 @@ import { loadSavedState, toSave } from '../game/validation';
 import { readJson, remove, SAVE_KEY, writeJson } from './storage';
 
 export type AppPhase = 'briefing' | 'mission' | 'debrief';
-export type SaveStatus = 'none' | 'resumable' | 'unreadable';
+export type SaveStatus = 'none' | 'resumable' | 'unreadable' | 'failed';
 
 interface Boot {
   saved: GameState | null;
@@ -41,9 +41,13 @@ export function useMission(reducedMotion: boolean) {
     latest.current = next;
     setGame(next);
     if (persist) {
-      writeJson(SAVE_KEY, toSave(next));
-      setSaved(next);
-      setSaveStatus('resumable');
+      const wrote = writeJson(SAVE_KEY, toSave(next));
+      if (wrote) {
+        setSaved(next);
+        setSaveStatus('resumable');
+      } else {
+        setSaveStatus('failed');
+      }
     }
   }, []);
 
@@ -98,5 +102,18 @@ export function useMission(reducedMotion: boolean) {
 
   const toBriefing = useCallback(() => setAppPhase('briefing'), []);
 
-  return { appPhase, game, lastEvents, rejection, saveStatus, canResume: saved !== null && saved.phase !== 'ended', dispatch, startNew, resume, resetSave, toBriefing };
+  return {
+    appPhase,
+    game,
+    lastEvents,
+    rejection,
+    saveStatus,
+    hasStoredSave: saved !== null,
+    canResume: saved !== null && saved.phase !== 'ended',
+    dispatch,
+    startNew,
+    resume,
+    resetSave,
+    toBriefing,
+  };
 }

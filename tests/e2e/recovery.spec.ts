@@ -102,14 +102,46 @@ test.describe('save, resume and recovery', () => {
     await expect(page.getByTestId('outcome')).toHaveText('Mission complete');
   });
 
-  test('storage that throws does not break play', async ({ page }) => {
+  test('a denied save is reported and a reload does not restore that progress', async ({ page }) => {
     await page.addInitScript(() => {
       Storage.prototype.setItem = () => {
-        throw new Error('QuotaExceededError');
+        throw new DOMException('QuotaExceededError', 'QuotaExceededError');
       };
     });
     await start(page);
+    await expect(page.getByTestId('save-failed')).toBeVisible();
     await playThrough(page, WIN);
     await expect(page.getByTestId('outcome')).toHaveText('Mission complete');
+    await expect(page.getByTestId('save-failed')).toBeVisible();
+    await page.getByTestId('open-settings').click();
+    await expect(page.getByTestId('save-status')).toContainText('could not be saved');
+    await page.reload();
+    await expect(page.getByTestId('resume')).toHaveCount(0);
+    await expect(page.getByTestId('start')).toBeVisible();
+    expect(await page.evaluate((key) => window.localStorage.getItem(key), SAVE_KEY)).toBeNull();
+  });
+
+  test('when a later save is denied, reload restores the last write that worked', async ({ page }) => {
+    await page.addInitScript(() => {
+      const original = Storage.prototype.setItem;
+      let missionWrites = 0;
+      Storage.prototype.setItem = function (this: Storage, key: string, value: string) {
+        if (key === 'jamt.save.v1') {
+          missionWrites += 1;
+          if (missionWrites > 1) throw new DOMException('QuotaExceededError', 'QuotaExceededError');
+        }
+        return original.call(this, key, value);
+      };
+    });
+    await start(page);
+    await expect(page.getByTestId('save-failed')).toHaveCount(0);
+    await decide(page, 'drill-1');
+    await expect(page.getByTestId('save-failed')).toBeVisible();
+    expect(await value(page, 'samples')).toBe(1);
+    await page.reload();
+    await page.getByTestId('resume').click();
+    await expect(page.getByRole('heading', { name: 'Morning check' })).toBeVisible();
+    expect(await value(page, 'samples')).toBe(0);
+    expect(await value(page, 'power')).toBe(mission.start.power);
   });
 });
