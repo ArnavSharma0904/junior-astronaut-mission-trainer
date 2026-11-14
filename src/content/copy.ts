@@ -54,7 +54,7 @@ export const actionCopy: Record<string, { label: string; effect: string; happene
   'stock-3': { label: 'Stock the shelter', effect: 'Get the shelter ready before the storm.', happened: 'The shelter is ready. Moving supplies used some power and air.' },
   'shelter-4': { label: 'Go to the shelter', effect: 'Stop work and get everyone behind thick Moon soil.', happened: 'Everyone moved into the shelter.' },
   'remote-4': { label: 'Shelter and drill by remote', effect: 'Get safe, then drive the drill from inside.', happened: 'The crew got safe and ran the drill by remote control. That used a lot of power.' },
-  'outside-4': { label: 'Keep working outside', effect: 'Stay out to finish the sample. This breaks the storm safety rule.', happened: 'The crew stayed outside during the storm. That breaks the safety rule, so Mission Control called everyone in.' },
+  'outside-4': { label: 'Keep working outside', effect: 'Stay out to finish the sample. This breaks the storm safety rule.', happened: 'The crew stayed outside during the storm. That breaks the safety rule, so Mission Control brought everyone inside and paused the mission.' },
   'rest-5': { label: 'Rest in low power', effect: 'Save power and wait. The shelter air gets used up.', happened: 'The base ran on low power. The air in the shelter went down.' },
   'remote-5': { label: 'Drill by remote', effect: 'Drive the drill from inside the shelter.', happened: 'The crew ran the drill by remote control. That used a lot of power.' },
   'scrub-5': { label: 'Run the air scrubbers', effect: 'Clean the shelter air. The scrubbers need power.', happened: 'The scrubbers cleaned the air and used power.' },
@@ -106,7 +106,7 @@ export const endingCopy = {
 export const pauseCopy: Record<PauseReason, string> = {
   power: 'The base ran out of power. Without power the base cannot keep working.',
   oxygen: 'The oxygen reserve ran out. Mission Control switched to the backup supply and ended the mission.',
-  'safety-rule': 'The crew was outside during the particle storm. The safety rule says shelter first.',
+  'safety-rule': 'The crew stayed outside during the particle storm, so the safety rule paused the mission. Mission Control then brought everyone inside. Everyone is safe.',
 };
 
 export const missingCopy = {

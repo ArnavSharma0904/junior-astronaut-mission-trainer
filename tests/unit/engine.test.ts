@@ -57,7 +57,10 @@ describe('mission engine', () => {
 
   it('pauses the mission when the crew works outside during the storm, with a named reason', () => {
     const final = playAll(['charge-1', 'drill-2', 'drill-3', 'outside-4']);
-    expect(final).toMatchObject({ phase: 'ended', outcome: 'paused', pauseReason: 'safety-rule' });
+    expect(final).toMatchObject({ phase: 'ended', outcome: 'paused', pauseReason: 'safety-rule', crew: 'sheltered' });
+    expect(final.decisionLog.at(-1)?.actionId).toBe('outside-4');
+    const trap = mission.turns.find((turn) => turn.id === 'particle-storm')!.actions.find((action) => action.id === 'outside-4')!;
+    expect(trap.sets?.crew).toBeUndefined();
   });
 
   it('moves the crew into shelter for the storm and back out after it', () => {

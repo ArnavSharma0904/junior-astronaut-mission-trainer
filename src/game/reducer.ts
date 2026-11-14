@@ -46,13 +46,20 @@ function commit(state: GameState, mission: MissionDef, actionId: string): Resolu
 
   const shelterStocked = state.shelterStocked || action.sets?.shelterStocked === true;
   if (shelterStocked && !state.shelterStocked) events.push({ kind: 'shelter-stocked' });
-  const crew = action.sets?.crew ?? state.crew;
-  if (crew !== state.crew) events.push({ kind: 'crew', to: crew });
+  const actedCrew = action.sets?.crew ?? state.crew;
+  if (actedCrew !== state.crew) events.push({ kind: 'crew', to: actedCrew });
 
   let outcome: Outcome = 'in-progress';
   let pauseReason: PauseReason | null = null;
-  const outsideInStorm = turn.weather === 'storm' && crew === 'working';
-  if (action.breaksSafetyRule || outsideInStorm) {
+  const outsideInStorm = turn.weather === 'storm' && actedCrew === 'working';
+  const safetyPause = action.breaksSafetyRule === true || outsideInStorm;
+  // The unsafe choice stays in the log. Bringing the crew inside is the rescue after that choice, not a rewrite of it.
+  let crew = actedCrew;
+  if (safetyPause && crew !== 'sheltered') {
+    crew = 'sheltered';
+    events.push({ kind: 'crew', to: 'sheltered' });
+  }
+  if (safetyPause) {
     outcome = 'paused';
     pauseReason = 'safety-rule';
   } else if (power <= 0) {

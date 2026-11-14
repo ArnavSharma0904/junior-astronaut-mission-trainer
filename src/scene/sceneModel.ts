@@ -44,7 +44,11 @@ export function toSceneModel(state: GameState, mission: MissionDef): SceneModel 
     'A small Moon base on a crater rim near the south pole, lit by a low Sun.',
     `Base lights show power is ${bandWord[power]}.`,
     `The greenhouse shows oxygen is ${bandWord[oxygen]}.`,
-    state.crew === 'sheltered' ? 'The crew is inside the soil-covered shelter.' : 'The crew is working at the drill.',
+    state.pauseReason === 'safety-rule'
+      ? 'The crew chose to stay outside, which broke the safety rule. Mission Control brought them inside the shelter. The mission is paused and everyone is safe.'
+      : state.crew === 'sheltered'
+        ? 'The crew is inside the soil-covered shelter.'
+        : 'The crew is working at the drill.',
     state.shelterStocked ? 'Supplies are stacked at the shelter door.' : '',
     `${state.samples} of ${mission.goalSamples} ice samples are in the rack.`,
     weatherWord[state.spaceWeather],

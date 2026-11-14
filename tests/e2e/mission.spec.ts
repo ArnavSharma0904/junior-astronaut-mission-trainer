@@ -35,7 +35,11 @@ test.describe('complete mission', () => {
     await start(page);
     await playThrough(page, UNSAFE);
     await expect(page.getByTestId('outcome')).toHaveText('Mission paused: crew safe');
-    await expect(page.getByTestId('pause-reason')).toContainText('safety rule');
+    await expect(page.getByTestId('pause-reason')).toContainText('brought everyone inside');
+    await expect(page.getByTestId('decision-log')).toContainText('Keep working outside');
+    await expect(page.getByTestId('chip-crew')).toContainText('In shelter');
+    await expect(page.locator('.scene')).toHaveAttribute('data-crew', 'sheltered');
+    await expect(page.locator('.scene')).toHaveAttribute('aria-label', /brought them inside the shelter/);
     await expect(page.locator('.scene')).toHaveAttribute('data-outcome', 'paused');
   });
 
