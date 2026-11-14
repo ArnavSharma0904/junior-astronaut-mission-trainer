@@ -161,3 +161,25 @@ No dev server was left running by this handoff.
 
 ### Still unauthorized
 Push, deployment, account creation, purchases, protected-contract changes (including ADR-P1), submission.
+
+## HANDOFF 2026-11-14 about 3:05 PM Pacific: iteration-2 repair committed, check follows this commit (writer cursor)
+- Tool and model: same Cursor session bc402846-4c7a-4814-9831-38cf876ebac8, model reported as Grok 4.7. This is repair iteration 2, operational round-4. It is not a new builder and not a rescore.
+- Repository: /Users/arnavsharma/Downloads/nasa-hackathon-kit 2, branch main. Nothing has been pushed.
+- Code SHA: 7850d484a8e82748a0a24b5744c835eff6b80b2a. This handoff is committed with the status notes before `node scripts/run-checks.mjs`. The checked SHA is this commit, not 7850d48 and not 2531b94.
+- Dirty files expected after the commit: none. Lease: cursor/build, released only after the request is filed and the tree is clean.
+- Prior exact-HEAD PASS that must not be reused: run-1794695106591-s41b6a4m at 2531b9436498784163feaeb3cdcf2b7ccf6cce41. Reviews of that SHA (request autonomy-r1-recovered) were FIX for coverage and FIX for the visual target. No self-approval.
+- Local layout screenshots taken while building are under the ignored `.agent-bus/tmp-visual/` folder. They are not review evidence and they are not a rubric score.
+
+### What this repair changes
+The briefing card is a left column at 1440x900 and 1024x768, and the habitat and greenhouse stay in the scene beside it. On a phone the scene fills the column and frames the solar array, habitat, greenhouse, and drill. The goal, the world, and the current turn title sit on the first screen. Evidence lines and source buttons are hit-tested in full, and Confirm is hit-tested before the 200% click. SVG and CSS only. The archived NASA events were not edited.
+
+### Next
+1. Full check on this commit. Keep any failed run. A fix is a new commit and a new run. The passing run id, if any, is written to ignored `.agent-bus/autonomy/builder-result.json` with order round-4.
+2. Request id autonomy-r2, owner cursor. Aside reviews that exact SHA. This builder does not approve it.
+3. M06 stays skipped until ADR-P1 is approved. Do not claim a visual score, award eligibility, or NASA endorsement.
+
+### Processes
+No dev server was left running by this handoff.
+
+### Still unauthorized
+Push, deployment, account creation, purchases, protected-contract changes (including ADR-P1), submission.
