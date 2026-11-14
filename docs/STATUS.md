@@ -32,3 +32,11 @@ Next planning agent: verify current state; DO NOT clone the empty remote over th
 
 ## Assignment change 2026-11-14 10:27 Pacific
 Owner reassigned implementation of M01-M05 to Claude as sole writer (D014). Lease claimed by `claude`, scope `build`, at b703b5e0e50a4f4f015ea1ac148cac414c49dd7a (18:28Z). Cursor did not start. Build environment and its limits: D015.
+
+
+## Build progress 2026-11-14 10:45 Pacific (writer: claude)
+- M01 committed: d1ecf21e6b7f18de44805bab5737cb8a121c0b47. Check run run-1794681242061-2e95kvp5 PASS (cloud container, PW_CHANNEL=chrome; evidence in the cloud clone only).
+- M02 committed: 1328c1482643cc67a34e5f510cf5b1e49a6b95d6. Check run run-1794681475666-45kv26rh PASS, evidence copied unchanged to .agent-bus/runs/.
+  40 unit tests; the balance test enumerates every legal path of the mission.
+- C1 review request m02-r1 was created for 1328c14. Two fresh-context reviewers (independent code review and real-browser QA, substituting for Codex and the paused Aside routine) were started and BOTH stopped on the account usage limit before producing a verdict. C1 is therefore BLOCKED, not passed. No verdict file exists. A new request id is needed once reviewers are available (limit resets 14:30 Pacific), covering all changes up to the then-current HEAD.
+- Nothing is playable yet. No NASA snapshot yet. No push.

@@ -69,3 +69,12 @@ Push, deployment, account creation, purchases, governance changes to protected f
 
 ## Assignment change 2026-11-14 10:27 Pacific (supersedes the Cursor launch section above until the next handoff)
 The owner directed Claude to continue as the sole implementation writer for M01-M05 (docs/DECISIONS.md D014). Lease: owner `claude`, scope `build`, claimed at b703b5e. Cursor must not claim until a later handoff section in this file says the lease was released.
+
+
+## Interim state 2026-11-14 10:45 Pacific (writer: claude, lease held, scope build)
+- Commits so far on main, in order: 17b0177 (M00), b703b5e (plan), e67c9a7 (reassignment note), d1ecf21 (M01), 1328c14 (M02), then the commit containing this note.
+- Lease: `.agent-bus/locks/writer.json` names `claude`. If this session ended without a later handoff section, the lease is stale: the owner should inspect `git status`, then run `node scripts/workflow.mjs release claude` (needs a clean tree) before another writer claims.
+- Pending review: request m02-r1 (SHA 1328c14) has NO verdict; reviewers hit the usage limit. Treat C1 as BLOCKED. Do not push.
+- Next slice: M03 (NASA snapshot). NASA hosts are unreachable from both sandboxes, so raw responses are being collected through the owner's Chrome and saved byte-for-byte as text; see docs/STATUS.md for the result.
+- To run the checks on the owner's Mac: `npm ci && npx playwright install chromium && node scripts/run-checks.mjs`. The sandbox's node_modules is not in the repository.
+- No server or background process is running in the repository.
