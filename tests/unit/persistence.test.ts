@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { mission } from '../../src/content/mission';
 import { resolve } from '../../src/game/reducer';
 import { loadSavedState, toSave } from '../../src/game/validation';
-import { play, SNAPSHOT, start } from './helpers';
+import { play, playAll, SNAPSHOT, start } from './helpers';
 
 const roundTrip = (value: unknown): unknown => JSON.parse(JSON.stringify(value));
 
@@ -42,5 +42,26 @@ describe('saved missions', () => {
     expect(loadSavedState(roundTrip(beyond), mission, SNAPSHOT)).toEqual({ ok: false, reason: 'inconsistent' });
     const skipped = { ...toSave(start()), state: { ...start(), turnIndex: 3 } };
     expect(loadSavedState(roundTrip(skipped), mission, SNAPSHOT)).toEqual({ ok: false, reason: 'inconsistent' });
+  });
+
+  it('rejects a schema-valid explanation that has no decision behind it', () => {
+    const explainedWithNoDecision = {
+      ...toSave(start()),
+      state: { ...start(), phase: 'explained', inspecting: null, decisionLog: [], turnIndex: 0 },
+    };
+    expect(loadSavedState(roundTrip(explainedWithNoDecision), mission, SNAPSHOT)).toEqual({ ok: false, reason: 'inconsistent' });
+  });
+
+  it('rejects a schema-valid save whose resources do not follow the logged action', () => {
+    const played = play(start(), 'charge-1');
+    const tampered = { ...toSave(played), state: { ...played, resources: { power: played.resources.power - 5, oxygen: played.resources.oxygen } } };
+    expect(loadSavedState(roundTrip(tampered), mission, SNAPSHOT)).toEqual({ ok: false, reason: 'inconsistent' });
+  });
+
+  it('accepts an inspection and a finished mission that the engine can actually reach', () => {
+    const inspected = resolve(start(), { type: 'INSPECT', actionId: 'grow-1' }, mission).state;
+    expect(loadSavedState(roundTrip(toSave(inspected)), mission, SNAPSHOT)).toEqual({ ok: true, state: inspected });
+    const ended = playAll(['charge-1', 'drill-2', 'drill-3', 'outside-4']);
+    expect(loadSavedState(roundTrip(toSave(ended)), mission, SNAPSHOT)).toEqual({ ok: true, state: ended });
   });
 });

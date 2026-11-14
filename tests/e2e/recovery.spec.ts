@@ -1,5 +1,8 @@
 import { expect, test } from '@playwright/test';
 import { mission } from '../../src/content/mission';
+import { SNAPSHOT_VERSION } from '../../src/data';
+import { createInitialState } from '../../src/game/reducer';
+import { toSave } from '../../src/game/validation';
 import { decide, playThrough, SAVE_KEY, start, value, WIN } from './helpers';
 
 test.describe('save, resume and recovery', () => {
@@ -38,6 +41,21 @@ test.describe('save, resume and recovery', () => {
       expect(await value(page, 'power')).toBe(mission.start.power);
     });
   }
+
+  test('an explained save with no decision is not offered as Continue, including after reload', async ({ page }) => {
+    const fresh = createInitialState(mission, SNAPSHOT_VERSION);
+    const corrupt = toSave({ ...fresh, phase: 'explained', inspecting: null, decisionLog: [] });
+    await page.addInitScript(([key, raw]) => window.localStorage.setItem(key, raw), [SAVE_KEY, JSON.stringify(corrupt)] as const);
+    await page.goto('/');
+    await expect(page.getByTestId('save-unreadable')).toBeVisible();
+    await expect(page.getByTestId('resume')).toHaveCount(0);
+    await page.reload();
+    await expect(page.getByTestId('save-unreadable')).toBeVisible();
+    await expect(page.getByTestId('resume')).toHaveCount(0);
+    await page.getByTestId('start').click();
+    await expect(page.getByRole('heading', { name: 'Morning check' })).toBeVisible();
+    expect(await value(page, 'power')).toBe(mission.start.power);
+  });
 
   test('erasing the save from Settings needs a second step and returns to the briefing', async ({ page }) => {
     await start(page);
