@@ -66,3 +66,19 @@ What is NOT established:
 - The low-effects and reduced-motion styles have behaviour tests but no dedicated screenshots were reviewed.
 - M06 (WebGL) is skipped; ADR-P1 is still unapproved.
 - Eligibility still rests on the owner's report.
+
+## M07 review fixes on the Mac: 2026-11-14 about 12:45 Pacific (writer: cursor)
+Independent review of 5f419e0 was FIX. It was not a two-lane gate PASS. Cursor then committed, oldest first:
+- fe37eea reject unreachable saves and add a discard-and-start-fresh recovery
+- a883a95 report a failed save instead of claiming it worked
+- d199eb9 bring the crew inside after an unsafe storm pause, without erasing that choice
+- b9e4c70 release stored oxygen instead of teaching that scrubbers make oxygen
+- ca38613 keep Confirm, the goal, and tool names available at 1024 and 390
+- 5127398 stop the balance search from swallowing assertion failures; assert low-effects scan lines
+- 2cd773d viewport hit-test types
+- 103e4c2 JSON import attributes so Node 25 can load the snapshot in browser tests
+- fd2e381 wait for entrance motion before the contrast scan
+
+Check run run-1794689033550-mlsecgte PASS at fd2e381be9f0242d4ea6eba11bb87a713df63d06 on this Mac (Homebrew Node 25.6.0, Playwright Chromium 159). typecheck, lint, 73 unit tests, production build, and 36 browser tests. `npm ci` restored the lockfile's lightningcss and rolldown native binaries and both loaded. Vitest prints an engine warning on Node 25; the suite still passed. This is not a fresh independent or browser-lane PASS, and nothing was pushed.
+
+Still open: visual craft was scored 3/5 on the diagnostic preview of 5f419e0 and has not been re-scored. M06/ADR-P1 is still unapproved. Safari, a physical phone, a screen reader, and device frame rate are still unmeasured. Eligibility still rests on the owner's report.

@@ -112,3 +112,27 @@ No server or background process was left running in this repository. The cloud p
 
 ### Still unauthorized
 Push, deployment, account creation, purchases, protected-contract changes (including ADR-P1), submission.
+
+
+## HANDOFF 2026-11-14 about 12:45 Pacific: review fixes built and checked on the Mac (writer cursor releasing the lease)
+- Tool and model: Cursor session, model reported as Grok 4.7. Commits use the repo-local identity (Arnav Sharma).
+- Repository: /Users/arnavsharma/Downloads/nasa-hackathon-kit 2, branch main. Nothing has been pushed.
+- Checked product SHA: fd2e381be9f0242d4ea6eba11bb87a713df63d06. This handoff commit is docs only and has no check run of its own. `git log --oneline -1` after this commit should show the handoff; its parent chain includes fd2e381.
+- Dirty files expected: none. Lease: released after this commit.
+- Passing check run: run-1794689033550-mlsecgte at fd2e381. Evidence: .agent-bus/runs/run-1794689033550-mlsecgte/. 73 unit tests and 36 browser tests passed on the built preview. Two earlier Mac runs in that folder are failed and were kept: run-1794688839425-sgda33hm (Node 25 JSON import) and run-1794688883619-qz3216cq (contrast scan during the fade-in).
+- Mac path that reproduced the PASS: `npm ci`, then `npx playwright install --force chromium` because the headless-shell binary was missing from the cache, then `node scripts/run-checks.mjs` on a clean tree. Do not treat `build.cssMinify=false` as a production build. The native bindings load after `npm ci` on this machine.
+- Independent review of 5f419e0 remains FIX, not imported as a gate. m02-r1 is still stale. No new review request was filed in this pass.
+
+### What the fixes changed
+Unreachable saves are rejected and a crash can discard the save. A denied write is shown as a failed save, and reload restores only the last write that worked. Staying outside in the storm still pauses the mission and stays in the log; the crew is then inside. The old scrubber action is now "Release reserve oxygen," with the same made-up game units. Confirm, the goal, and Sources/Settings/Sound names stay available at 1024x768 and 390x844. The balance search only ignores illegal actions. Low effects removes the scene scan line.
+
+### Next
+1. Fresh independent and browser review of fd2e381, or of this handoff commit if the docs change must be in the reviewed SHA. A FIX needs a new commit and a new request id.
+2. Then M08: science provenance package and the short demonstration, still without claiming award eligibility or NASA endorsement.
+3. 2D visual craft is still the open quality gap from the 5f419e0 browser review. M06 stays skipped until ADR-P1 is approved.
+
+### Processes
+No dev server was left running.
+
+### Still unauthorized
+Push, deployment, account creation, purchases, protected-contract changes (including ADR-P1), submission.

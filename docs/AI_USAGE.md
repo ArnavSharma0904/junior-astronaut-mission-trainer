@@ -38,3 +38,6 @@ At the owner's direction (D014) the application source, tests, styles, scene art
 - Data: NASA DONKI values were read by the AI from live responses in the owner's Chrome and typed into the snapshot through a script; see src/data/TRANSFORMS.md for the limits of that method.
 - Human decisions in this period: reassigning the writer role, and choosing to proceed.
 - Not done by a human yet: review of the mission design, numbers, wording, science claims and visuals. The team should play it, change what it wants to own, and record that here.
+
+## Review fixes 2026-11-14 about 12:20-12:45 Pacific
+Cursor session, model reported as Grok 4.7, after the independent FIX review of 5f419e0. The assistant wrote the repair commits listed in docs/STATUS.md (save validation, honest save failure, storm rescue, reserve oxygen, layout, tests, and the Node 25 JSON import attribute). No image, video, or audio generator was used. The NASA snapshot files were not replaced. Checks: run-1794689033550-mlsecgte PASS at fd2e381 on the owner's Mac. The team still has not played and owned the wording.
