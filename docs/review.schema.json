@@ -1,0 +1,106 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "requestId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$"
+    },
+    "sha": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    },
+    "role": {
+      "enum": [
+        "independent",
+        "browser"
+      ]
+    },
+    "reviewer": {
+      "type": "string",
+      "minLength": 3,
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{2,79}$"
+    },
+    "verdict": {
+      "enum": [
+        "PASS",
+        "FIX",
+        "BLOCKED"
+      ]
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 10
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "observedBuildSha": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    }
+  },
+  "required": [
+    "requestId",
+    "sha",
+    "role",
+    "reviewer",
+    "verdict",
+    "summary",
+    "evidence",
+    "findings"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "role": {
+            "const": "browser"
+          },
+          "verdict": {
+            "const": "PASS"
+          }
+        },
+        "required": [
+          "role",
+          "verdict"
+        ]
+      },
+      "then": {
+        "required": [
+          "observedBuildSha"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "verdict": {
+            "const": "PASS"
+          }
+        },
+        "required": [
+          "verdict"
+        ]
+      },
+      "then": {
+        "properties": {
+          "findings": {
+            "maxItems": 0
+          }
+        }
+      }
+    }
+  ]
+}

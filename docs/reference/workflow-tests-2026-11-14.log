@@ -1,0 +1,29 @@
+✔ prestart allows only Claude planning lease and blocks runtime gates (315.719708ms)
+✔ lease conflict, owner release, traversal and symlinks rejected (616.919667ms)
+✔ successful exact-SHA two-lane gate, pending and immutable records (3571.161792ms)
+✔ wrong request owner and missing/incomplete run rejected (2529.199375ms)
+✔ browser screenshot, observed SHA, findings, self-review and mismatched SHA rejected (3025.597584ms)
+Polling only. This does not wake or resume a dead agent.
+✔ review locks are owner-exclusive; honest BLOCKED text accepted but not gated (2611.734ms)
+✔ dirty worktree and stale committed SHA invalidate gate (2772.155583ms)
+✔ protected hashes and installed baseline pin contracts (350.988959ms)
+✔ exact Git root refusal and safe evidence directory symlinks (216.490209ms)
+✔ missing package or scripts creates honest BLOCKED immutable summary (479.61875ms)
+✔ failed check stops sequence, preserves log, and cannot gate (966.712708ms)
+✔ check timeouts terminate process groups and preserve summary (758.513542ms)
+✔ install refuses hook conflicts/hooksPath; installation pins baseline and preserves push stdin (609.928ms)
+✔ push requires approval, origin, exact branch HEAD, two lanes and fast-forward (3989.116167ms)
+✔ M00 unborn bootstrap accepts inventory-listed mutable docs, rejects product files, and needs no lease (615.843833ms)
+✔ run rejects missing logs and invalid commit-time metadata (2256.488458ms)
+✔ push refuses a real divergent known commit, not only unknown hashes (2850.175708ms)
+✔ normal precommit guard rejects poisoned index with restored worktree (729.823833ms)
+✔ M00 bootstrap refuses partial inventory staging (570.374958ms)
+✔ all CLI entrypoints execute in checkout paths containing # and ? (347.498333ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 30245.546333

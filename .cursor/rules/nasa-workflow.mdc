@@ -1,0 +1,5 @@
+---
+description: Canonical hackathon engineering, visual quality and review gates
+alwaysApply: true
+---
+Read AGENTS.md and docs/STATUS.md. The canonical requirements live in docs; do not duplicate or silently rewrite them here. Use prompts/01_CURSOR_BUILD.md for the builder workflow. One implementation writer, exact-commit reviews, source-backed NASA facts, working controls, real browser tests, 2D fallback, reduced motion, no pre-event build, no automatic publishing. Continue ordered milestones without routine confirmation requests. Stop only for the documented escalation conditions.

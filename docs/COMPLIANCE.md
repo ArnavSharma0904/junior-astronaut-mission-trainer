@@ -1,0 +1,15 @@
+# Competition and publishing safeguards
+
+The kit files began being created with AI on November 14, 2026 at 09:24 Pacific, verified from filesystem birth timestamps. Earlier challenge selection/AI-assisted discussions occurred November 13. This includes project-specific planning, not just tooling. Do not misstate the dates, call it entirely team-authored, or certify unqualified originality without organizer guidance. NASA's AI ideation restriction and treatment of earlier discussions may affect eligibility; only organizers can resolve that. Contact nasaspaceapps@sonoma.edu / local lead with an accurate account. The global form opens 09:00; Sonoma's first scheduled work session is 10:00, so confirm local build-start instructions. No game code/assets have been produced in this kit.
+
+References supplied by the user: official Project Submission Guide and Junior Astronaut brief. Official guide: https://www.spaceappschallenge.org/resources/project-submission-guide/ . Local event: https://www.spaceappschallenge.org/2026/local-events/rohnert-park/ . The build gate uses November 14, 09:00 America/Los_Angeles (17:00Z); obey any stricter local start instruction. Sonoma's first scheduled work session is 10:00.
+
+At least one NASA data/resource is required for global-award eligibility. The game must genuinely use it. NASA does not endorse this independent project; do not imply approval or agency certification. External websites/assets obey their own data and copyright terms. NASA imagery is not automatically a universal license for every credited third-party work.
+
+AI-generated images/video require visible SI-generation marking under the supplied guide. Audio, code and data require acknowledgments in descriptive text/metadata. Keep docs/AI_USAGE.md accurate. AI-generated material may not contain/modify NASA branding, flags or mission identifiers. Prefer licensed/procedural original shapes over generated agency imagery. Label generated decoration visibly where required; don't hide attribution in unreachable text.
+
+The audience is children, but final project/demo must not include photos, voices, video or other likenesses of actual under-18s. Use abstract non-identifiable icons, adult narration or text. No child analytics, accounts, personal-data collection or recordings. No tracking by default.
+
+Global submission: project name, summary, demo link, final-project link, detailed description, SI use, NASA data and other references. English. Demo <=30 seconds OR <=7 slides including title/introduction. Public links require no account/permission. Submit for Judging, not only Save Progress; verify confirmation. Sunday November 15, 23:59 local is the stated global deadline, but Sonoma presents at 15:00 and local submission instructions may be earlier. Confirm live-pitch duration at kickoff; the Folsom-specific instructions do not apply.
+
+No automatic account creation, paid subscription, plugin purchase, public push/deployment, submission certification or final send. These need explicit owner authorization. Routine local implementation/testing should not stop for permission on every reversible step.

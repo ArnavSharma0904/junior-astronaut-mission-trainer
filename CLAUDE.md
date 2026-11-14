@@ -1,0 +1,2 @@
+# Claude Code entrypoint
+Read AGENTS.md, then prompts/00_CLAUDE_PLAN.md for planning or prompts/04_FRESH_EVALUATOR.md for an independent evaluation. Treat the repo files as durable state, not this chat. Keep the configured model; verify it through /model rather than guessing a model ID. Native specialist definitions are in .claude/agents. Read-only helpers must not commit, push, or edit product files. Never use permission-bypass flags.
