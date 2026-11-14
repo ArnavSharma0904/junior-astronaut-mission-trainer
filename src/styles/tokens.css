@@ -1,12 +1,36 @@
-/* Design tokens from docs/DESIGN_SYSTEM.md. Extended in M05. */
+/* Design tokens. Palette from docs/DESIGN_SYSTEM.md; additions listed in docs/refinements/VISUAL_SPEC.md section 6. */
 :root {
   --bg: #070b16;
   --panel: #10182a;
+  --panel-2: #1a2540;
   --text: #edf4ff;
   --text-2: #b6c3d8;
+  --muted: #8494ae;
   --cyan: #66e3ff;
   --violet: #ac91ff;
   --amber: #ffd166;
+  --critical: #ff6b6b;
+  --success: #7cf2b0;
+  --line: #2a3a5c; /* decoration only: 1.7:1 */
+  --edge: #5b7199; /* control boundaries: 3.6:1 on panel */
+
+  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: var(--font-body);
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 24px;
+  --s6: 32px;
+  --s7: 48px;
+  --r1: 6px;
+  --r2: 12px;
+  --fast: 150ms;
+  --base: 250ms;
+  --slow: 600ms;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   color-scheme: dark;
 }
 
@@ -16,33 +40,87 @@
   box-sizing: border-box;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
   background: var(--bg);
   color: var(--text);
-  font: 400 1rem/1.5 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font: 400 1rem/1.5 var(--font-body);
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+dl,
+dd,
+fieldset {
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+fieldset {
+  border: 0;
+  min-width: 0;
 }
 
 a {
   color: var(--cyan);
 }
 
+button {
+  font: inherit;
+  color: inherit;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
 :focus-visible {
   outline: 3px solid #ffffff;
   outline-offset: 2px;
-  box-shadow: 0 0 0 2px var(--bg);
+  box-shadow: 0 0 0 5px var(--bg);
+}
+
+[tabindex='-1']:focus-visible {
+  outline-style: dashed;
+  outline-width: 2px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 .skip-link {
   position: absolute;
   left: 8px;
-  top: -64px;
+  top: -80px;
   padding: 12px 16px;
   background: var(--cyan);
   color: var(--bg);
   font-weight: 600;
-  border-radius: 6px;
+  border-radius: var(--r1);
   z-index: 100;
 }
 

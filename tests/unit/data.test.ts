@@ -107,3 +107,27 @@ describe('DONKI normalizer', () => {
     expect(() => normalizeSeps([{ eventTime: '2024-05-11T02:10Z' }], 'sep')).toThrow(DonkiFormatError);
   });
 });
+
+describe('words and numbers stay in step', () => {
+  it('states the derived warning gap exactly as the data gives it', async () => {
+    const { warningGapMinutes } = await import('../../src/content/evidence');
+    expect(getSource('donki-sep-2024-05-11').supportedClaim).toContain(`${warningGapMinutes()} minutes`);
+  });
+
+  it('keeps game numbers out of the copy so they can only come from mission data', async () => {
+    const { actionCopy, turnCopy, principleCopy } = await import('../../src/content/copy');
+    const strings = [...Object.values(actionCopy).flatMap((item) => [item.label, item.effect, item.happened]), ...Object.values(turnCopy).flatMap((item) => [item.title, item.situation, item.lesson]), ...Object.values(principleCopy)];
+    expect(strings.filter((text) => /\d/.test(text))).toEqual([]);
+  });
+
+  it('has words for every turn, action and principle in the mission', async () => {
+    const { actionCopy, turnCopy, principleCopy } = await import('../../src/content/copy');
+    for (const turn of mission.turns) {
+      expect(turnCopy[turn.id]).toBeDefined();
+      for (const action of turn.actions) {
+        expect(actionCopy[action.id]).toBeDefined();
+        expect(principleCopy[action.principleId]).toBeDefined();
+      }
+    }
+  });
+});

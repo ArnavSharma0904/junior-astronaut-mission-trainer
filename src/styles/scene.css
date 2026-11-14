@@ -1,0 +1,240 @@
+/* The outpost scene. Game state arrives as data attributes on .scene; nothing here decides game logic. */
+.scene-frame {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border: 1px solid var(--edge);
+  border-radius: var(--r2);
+  overflow: hidden;
+  background: #03050c;
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+}
+
+.scene {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.scene-dim {
+  opacity: 0;
+  transition: opacity var(--slow) var(--ease);
+}
+
+.scene-frame[data-dimmed='true'] .scene-dim {
+  opacity: 0.45;
+}
+
+/* Power: base lights */
+.hab-window,
+.airlock-light {
+  fill: #ffe9b8;
+  transition: fill var(--slow) var(--ease), opacity var(--slow) var(--ease);
+}
+
+.airlock-light {
+  fill: #66e3ff;
+}
+
+.hab-seam,
+.conduit {
+  stroke: #66e3ff;
+  stroke-width: 4;
+  stroke-linecap: round;
+  transition: stroke var(--slow) var(--ease), opacity var(--slow) var(--ease);
+}
+
+.conduit {
+  stroke-dasharray: 2 0;
+}
+
+.beacon,
+.rover-light,
+.shelter-light {
+  fill: #66e3ff;
+}
+
+.scene[data-power='steady'] .hab-window-1,
+.scene[data-power='steady'] .hab-window-3 {
+  fill: #1b2034;
+}
+
+.scene[data-power='steady'] .conduit,
+.scene[data-power='steady'] .hab-seam {
+  opacity: 0.6;
+}
+
+.scene[data-power='low'] .hab-window {
+  fill: #1b2034;
+}
+
+.scene[data-power='low'] .conduit {
+  stroke-dasharray: 10 14;
+  opacity: 0.45;
+  stroke: #ffd166;
+}
+
+.scene[data-power='low'] .hab-seam {
+  opacity: 0.25;
+}
+
+.scene[data-power='low'] .beacon {
+  fill: #ffd166;
+}
+
+.scene[data-power='low'] .panel-glint {
+  opacity: 0;
+}
+
+/* Oxygen: the greenhouse */
+.dome-glow,
+.plant {
+  transition: opacity var(--slow) var(--ease), transform var(--slow) var(--ease);
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+
+.scene[data-oxygen='steady'] .dome-glow {
+  opacity: 0.55;
+}
+
+.scene[data-oxygen='steady'] .plant-1,
+.scene[data-oxygen='steady'] .plant-4 {
+  opacity: 0;
+}
+
+.scene[data-oxygen='low'] .dome-glow {
+  opacity: 0.18;
+}
+
+.scene[data-oxygen='low'] .plant {
+  transform: scaleY(0.45) rotate(14deg);
+  opacity: 0.55;
+}
+
+.scene[data-oxygen='low'] .plant-1,
+.scene[data-oxygen='low'] .plant-3,
+.scene[data-oxygen='low'] .plant-4 {
+  opacity: 0;
+}
+
+/* Crew and shelter */
+.crew {
+  fill: #edf4ff;
+  stroke: #070b16;
+  stroke-width: 2;
+  transition: opacity var(--base) var(--ease);
+}
+
+.crew-sheltered {
+  fill: #7cf2b0;
+}
+
+.scene[data-crew='working'] .crew-sheltered,
+.scene[data-crew='sheltered'] .crew-working {
+  opacity: 0;
+}
+
+.shelter-crates,
+.shelter-shield {
+  opacity: 0;
+  transition: opacity var(--slow) var(--ease);
+}
+
+.scene[data-stocked='true'] .shelter-crates {
+  opacity: 1;
+}
+
+.shelter-shield {
+  stroke: #7cf2b0;
+  stroke-width: 5;
+  stroke-dasharray: 16 10;
+  stroke-linecap: round;
+}
+
+.scene[data-crew='sheltered'] .shelter-shield {
+  opacity: 1;
+}
+
+.scene[data-crew='sheltered'] .shelter-light {
+  fill: #7cf2b0;
+}
+
+/* Samples */
+.sample {
+  fill: #0b0d18;
+  stroke: #8f93a3;
+  stroke-width: 2;
+  transition: fill var(--base) var(--ease);
+}
+
+.sample-filled {
+  fill: #7cf2b0;
+  stroke: #eafff3;
+}
+
+/* Space weather: more streaks means a higher stage. The hatched band appears only in a storm. */
+.streak {
+  stroke: #c9b8ff;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  opacity: 0;
+  transition: opacity 2.5s linear;
+}
+
+.scene[data-weather='watch'] .streak-0 {
+  opacity: 0.4;
+}
+
+.scene[data-weather='clearing'] .streak-0 {
+  opacity: 0.5;
+}
+
+.scene[data-weather='clearing'] .streak-1 {
+  opacity: 0.25;
+}
+
+.scene[data-weather='storm'] .streak {
+  opacity: 0.85;
+  stroke: #ffd98a;
+}
+
+.scene-storm-band {
+  opacity: 0;
+  transition: opacity 2.5s linear;
+}
+
+.scene[data-weather='storm'] .scene-storm-band {
+  opacity: 0.8;
+}
+
+/* Decision feedback: a steady outline on the module the choice touched. */
+.module-outline {
+  fill: none;
+  stroke: #66e3ff;
+  stroke-width: 4;
+  stroke-dasharray: 22 10;
+  opacity: 0;
+  transition: opacity var(--base) var(--ease);
+}
+
+.scene[data-pulse='drill'] .module-drill .module-outline,
+.scene[data-pulse='array'] .module-array .module-outline,
+.scene[data-pulse='dome'] .module-dome .module-outline,
+.scene[data-pulse='shelter'] .module-shelter .module-outline,
+.scene[data-pulse='hab'] .module-hab .module-outline {
+  opacity: 1;
+}
+
+/* Endings */
+.scene[data-outcome='paused'] .hab-window,
+.scene[data-outcome='paused'] .conduit {
+  opacity: 0.25;
+}
+
+.scene[data-outcome='success'] .beacon {
+  fill: #7cf2b0;
+}
+
+.scene[data-outcome='success'] .scene-sun-glow {
+  opacity: 1;
+}

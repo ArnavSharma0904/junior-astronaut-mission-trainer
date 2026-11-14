@@ -1,0 +1,198 @@
+.app {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: var(--s5);
+  min-height: 64px;
+  padding: var(--s2) var(--s5);
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, #0c1324, var(--bg));
+}
+
+.app-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.app-objective {
+  color: var(--text-2);
+  flex: 1;
+  min-width: 0;
+}
+
+.objective-label {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--bg);
+  background: var(--amber);
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-right: var(--s2);
+  font-weight: 700;
+}
+
+.turn-pips {
+  display: flex;
+  gap: 6px;
+}
+
+.turn-pip {
+  width: 22px;
+  height: 8px;
+  border-radius: 4px;
+  border: 1px solid var(--edge);
+}
+
+.turn-pip[data-state='done'] {
+  background: var(--edge);
+}
+
+.turn-pip[data-state='current'] {
+  background: var(--cyan);
+  border-color: var(--cyan);
+  height: 12px;
+}
+
+.app-tools {
+  display: flex;
+  gap: var(--s2);
+  margin-left: auto;
+}
+
+.app-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2) var(--s5);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--s3) var(--s5);
+  border-top: 1px solid var(--line);
+  color: var(--text-2);
+  font-size: 1rem;
+}
+
+main {
+  min-width: 0;
+}
+
+main:focus {
+  outline: none;
+}
+
+/* Mission console: scene side about 60%, decision side the rest. */
+.console,
+.debrief {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: var(--s5);
+  padding: var(--s5);
+  align-items: start;
+  max-width: 1680px;
+  margin: 0 auto;
+}
+
+.console-scene {
+  display: grid;
+  gap: var(--s4);
+  min-width: 0;
+  position: sticky;
+  top: var(--s4);
+}
+
+.console-decision,
+.debrief-panel {
+  display: grid;
+  gap: var(--s4);
+  min-width: 0;
+}
+
+.briefing {
+  position: relative;
+  min-height: calc(100vh - 64px - 56px);
+  display: grid;
+  place-items: center;
+  padding: var(--s5);
+  overflow: hidden;
+}
+
+.briefing > .scene-frame {
+  position: absolute;
+  inset: 0;
+  border-radius: 0;
+  border: 0;
+  aspect-ratio: auto;
+  clip-path: none;
+}
+
+@media (max-width: 1100px) {
+  .app-header {
+    gap: var(--s3);
+    padding: var(--s2) var(--s4);
+  }
+  .app-objective {
+    display: none;
+  }
+  .console,
+  .debrief {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--s4);
+    padding: var(--s4);
+  }
+}
+
+@media (max-width: 720px) {
+  .app-header {
+    flex-wrap: wrap;
+    min-height: 56px;
+  }
+  .app-title {
+    font-size: 0.9375rem;
+    white-space: normal;
+    flex: 1;
+  }
+  .app-tools .button span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .console,
+  .debrief {
+    grid-template-columns: minmax(0, 1fr);
+    padding: var(--s3);
+    gap: var(--s3);
+  }
+  .console-scene {
+    position: static;
+    gap: var(--s3);
+  }
+  .console .scene-frame {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+  .briefing {
+    padding: var(--s3);
+    place-items: end center;
+  }
+  .confirm-bar {
+    position: sticky;
+    bottom: 0;
+    z-index: 6;
+    margin: 0 calc(-1 * var(--s3));
+    padding: var(--s2) var(--s3);
+    background: linear-gradient(180deg, transparent, var(--bg) 30%);
+  }
+  .app-footer {
+    padding: var(--s3);
+  }
+}
