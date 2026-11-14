@@ -53,6 +53,7 @@ export async function expectVisibleUncovered(page: Page, locator: ReturnType<Pag
       [rect.right - Math.min(12, rect.width / 2), rect.bottom - Math.min(12, rect.height / 2)],
     ];
     return points.every(([x, y]) => {
+      if (x === undefined || y === undefined) return false;
       const hit = document.elementFromPoint(x, y);
       return hit !== null && (hit === element || element.contains(hit));
     });
