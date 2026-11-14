@@ -3,6 +3,14 @@ import { expect, test, type Page } from '@playwright/test';
 import { decide, expectNoHorizontalOverflow, expectVisibleUncovered, playThrough, start, UNSAFE, WIN } from './helpers';
 
 async function expectNoAxeViolations(page: Page) {
+  await page.evaluate(() =>
+    Promise.all(
+      document.getAnimations().flatMap((animation) => {
+        const iterations = animation.effect?.getTiming().iterations;
+        return iterations === Infinity ? [] : [animation.finished.catch(() => undefined)];
+      }),
+    ),
+  );
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations.map((violation) => `${violation.id}: ${violation.nodes.map((node) => node.target.join(' ')).join(' | ')}`)).toEqual([]);
 }
