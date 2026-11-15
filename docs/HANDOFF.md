@@ -240,3 +240,13 @@ No dev server was left running by this handoff.
 
 ### Still unauthorized
 Push, deployment, account creation, purchases, protected-contract changes (including ADR-P1), submission, and any eligibility claim.
+
+## HANDOFF 2026-11-15 about 2:00 PM Pacific: caption contrast committed after local checks (writer cursor)
+- The scene caption text is fixed at `#edf4ff` on the `#070b16` sky box. Fieldbook, Flight Deck, and Night Shift each have a contrast test.
+- Parent of this note: 76faec0de5a34fa0e3a520b55c4064e5f34990b2. This note is in the caption commit.
+- Checks run on the caption diff before the commit: typecheck, lint, 87 unit, production build, 86 browser, data:validate 17 passed and 0 skipped.
+- Request redesign-r3 still names 76faec0. It is not a review of this commit. No new request was filed. Nothing was pushed.
+- Lease: cursor/build until released after this commit. No visual score.
+
+### Still unauthorized
+Push, deployment, account creation, purchases, protected-contract changes, submission, and any eligibility claim.

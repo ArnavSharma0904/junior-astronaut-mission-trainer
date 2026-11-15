@@ -25,7 +25,8 @@
   max-width: min(28rem, 58%);
   margin: 0;
   padding: 4px 8px;
-  color: var(--text);
+  /* The sky box stays #070b16 in every theme, so the words stay light. Fieldbook --text is dark. */
+  color: #edf4ff;
   background: #070b16;
   border: 1px solid var(--edge);
   font-size: 0.875rem;

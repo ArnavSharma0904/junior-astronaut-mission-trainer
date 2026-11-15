@@ -315,6 +315,21 @@ test.describe('themes and keyboard route', () => {
   });
 
   for (const theme of THEMES) {
+    test(`${theme} scene caption stays readable on the dark sky box`, async ({ page }) => {
+      await page.addInitScript((name) => {
+        localStorage.setItem('jamt.settings.v1', JSON.stringify({ muted: true, reducedMotion: 'on', lowEffects: false, theme: name }));
+      }, theme);
+      await page.goto('/');
+      await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+      await expect(page.locator('.scene-caption')).toBeVisible();
+      expect(await surfaceContrast(page, '.scene-caption')).toBeGreaterThanOrEqual(4.5);
+      await page.getByTestId('start').click();
+      await expect(page.getByTestId('scene-caption')).toBeVisible();
+      expect(await surfaceContrast(page, '.scene-caption')).toBeGreaterThanOrEqual(4.5);
+    });
+  }
+
+  for (const theme of THEMES) {
     for (const viewport of [
       { width: 1024, height: 768 },
       { width: 800, height: 600 },

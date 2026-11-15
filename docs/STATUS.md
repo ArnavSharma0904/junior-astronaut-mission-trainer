@@ -142,3 +142,6 @@ What changed:
 - The build SHA is this app's git root. A copy nested in another repository uses GITHUB_SHA or unknown, not the outer HEAD.
 
 The commit that contains this note is the SHA for `node scripts/run-checks.mjs`. run-1794744190874-jgrr6uz7 at 706817b is not reused. Nothing was pushed. No visual score is claimed. Safari, a physical phone, a screen reader, and frame rate were not measured.
+
+## Caption contrast, 2026-11-15 about 2:00 PM Pacific (writer: cursor)
+The scene caption box stays `#070b16` in every theme. Its text is now the fixed light color `#edf4ff`, so Lunar Fieldbook no longer puts dark ink on that box. A browser test checks caption contrast in Flight Deck, Fieldbook, and Night Shift on the briefing and after Start. Before this commit: typecheck, lint, 87 unit tests, production build, 86 browser tests, and `data:validate` (17 passed, 0 skipped) all passed on this diff. Nothing was pushed. No visual score is claimed.
