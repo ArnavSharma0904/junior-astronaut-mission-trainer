@@ -27,13 +27,13 @@ export const turnCopy: Record<string, { title: string; situation: string; lesson
   },
   'particle-storm': {
     title: 'Particle storm',
-    situation: 'A bigger flare just peaked. Fast particles can follow within the hour. The crew needs to be in the shelter now.',
-    lesson: 'Fast particles can arrive soon after a flare. Getting ready early pays off.',
+    situation: 'A bigger flare just peaked. Fast particles can follow. The archive gap is not a Moon arrival time and not a guaranteed warning. The crew needs to be in the shelter now.',
+    lesson: 'Fast particles can arrive soon after a flare. Getting ready early pays off. Not every flare brings local danger.',
   },
   'storm-continues': {
     title: 'Storm continues',
-    situation: 'The crew is safe behind thick Moon soil. Work is slower in here, and the stored oxygen needs looking after.',
-    lesson: 'Shelter keeps the crew safe, but work slows down. Remote tools help.',
+    situation: 'In this game the crew is behind thick Moon soil. Real shielding can reduce exposure, and it is not a promise that the storm is safe. Work is slower in here, and the stored oxygen needs looking after.',
+    lesson: 'Shelter can reduce exposure. This game does not measure a real dose. Work slows down. Remote tools help.',
   },
   'all-clear': {
     title: 'All clear',
@@ -73,9 +73,9 @@ export const principleCopy: Record<string, string> = {
   'flare-light-is-fast': 'A flare is a burst of light from the Sun. Light takes about eight minutes to get here, so we see a flare soon after it happens.',
   'prepare-early': 'Getting ready before trouble arrives is cheaper than rushing later.',
   'forecasts-change': 'Scientists use computer models to guess when a solar cloud will arrive. New information can change the guess.',
-  'particles-follow-fast': 'After some flares, tiny fast particles race out from the Sun. They can arrive in minutes to hours, long before the slow cloud.',
-  'shelter-rule': 'The Moon has no thick air or magnetic shield like Earth. Crews plan to shelter behind thick material, such as Moon soil, during a particle storm.',
-  'shelter-slows-work': 'Staying sheltered keeps the crew safe, but it is harder to get work done. Robots and remote controls can help.',
+  'particles-follow-fast': 'After some flares, tiny fast particles race out from the Sun. They can arrive in minutes to hours, long before the slow cloud. A gap between two archived records is not a countdown for the Moon.',
+  'shelter-rule': 'The Moon has no thick air or magnetic shield like Earth. Crews plan to shelter behind thick material, such as Moon soil, during a particle storm. Shielding can reduce exposure. It is not a guarantee.',
+  'shelter-slows-work': 'Staying sheltered can reduce exposure, but it is not a promise of safety, and it is harder to get work done. Robots and remote controls can help.',
   'rebuild-reserves': 'A good mission ends with something left in the tank for the next crew.',
 };
 

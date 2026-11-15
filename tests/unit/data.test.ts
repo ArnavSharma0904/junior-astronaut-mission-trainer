@@ -111,7 +111,10 @@ describe('DONKI normalizer', () => {
 describe('words and numbers stay in step', () => {
   it('states the derived warning gap exactly as the data gives it', async () => {
     const { warningGapMinutes } = await import('../../src/content/evidence');
-    expect(getSource('donki-sep-2024-05-11').supportedClaim).toContain(`${warningGapMinutes()} minutes`);
+    const claim = getSource('donki-sep-2024-05-11').supportedClaim;
+    expect(claim).toContain(`${warningGapMinutes()} minutes`);
+    expect(claim).toContain('not a measured arrival at the Moon');
+    expect(snapshot.events).toHaveLength(19);
   });
 
   it('keeps game numbers out of the copy so they can only come from mission data', async () => {

@@ -50,6 +50,8 @@ Why this window is used meaningfully: the real gap between the 11 May flare peak
 is under an hour, while the cloud forecast worked on a scale of days and changed between two model runs. That is
 the reason the game rewards preparing the shelter before the storm turn. The data shapes the mechanic.
 
+Qualification added 2026-11-15: the 47 minutes are only the interval between the archived X5.8 peak (01:23Z) and the GOES SEP record (02:10Z). They are not a Moon arrival time, a causal proof, or a guaranteed warning. Not every flare leads to local danger.
+
 Not yet fetched (run in M03): `CME?startDate=2024-05-11&endDate=2024-05-11`,
 `WSAEnlilSimulations?startDate=2024-05-09&endDate=2024-05-09` (to confirm the two run ids), and the single-day FLR/SEP calls.
 If any id does not match raw data, use what the raw data says and update content. Never keep an unconfirmed id.

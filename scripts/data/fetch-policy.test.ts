@@ -1,0 +1,102 @@
+import { createHash } from 'node:crypto';
+import { describe, expect, it, vi } from 'vitest';
+import { FetchFailure, fetchQuery, fetchWithPolicy, mirrorUrl, receiptUrl, retryDelayMs, verifyLaterReceipt } from './fetch-donki.mjs';
+
+const original = {
+  retrievedAt: '2026-11-14T18:41:31.405Z',
+  sha256: 'ab'.repeat(32),
+  recordCount: 1,
+};
+
+const asFetch = (impl: unknown) => impl as typeof fetch;
+
+function jsonResponse(body: string, status = 200, headers: Record<string, string> = {}) {
+  return {
+    ok: status >= 200 && status < 300,
+    status,
+    headers: { get: (name: string) => headers[name.toLowerCase()] ?? null },
+    text: async () => body,
+  };
+}
+
+describe('DONKI fetch policy', () => {
+  it('waits the full Retry-After seconds and does not cap a long delay', () => {
+    expect(retryDelayMs('120', 0)).toBe(120_000);
+  });
+
+  it('waits until an HTTP-date Retry-After, and not earlier', () => {
+    const now = Date.parse('2026-11-15T12:00:00Z');
+    expect(retryDelayMs('Sun, 15 Nov 2026 12:00:30 GMT', now)).toBe(30_000);
+  });
+
+  it('does not sleep after the final 429 or 500', async () => {
+    const sleep = vi.fn(async () => undefined);
+    const fetchImpl = vi.fn(async () => jsonResponse('[]', 429, { 'retry-after': '120' }));
+    await expect(fetchQuery('https://ccmc.gsfc.nasa.gov/DONKI-API/get/FLR', { fetchImpl: asFetch(fetchImpl), retries: 1, sleep, deadlineMs: 500_000 })).rejects.toMatchObject({ kind: 'rate-limited' });
+    expect(sleep).toHaveBeenCalledTimes(1);
+    expect(sleep).toHaveBeenCalledWith(120_000);
+  });
+
+  it('rejects a JSON array served as text/html and a JSON array with no JSON type', async () => {
+    const html = async () => jsonResponse('[]', 200, { 'content-type': 'text/html' });
+    const plain = async () => jsonResponse('[]', 200, { 'content-type': 'text/plain' });
+    await expect(fetchQuery('https://example.test/FLR', { fetchImpl: asFetch(html), retries: 0 })).rejects.toMatchObject({ kind: 'html' });
+    await expect(fetchQuery('https://example.test/FLR', { fetchImpl: asFetch(plain), retries: 0 })).rejects.toMatchObject({ kind: 'mime' });
+  });
+
+  it('aborts a stalled body', async () => {
+    const fetchImpl = async (_url: string, init: { signal: AbortSignal }) => ({
+      ok: true,
+      status: 200,
+      headers: { get: () => 'application/json' },
+      text: () => new Promise((_resolve, reject) => {
+        init.signal.addEventListener('abort', () => reject(Object.assign(new Error('aborted'), { name: 'AbortError' })));
+      }),
+    });
+    await expect(fetchQuery('https://example.test/FLR', { fetchImpl: asFetch(fetchImpl), timeoutMs: 20, retries: 0 })).rejects.toMatchObject({ kind: 'timeout' });
+  });
+
+  it('stops when Retry-After would pass the overall deadline', async () => {
+    const fetchImpl = async () => jsonResponse('[]', 503, { 'retry-after': '120' });
+    await expect(fetchQuery('https://example.test/FLR', { fetchImpl: asFetch(fetchImpl), retries: 1, deadlineMs: 1000, sleep: async () => undefined })).rejects.toMatchObject({ kind: 'deadline' });
+  });
+
+  it('uses the public mirror only after an opted-in primary failure and strips the key', async () => {
+    const calls: string[] = [];
+    const fetchImpl = async (url: string) => {
+      calls.push(url);
+      if (url.includes('ccmc.gsfc.nasa.gov')) return jsonResponse('[]', 503, { 'retry-after': '0' });
+      return jsonResponse('[]', 200, { 'content-type': 'application/json' });
+    };
+    const primary = 'https://ccmc.gsfc.nasa.gov/DONKI-API/get/FLR?startDate=2024-05-09&endDate=2024-05-11';
+    const result = await fetchWithPolicy(primary, { fetchImpl: asFetch(fetchImpl), allowMirror: true, retries: 0, sleep: async () => undefined });
+    expect(calls[1]).toContain('api_key=DEMO_KEY');
+    expect(result.url).not.toContain('api_key');
+    expect(result.verification).toBe('later-verification');
+    expect(mirrorUrl(primary)).toContain('https://api.nasa.gov/DONKI/get/FLR');
+    expect(receiptUrl(mirrorUrl(primary)!)).not.toContain('api_key');
+  });
+
+  it('does not mirror when the caller did not allow it', async () => {
+    const fetchImpl = async () => jsonResponse('nope', 404);
+    await expect(fetchWithPolicy('https://ccmc.gsfc.nasa.gov/DONKI-API/get/FLR', { fetchImpl: asFetch(fetchImpl), retries: 0 })).rejects.toBeInstanceOf(FetchFailure);
+  });
+
+  it('checks the raw body hash and refuses an original-acquisition label', () => {
+    const body = '[]';
+    const sha256 = createHash('sha256').update(body).digest('hex');
+    const meta = {
+      sha256,
+      bytes: Buffer.byteLength(body),
+      contentType: 'application/json',
+      verification: 'later-verification',
+      url: 'https://ccmc.gsfc.nasa.gov/DONKI-API/get/FLR',
+      retrievedAt: '2026-11-15T11:00:00Z',
+      recordCount: 0,
+    };
+    expect(verifyLaterReceipt(body, meta, original).ok).toBe(true);
+    expect(verifyLaterReceipt(body, { ...meta, sha256: '0'.repeat(64) }, original)).toMatchObject({ ok: false, reason: 'body-hash' });
+    expect(verifyLaterReceipt(body, { ...meta, verification: 'original-acquisition' }, original)).toMatchObject({ ok: false, reason: 'label' });
+    expect(verifyLaterReceipt(body, { ...meta, url: 'https://api.nasa.gov/DONKI/get/FLR?api_key=DEMO_KEY' }, original)).toMatchObject({ ok: false, reason: 'key' });
+  });
+});

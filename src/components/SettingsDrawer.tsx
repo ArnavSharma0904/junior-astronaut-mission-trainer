@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Settings } from '../state/settings';
+import { THEMES, type Settings } from '../state/settings';
 import type { SaveStatus } from '../state/useMission';
 import { Drawer } from './Drawer';
 
@@ -7,7 +7,7 @@ interface Props {
   open: boolean;
   onClose: () => void;
   settings: Settings;
-  update: (patch: Partial<Settings>) => void;
+  update: (patch: Partial<Settings>) => boolean;
   onReset: () => boolean;
   hasSave: boolean;
   saveStatus: SaveStatus;
@@ -16,11 +16,17 @@ interface Props {
 export function SettingsDrawer({ open, onClose, settings, update, onReset, hasSave, saveStatus }: Props) {
   const [confirming, setConfirming] = useState(false);
   const [eraseNotice, setEraseNotice] = useState<'erased' | 'still-there' | null>(null);
+  const [settingsNote, setSettingsNote] = useState<'unstored' | null>(null);
+  const themeLabel = { 'flight-deck': 'Flight deck', fieldbook: 'Lunar fieldbook', 'night-shift': 'Night shift' } as const;
+  const apply = (patch: Partial<Settings>) => {
+    const saved = update(patch);
+    setSettingsNote(saved ? null : 'unstored');
+  };
   return (
     <Drawer open={open} onClose={() => { setConfirming(false); setEraseNotice(null); onClose(); }} title="Settings" id="settings-drawer">
       <div className="setting">
         <label className="switch">
-          <input type="checkbox" role="switch" checked={!settings.muted} onChange={(event) => update({ muted: !event.target.checked })} />
+          <input type="checkbox" role="switch" checked={!settings.muted} onChange={(event) => apply({ muted: !event.target.checked })} />
           <span>Sound</span>
         </label>
         <p>Short beeps when you choose. Off until you turn it on. Everything is also shown on screen.</p>
@@ -35,7 +41,7 @@ export function SettingsDrawer({ open, onClose, settings, update, onReset, hasSa
           ] as const
         ).map(([value, label]) => (
           <label key={value} className="radio">
-            <input type="radio" name="motion" value={value} checked={settings.reducedMotion === value} onChange={() => update({ reducedMotion: value })} />
+            <input type="radio" name="motion" value={value} checked={settings.reducedMotion === value} onChange={() => apply({ reducedMotion: value })} />
             <span>{label}</span>
           </label>
         ))}
@@ -43,11 +49,26 @@ export function SettingsDrawer({ open, onClose, settings, update, onReset, hasSa
       </fieldset>
       <div className="setting">
         <label className="switch">
-          <input type="checkbox" role="switch" checked={settings.lowEffects} onChange={(event) => update({ lowEffects: event.target.checked })} />
+          <input type="checkbox" role="switch" checked={settings.lowEffects} onChange={(event) => apply({ lowEffects: event.target.checked })} />
           <span>Low effects</span>
         </label>
         <p>Turns off glow, particles and scan lines. Good for slower devices.</p>
       </div>
+      <fieldset className="setting">
+        <legend>Theme</legend>
+        {THEMES.map((theme) => (
+          <label key={theme} className="radio">
+            <input type="radio" name="theme" value={theme} checked={settings.theme === theme} data-testid={`theme-${theme}`} onChange={() => apply({ theme })} />
+            <span>{themeLabel[theme]}</span>
+          </label>
+        ))}
+        <p>Flight deck is the original night palette. The other two themes recolor the book, not the sunlight on the Moon.</p>
+        {settingsNote === 'unstored' ? (
+          <p role="status" data-testid="settings-save-failed">
+            This choice is on for now, but it could not be saved on this device.
+          </p>
+        ) : null}
+      </fieldset>
       <div className="setting">
         <h3>Saved mission</h3>
         <p data-testid="save-status">

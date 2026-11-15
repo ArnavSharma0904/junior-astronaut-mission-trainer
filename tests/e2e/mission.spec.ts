@@ -109,7 +109,8 @@ test.describe('complete mission', () => {
     await playThrough(page, ['drill-3']);
     await decide(page, 'shelter-4');
     const explanation = page.getByTestId('explanation');
-    await expect(explanation).toContainText('47 minutes after the flare');
+    await expect(explanation).toContainText('47 minutes after the X5.8 flare peak');
+    await expect(explanation).toContainText('not a measured arrival at the Moon');
     await expect(explanation).toContainText('Observed');
     await expect(explanation).toContainText('Science idea');
     await expect(explanation).toContainText('Game rule');

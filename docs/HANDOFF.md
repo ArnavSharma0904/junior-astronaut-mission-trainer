@@ -183,3 +183,22 @@ No dev server was left running by this handoff.
 
 ### Still unauthorized
 Push, deployment, account creation, purchases, protected-contract changes (including ADR-P1), submission.
+
+## HANDOFF 2026-11-15 about 3:15 AM Pacific: redesign committed, check follows this commit (writer cursor)
+- Tool and model: same Cursor session bc402846-4c7a-4814-9831-38cf876ebac8, model reported as Grok 4.7. Owner-requested round-5. c6e59395e1e7f2044d3253d7e7dc8b0b0ddc99a4 is the rollback parent, not a reset.
+- Repository: /Users/arnavsharma/Downloads/nasa-hackathon-kit 2, branch main. Nothing has been pushed.
+- This handoff is in the commit that `node scripts/run-checks.mjs` must check. Do not reuse run-1794697425362-xca0r3fm.
+- Lease: cursor/build, released only after request redesign-r1 is filed and the tree is clean.
+- Acceptance was copied before the code and was not edited to match the output. No visual score is claimed.
+- `npm run data:validate` before this check: 11 passed, 5 skipped. The skip is the missing original DONKI raw bodies. OSD-476 receipt is a later verification from 2026-11-15T11:08:43Z.
+
+### Next
+1. Full canonical check on this commit. Keep any failed run. A fix is a new commit and a new run.
+2. After a PASS, run `node scripts/check-bundle.mjs` and record the gzip byte count. That script is extra evidence, not a sixth canonical check.
+3. Request redesign-r1, owner cursor. Write ignored builder-result.json with order round-5. Release the lease. Do not self-approve.
+
+### Processes
+No dev server was left running by this handoff.
+
+### Still unauthorized
+Push, deployment, account creation, purchases, protected-contract changes (including ADR-P1), submission, and any eligibility claim.

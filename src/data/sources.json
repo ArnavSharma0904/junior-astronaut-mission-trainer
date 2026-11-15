@@ -175,7 +175,7 @@
       "kind": "observation",
       "originalUnits": "event onset time; instrument channel >100 MeV",
       "transformedUnits": null,
-      "supportedClaim": "A solar energetic particle event was recorded at 02:10 UTC on 11 May 2024 by the GOES SEISS instrument (protons above 100 MeV), 47 minutes after the flare's peak. NASA's record links it to that flare.",
+      "supportedClaim": "A solar energetic particle event was recorded at 02:10 UTC on 11 May 2024 by the GOES SEISS instrument (protons above 100 MeV), 47 minutes after the X5.8 flare peak in the archive. That is the interval between two records, not a measured arrival at the Moon and not a guaranteed warning. NASA's record links it to that flare.",
       "notSupported": [
         "Any radiation dose, health effect or safety level",
         "Conditions on the Moon's surface",

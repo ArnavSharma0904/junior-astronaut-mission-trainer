@@ -141,7 +141,7 @@ export function Scene2D({ model, frame = 'wide' }: { model: SceneModel; frame?: 
       </defs>
 
       {/* Sky */}
-      <rect width="1600" height="900" fill="url(#sky)" />
+      <rect width="1600" height="900" fill="#000" />
       <g className="scene-stars">
         {STARS.map((star, index) => (
           <circle key={index} cx={star.x} cy={star.y} r={star.r} fill="#edf4ff" opacity={star.o} />
@@ -276,6 +276,8 @@ export function Scene2D({ model, frame = 'wide' }: { model: SceneModel; frame?: 
         <path className="hab-cool-rim" d="M 808 598 C 836 604 844 640 828 676" fill="none" stroke="#9fc6ff" strokeWidth="4" strokeLinecap="round" />
         <rect x="812" y="606" width="46" height="64" rx="8" fill="url(#metalDark)" stroke="#aeb3c4" strokeWidth="2" />
         <rect className="airlock-light" x="824" y="618" width="22" height="30" rx="4" />
+        <circle cx="835" cy="633" r="18" fill="none" stroke="#d5dbe8" strokeWidth="3" />
+        <path d="M 835 615 L 835 651 M 817 633 L 853 633" stroke="#d5dbe8" strokeWidth="2" />
         <rect className="module-outline" x="478" y="580" width="392" height="130" rx="12" />
       </g>
       <ellipse className="hab-glow" cx="660" cy="712" rx="160" ry="16" fill="#ffb15a" />

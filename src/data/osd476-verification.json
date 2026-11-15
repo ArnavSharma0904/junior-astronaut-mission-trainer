@@ -1,0 +1,18 @@
+{
+  "verification": "later-verification",
+  "notOriginalAcquisition": true,
+  "retrievedAt": "2026-11-15T11:08:43Z",
+  "httpDate": "Sun, 15 Nov 2026 11:08:43 GMT",
+  "url": "https://visualization.osdr.nasa.gov/biodata/api/v2/dataset/OSD-476/",
+  "httpStatus": 200,
+  "contentType": "application/json",
+  "bytes": 15068,
+  "sha256": "a6d16e63e419f426c4d2fb63f22ace51c47f486fdb8ea29de00b447db3c3f454",
+  "context": "Earth ground study. Arabidopsis thaliana grown in Apollo lunar regolith. The study title records stress-associated transcriptomes. This is not a Moon greenhouse and not an oxygen-yield model.",
+  "observed": {
+    "studyIdentifier": "OSD-476",
+    "organism": "Arabidopsis thaliana",
+    "projectType": "Ground Study",
+    "studyTitle": "Plants grown in Apollo lunar regolith present stress-associated transcriptomes that inform prospects for lunar exploration"
+  }
+}

@@ -13,6 +13,9 @@
   --success: #7cf2b0;
   --line: #2a3a5c; /* decoration only: 1.7:1 */
   --edge: #5b7199; /* control boundaries: 3.6:1 on panel */
+  --accent-hover: #9cedff;
+  --focus-ring: #ffffff;
+  --header-top: #0c1324;
 
   /* Locally bundled, SIL Open Font License 1.1 (see docs/ASSETS.md). System fonts are the fallback. */
   --font-body: 'Atkinson Hyperlegible Next', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -32,6 +35,48 @@
   --base: 250ms;
   --slow: 600ms;
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  color-scheme: dark;
+}
+
+/* Lunar fieldbook: warm paper, graphite ink, a rust action color. The Moon scene keeps its own light. */
+:root[data-theme='fieldbook'] {
+  --bg: #f3ecdf;
+  --panel: #fffaf3;
+  --panel-2: #e7dccb;
+  --text: #1c1612;
+  --text-2: #3f342c;
+  --muted: #5c4e43;
+  --cyan: #9a3412;
+  --violet: #3f6212;
+  --amber: #9a3412;
+  --critical: #9f1239;
+  --success: #3f6212;
+  --line: #d9cbb8;
+  --edge: #6b5648;
+  --accent-hover: #7c2d12;
+  --focus-ring: #1c1612;
+  --header-top: #e7dccb;
+  color-scheme: light;
+}
+
+/* Night shift: charcoal instruments, bone type, sage for the action. Not a neon radiation theme. */
+:root[data-theme='night-shift'] {
+  --bg: #141816;
+  --panel: #1e2421;
+  --panel-2: #2a332e;
+  --text: #f4f0e6;
+  --text-2: #d5d0c4;
+  --muted: #b7b1a4;
+  --cyan: #b7d3b0;
+  --violet: #d7c4a3;
+  --amber: #e7c8a0;
+  --critical: #ffb4b4;
+  --success: #b7d3b0;
+  --line: #3a453f;
+  --edge: #8d988f;
+  --accent-hover: #d5e6cf;
+  --focus-ring: #f4f0e6;
+  --header-top: #1e2421;
   color-scheme: dark;
 }
 
@@ -91,7 +136,7 @@ button {
 }
 
 :focus-visible {
-  outline: 3px solid #ffffff;
+  outline: 3px solid var(--focus-ring);
   outline-offset: 2px;
   box-shadow: 0 0 0 5px var(--bg);
 }

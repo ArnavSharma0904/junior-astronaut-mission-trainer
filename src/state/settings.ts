@@ -2,21 +2,41 @@ import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
 import { z } from 'zod';
 import { readJson, SETTINGS_KEY, writeJson } from './storage';
 
-const settingsSchema = z.strictObject({
+export const THEMES = ['flight-deck', 'fieldbook', 'night-shift'] as const;
+export type ThemeName = (typeof THEMES)[number];
+
+const legacySchema = z.object({
   muted: z.boolean(),
   reducedMotion: z.enum(['system', 'on', 'off']),
   lowEffects: z.boolean(),
 });
-export type Settings = z.infer<typeof settingsSchema>;
+const themeSchema = z.enum(THEMES);
+
+export interface Settings {
+  muted: boolean;
+  reducedMotion: 'system' | 'on' | 'off';
+  lowEffects: boolean;
+  theme: ThemeName;
+}
 
 /** Sound is off until the player turns it on. Motion follows the device setting until the player chooses. */
-export const DEFAULT_SETTINGS: Settings = { muted: true, reducedMotion: 'system', lowEffects: false };
+export const DEFAULT_SETTINGS: Settings = { muted: true, reducedMotion: 'system', lowEffects: false, theme: 'flight-deck' };
+
+/**
+ * Old saves have sound, motion and low effects, and no theme. An unknown theme name keeps those three
+ * and uses Flight Deck. A broken object falls back to the defaults instead of crashing.
+ */
+export function interpretSettings(value: unknown): Settings {
+  const legacy = legacySchema.safeParse(value);
+  if (!legacy.success) return DEFAULT_SETTINGS;
+  const theme = themeSchema.safeParse(value && typeof value === 'object' ? (value as { theme?: unknown }).theme : undefined);
+  return { ...legacy.data, theme: theme.success ? theme.data : 'flight-deck' };
+}
 
 function loadSettings(): Settings {
   const stored = readJson(SETTINGS_KEY);
   if (!stored.found) return DEFAULT_SETTINGS;
-  const parsed = settingsSchema.safeParse(stored.value);
-  return parsed.success ? parsed.data : DEFAULT_SETTINGS;
+  return interpretSettings(stored.value);
 }
 
 const QUERY = '(prefers-reduced-motion: reduce)';
@@ -36,14 +56,17 @@ export function useSettings() {
     const root = document.documentElement;
     root.dataset.motion = reducedMotion ? 'reduced' : 'full';
     root.dataset.effects = settings.lowEffects ? 'low' : 'full';
-  }, [reducedMotion, settings.lowEffects]);
+    root.dataset.theme = settings.theme;
+  }, [reducedMotion, settings.lowEffects, settings.theme]);
 
   const update = useCallback((patch: Partial<Settings>) => {
+    let saved = false;
     setSettings((current) => {
       const next = { ...current, ...patch };
-      writeJson(SETTINGS_KEY, next);
+      saved = writeJson(SETTINGS_KEY, next);
       return next;
     });
+    return saved;
   }, []);
 
   return { settings, reducedMotion, update };

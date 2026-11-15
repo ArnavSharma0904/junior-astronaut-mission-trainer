@@ -45,8 +45,8 @@
 }
 
 .button-primary:hover:not(:disabled) {
-  background: #9cedff;
-  border-color: #9cedff;
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
 }
 
 .button-primary:disabled {
@@ -98,11 +98,11 @@
 .meters,
 .timeline,
 .briefing-card {
-  background: linear-gradient(180deg, rgba(26, 37, 64, 0.55), rgba(16, 24, 42, 0.96));
-  border: 1px solid var(--line);
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-left: 4px solid var(--cyan);
   border-radius: var(--r2);
   padding: var(--s4);
-  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
 }
 
 .situation-kicker,
@@ -115,7 +115,11 @@
 
 .situation h1,
 .explanation h2,
-.debrief-panel h1,
+.debrief-panel h1 {
+  font-family: var(--font-body);
+  line-height: 1.15;
+}
+
 .briefing-card h1 {
   font-family: var(--font-display);
   line-height: 1.15;
@@ -678,7 +682,7 @@
   display: grid;
   gap: var(--s3);
   padding: var(--s5);
-  background: linear-gradient(180deg, rgba(16, 24, 42, 0.92), rgba(7, 11, 22, 0.96));
+  background: var(--panel);
   border-color: var(--edge);
 }
 
@@ -1069,7 +1073,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
-    background: #10182a;
+    background: var(--panel);
     border-top: 2px solid var(--cyan);
   }
 }

@@ -11,7 +11,7 @@
   min-height: 64px;
   padding: var(--s2) var(--s5);
   border-bottom: 1px solid var(--line);
-  background: linear-gradient(180deg, #0c1324, var(--bg));
+  background: linear-gradient(180deg, var(--header-top), var(--bg));
 }
 
 .app-title {
@@ -123,7 +123,7 @@ main:focus {
   display: grid;
   place-items: center;
   padding: var(--s5);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .briefing > .scene-frame {
@@ -220,6 +220,9 @@ main:focus {
     grid-column: 1 / -1;
     grid-row: 3;
     order: 0;
+  }
+  .button {
+    min-height: 48px;
   }
   .app-tools .button span {
     position: absolute;

@@ -103,3 +103,16 @@ Code commit 7850d484a8e82748a0a24b5744c835eff6b80b2a:
 - Each evidence claim is scrolled and hit-tested through its lines and its source button at 390x844 and 1024x768, with the long greenhouse and outside explanations, the save-failure banner, and 200% text. Confirm is hit-tested before the click at 200%. The older short-slice helper is still there. Layout tests check the briefing split and the phone scene width. They are not a picture baseline and not a visual score.
 
 The commit that contains this note is the SHA for the next `node scripts/run-checks.mjs`. run-1794695106591-s41b6a4m passed at 2531b94 and is not reused. Nothing was pushed. M06/ADR-P1 stays unapproved. Safari, a physical phone, a screen reader, and device frame rate are still unmeasured. Eligibility still rests on the owner's report.
+
+## Owner-requested redesign, 2026-11-15 about 3:15 AM Pacific (writer: cursor)
+The owner expanded the scope after c6e59395e1e7f2044d3253d7e7dc8b0b0ddc99a4. That commit stays the rollback point. This is round-5, not a self-awarded visual score. The acceptance sheet was copied unchanged into docs/refinements/REDESIGN_ACCEPTANCE.md before the code in this commit. Research is in docs/refinements/DESIGN_RESEARCH_2026-11-15.md. The resource matrix is docs/refinements/INTEGRATION_STATUS_2026-11-15.md.
+
+What changed:
+- Player copy no longer says thick soil makes the crew safe. Shielding can reduce exposure. The 47-minute figure is only the archive gap between the X5.8 peak and the GOES particle record, not a Moon arrival or a guaranteed warning. The 19 curated DONKI records are unchanged.
+- OSD-476 was fetched again at 2026-11-15T11:08:43Z. The receipt is a later verification. The body is not in the repository. No oxygen-yield model was added.
+- DONKI fetch now rejects a non-JSON MIME, honors Retry-After seconds and HTTP-dates without shortening them, does not sleep after the final 429 or 500, and stops at an overall deadline. The public api.nasa.gov mirror runs only when a caller opts in after CCMC fails. Receipts omit api_key.
+- Flight deck keeps the navy and cyan tokens. Lunar fieldbook and night shift are added in Settings, applied immediately, and saved when the write works. A refused write does not say saved. Old settings without a theme keep sound, motion, and low effects.
+- Reading panels are flat fieldbook surfaces. The mission title still uses Orbitron. Situation headings use the body font. The sky in the scene is black, and the airlock has a hatch. No WebGL and no image generator.
+- Tests added for settings migration, fetch faults, theme viewports, a real Tab/Space/Enter/Escape route, and forced colors. The previous 73 unit and 44 browser cases remain. `npm run data:validate` was run on this machine before the canonical check: 11 passed and 5 skipped because the original raw bodies are not in the package.
+
+The commit that contains this note is the SHA for `node scripts/run-checks.mjs`. c6e5939 and run-1794697425362-xca0r3fm are not reused. Nothing was pushed. Safari, a physical phone, a screen reader, and frame rate were not measured. Eligibility is not claimed.
