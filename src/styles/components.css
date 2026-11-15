@@ -342,20 +342,35 @@
 }
 
 .meter {
+  display: grid;
+  grid-template-rows: 1.75rem 1.6rem 2.25rem 3rem auto;
+  align-content: start;
   min-width: 0;
 }
 
-.meter-head {
+.meter-label-row,
+.meter-state,
+.meter-number-row,
+.meter-unit {
+  min-width: 0;
+  align-self: start;
+}
+
+.meter-label-row {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: var(--s2);
-  min-width: 0;
   font-weight: 700;
 }
 
+.meter-state {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 1.6rem;
+}
+
 .meter-band {
-  margin-left: auto;
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -368,23 +383,27 @@
   color: var(--amber);
 }
 
-.meter-value {
+.meter-number-row {
   display: flex;
   align-items: baseline;
   gap: var(--s2);
-  flex-wrap: wrap;
+  min-height: 2.25rem;
 }
 
 .meter-number {
   font-size: 1.75rem;
   font-weight: 700;
   line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  min-width: 2.4ch;
 }
 
 .meter-unit {
+  display: block;
   color: var(--text-2);
   font-size: 1rem;
   min-width: 0;
+  min-height: 3rem;
 }
 
 .meter-preview {
@@ -788,6 +807,16 @@
   gap: var(--s3);
 }
 
+@media (max-width: 720px) {
+  .debrief-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .debrief-actions .button {
+    width: 100%;
+  }
+}
+
 /* Drawers */
 .drawer {
   margin: 0 0 0 auto;
@@ -810,6 +839,7 @@
   display: grid;
   gap: var(--s4);
   padding: var(--s5);
+  padding-bottom: calc(var(--s5) + 2.5rem);
   align-content: start;
 }
 
@@ -1062,6 +1092,9 @@
   .explanation-lesson {
     scroll-margin-bottom: 11rem;
     scroll-margin-top: 12px;
+  }
+  .app[data-app-phase='mission'] {
+    padding-bottom: calc(5.75rem + env(safe-area-inset-bottom));
   }
   .app[data-app-phase='mission'] .decision-dock {
     position: fixed;

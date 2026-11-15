@@ -249,29 +249,56 @@ test.describe('themes and keyboard route', () => {
       await page.keyboard.press('Escape');
     });
 
-    test(`${theme} at 200% hit-tests Confirm before the click`, async ({ page }) => {
-      test.setTimeout(90_000);
-      await page.setViewportSize({ width: 1024, height: 768 });
-      await page.addInitScript((name) => {
-        localStorage.setItem('jamt.settings.v1', JSON.stringify({ muted: true, reducedMotion: 'system', lowEffects: false, theme: name }));
-        Storage.prototype.setItem = () => {
-          throw new DOMException('QuotaExceededError', 'QuotaExceededError');
-        };
-      }, theme);
-      await page.goto('/');
-      await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
-      await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
-      await page.getByTestId('start').click();
-      await expect(page.getByTestId('save-failed')).toBeVisible();
-      await page.getByTestId('choice-grow-1').click();
-      await expectVisibleUncovered(page, page.getByTestId('confirm'));
-      await page.getByTestId('confirm').click();
-      await expect(page.getByTestId('explanation')).toBeVisible();
-      await expectVisibleUncovered(page, page.getByTestId('next'));
-      const source = page.locator('.evidence-row').first().getByRole('button', { name: /^Source/ });
-      await expectEntirelyReachable(page, source);
-      await expectNoHorizontalOverflow(page);
-    });
+    for (const viewport of [
+      { width: 1024, height: 768 },
+      { width: 390, height: 844 },
+    ]) {
+      test(`${theme} at ${viewport.width} and 200% reaches both long explanations with denied storage`, async ({ page }) => {
+        test.setTimeout(120_000);
+        await page.setViewportSize(viewport);
+        await page.addInitScript((name) => {
+          localStorage.setItem('jamt.settings.v1', JSON.stringify({ muted: true, reducedMotion: 'system', lowEffects: false, theme: name }));
+          Storage.prototype.setItem = () => {
+            throw new DOMException('QuotaExceededError', 'QuotaExceededError');
+          };
+        }, theme);
+        await page.goto('/');
+        await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
+        await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+        await page.getByTestId('start').click();
+        await expect(page.getByTestId('save-failed')).toBeVisible();
+        await page.getByTestId('choice-grow-1').click();
+        await expectVisibleUncovered(page, page.getByTestId('confirm'));
+        await page.getByTestId('confirm').click();
+        await expect(page.getByTestId('explanation')).toBeVisible();
+        await expect(page.getByTestId('explanation')).toContainText('Real plants would not fill a base this fast.');
+        await expectVisibleUncovered(page, page.getByTestId('next'));
+        const rows = page.locator('.evidence-row');
+        const count = await rows.count();
+        expect(count).toBeGreaterThan(1);
+        for (let index = 0; index < count; index += 1) {
+          const row = rows.nth(index);
+          await expectEntirelyReachable(page, row.locator('.evidence-row-text'));
+          const source = row.getByRole('button', { name: /^Source/ });
+          if ((await source.count()) > 0) await expectEntirelyReachable(page, source);
+        }
+        await expectNoHorizontalOverflow(page);
+        await page.getByTestId('next').click();
+        await playThrough(page, ['drill-2', 'drill-3']);
+        await page.getByTestId('choice-outside-4').click();
+        await expectVisibleUncovered(page, page.getByTestId('confirm'));
+        await page.getByTestId('confirm').click();
+        await expect(page.getByTestId('explanation')).toContainText('stayed outside');
+        await expectVisibleUncovered(page, page.getByTestId('next'));
+        const outsideRows = page.locator('.evidence-row');
+        const outsideCount = await outsideRows.count();
+        expect(outsideCount).toBeGreaterThan(1);
+        for (let index = 0; index < outsideCount; index += 1) {
+          await expectEntirelyReachable(page, outsideRows.nth(index).locator('.evidence-row-text'));
+        }
+        await expectNoHorizontalOverflow(page);
+      });
+    }
   }
 
   test('forced colors keep the primary action labeled', async ({ page }) => {
@@ -279,5 +306,39 @@ test.describe('themes and keyboard route', () => {
     await page.goto('/');
     await expect(page.getByTestId('start')).toBeVisible();
     await expect(page.getByTestId('start')).toContainText('Start mission');
+    await page.getByTestId('start').click();
+    await expect(page.locator('.meter-label').first()).toContainText('Power');
+    await expect(page.getByTestId('choice-drill-1')).toContainText('Run the ice drill');
+    await page.getByTestId('choice-drill-1').click();
+    await expect(page.getByTestId('confirm')).toContainText('Confirm');
+    await expect(page.getByTestId('confirm')).toBeVisible();
   });
+
+  for (const theme of THEMES) {
+    for (const viewport of [
+      { width: 1024, height: 768 },
+      { width: 800, height: 600 },
+    ]) {
+      test(`${theme} resource rows share baselines at ${viewport.width}`, async ({ page }) => {
+        await page.setViewportSize(viewport);
+        await page.addInitScript((name) => {
+          localStorage.setItem('jamt.settings.v1', JSON.stringify({ muted: true, reducedMotion: 'on', lowEffects: false, theme: name }));
+        }, theme);
+        await page.goto('/');
+        await page.getByTestId('start').click();
+        const rows = await page.evaluate(() => {
+          const read = (id: string) => {
+            const root = document.querySelector(`[data-testid="${id}"]`);
+            const top = (selector: string) => root?.querySelector(selector)?.getBoundingClientRect().top ?? Number.NaN;
+            return { label: top('.meter-label'), state: top('.meter-state'), value: top('.meter-number'), unit: top('.meter-unit') };
+          };
+          return { power: read('meter-power'), oxygen: read('meter-oxygen'), samples: read('meter-samples') };
+        });
+        for (const key of ['label', 'state', 'value', 'unit'] as const) {
+          expect(Math.abs(rows.power[key] - rows.oxygen[key])).toBeLessThanOrEqual(2);
+          expect(Math.abs(rows.power[key] - rows.samples[key])).toBeLessThanOrEqual(2);
+        }
+      });
+    }
+  }
 });

@@ -27,15 +27,16 @@ const STREAKS = Array.from({ length: 34 }, (_, index) => ({
 const WINDOWS = [0, 1, 2, 3, 4];
 const PLANTS = [0, 1, 2, 3, 4, 5];
 
-export function Scene2D({ model, frame = 'wide' }: { model: SceneModel; frame?: 'wide' | 'base' }) {
+export function Scene2D({ model, frame = 'wide', showStreaks = true }: { model: SceneModel; frame?: 'wide' | 'base' | 'briefing'; showStreaks?: boolean }) {
   const rack = Array.from({ length: Math.max(model.goalSamples, model.samples) }, (_, index) => index < model.samples);
-  // Phone shows the outpost band: solar, habitat, greenhouse and the drill. Sky and empty foreground stay out of frame.
-  const viewBox = frame === 'base' ? '40 450 1200 530' : '0 0 1600 900';
+  // Phone and the briefing use the whole diorama, including sky, rim, Earth and the drill. The wide console keeps the cinematic crop.
+  const viewBox = frame === 'base' ? '0 80 1600 820' : frame === 'briefing' ? '0 40 1600 860' : '0 0 1600 900';
+  const fit = frame === 'wide' ? 'xMidYMid slice' : 'xMidYMid meet';
   return (
     <svg
       className="scene"
       viewBox={viewBox}
-      preserveAspectRatio="xMidYMid slice"
+      preserveAspectRatio={fit}
       role="img"
       aria-label={model.description}
       data-power={model.power}
@@ -65,10 +66,10 @@ export function Scene2D({ model, frame = 'wide' }: { model: SceneModel; frame?: 
           <stop offset="0.62" stopColor="#6d7286" />
           <stop offset="1" stopColor="#2c334c" />
         </linearGradient>
-        <linearGradient id="farRidge" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#8ea4c8" />
-          <stop offset="0.45" stopColor="#3d4a68" />
-          <stop offset="1" stopColor="#1a2238" />
+        <linearGradient id="farRidge" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stopColor="#c4b49a" />
+          <stop offset="0.42" stopColor="#6a6258" />
+          <stop offset="1" stopColor="#242220" />
         </linearGradient>
         <linearGradient id="nearGround" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#c4b49a" />
@@ -124,10 +125,6 @@ export function Scene2D({ model, frame = 'wide' }: { model: SceneModel; frame?: 
           <stop offset="0.55" stopColor="#000" stopOpacity="0" />
           <stop offset="1" stopColor="#000" stopOpacity="0.28" />
         </radialGradient>
-        <linearGradient id="horizonCool" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#7ea6d8" stopOpacity="0" />
-          <stop offset="1" stopColor="#7ea6d8" stopOpacity="0.28" />
-        </linearGradient>
         <pattern id="stormHatch" width="18" height="18" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
           <rect width="18" height="18" fill="#ffd166" fillOpacity="0.06" />
           <rect width="5" height="18" fill="#ffd166" fillOpacity="0.5" />
@@ -148,30 +145,31 @@ export function Scene2D({ model, frame = 'wide' }: { model: SceneModel; frame?: 
         ))}
       </g>
 
-      {/* Earth is a small phased disk: ocean, land and cloud. It is not a map of a real site. */}
-      <g className="scene-earth" transform="translate(1410 168)">
-        <circle className="scene-earth-ocean" cx="0" cy="0" r="34" fill="#1d4e89" />
-        <path className="scene-earth-land" d="M -6 -20 C 8 -26 18 -8 8 2 C 16 10 2 18 -10 12 C -20 4 -18 -8 -6 -20 Z" fill="#6e8f45" />
-        <path className="scene-earth-land" d="M 8 6 C 16 4 18 14 8 18 C 2 12 4 8 8 6 Z" fill="#c4a15a" />
-        <path className="scene-earth-cloud" d="M -18 -4 q 8 -8 14 -1 q 6 -6 12 1 q -8 3 -12 0 q -6 5 -14 0 z" fill="#f7f4ee" />
-        <path d="M 0 -34 A 34 34 0 0 0 0 34 A 18 34 0 0 1 0 -34 Z" fill="#05070c" />
-        <circle cx="0" cy="0" r="34" fill="none" stroke="#f7f4ee" strokeWidth="1.5" />
+      {/* Earth is a small blue-white disk. It is not a map and not a crater. */}
+      <g className="scene-earth" transform="translate(1320 150)">
+        <circle className="scene-earth-ocean" cx="0" cy="0" r="22" fill="#2f6fbf" />
+        <path className="scene-earth-land" d="M -8 -8 C 2 -14 12 -6 6 2 C 0 8 -12 6 -14 0 C -16 -6 -12 -6 -8 -8 Z" fill="#3e7a62" />
+        <path className="scene-earth-cloud" d="M -12 -2 q 6 -5 10 0 q 5 -4 9 1 q -6 2 -9 0 q -4 3 -10 -1 z" fill="#f7f4ee" opacity="0.9" />
+        <path d="M 2 -22 A 22 22 0 0 0 2 22 A 12 22 0 0 1 2 -22 Z" fill="#05070c" />
+        <circle cx="0" cy="0" r="22" fill="none" stroke="#d7e6f7" strokeWidth="1.2" />
       </g>
 
-      {/* Space weather: streaks from the Sun side. Density is the cue, not colour alone. */}
-      <g className="scene-weather" aria-hidden="true">
-        {STREAKS.map((streak, index) => (
-          <line
-            key={index}
-            className={`streak streak-${streak.tier}`}
-            x1={streak.x}
-            y1={streak.y}
-            x2={streak.x + streak.length}
-            y2={streak.y + streak.length * 0.42}
-            style={{ animationDelay: `${(index % 7) * -0.6}s` }}
-          />
-        ))}
-      </g>
+      {/* Space weather: streaks from the Sun side. Low effects omits the nodes entirely. */}
+      {showStreaks ? (
+        <g className="scene-weather" aria-hidden="true">
+          {STREAKS.map((streak, index) => (
+            <line
+              key={index}
+              className={`streak streak-${streak.tier}`}
+              x1={streak.x}
+              y1={streak.y}
+              x2={streak.x + streak.length}
+              y2={streak.y + streak.length * 0.42}
+              style={{ animationDelay: `${(index % 7) * -0.6}s` }}
+            />
+          ))}
+        </g>
+      ) : null}
 
       {/* Low polar Sun behind the left ridge. No air glow: the sky stays black. */}
       <circle className="scene-sun-glow" cx="150" cy="500" r="170" fill="url(#sunGlow)" opacity="0.9" />
@@ -285,7 +283,11 @@ export function Scene2D({ model, frame = 'wide' }: { model: SceneModel; frame?: 
         <path d="M 858 606 L 858 670 M 812 600 L 870 600 M 812 676 L 870 676" stroke="#c5ccd8" strokeWidth="3" />
         <rect className="module-outline" x="478" y="580" width="392" height="130" rx="12" />
       </g>
-      <ellipse className="hab-glow" cx="660" cy="712" rx="160" ry="16" fill="#ffb15a" />
+      <g className="ice-pit">
+        <ellipse cx="660" cy="724" rx="78" ry="16" fill="#120e0c" />
+        <ellipse cx="648" cy="720" rx="58" ry="11" fill="#8d7b62" />
+        <ellipse className="hab-glow" cx="636" cy="718" rx="28" ry="5" fill="#efe2cc" />
+      </g>
 
       {/* Greenhouse dome */}
       <g className="module module-dome">
@@ -324,6 +326,7 @@ export function Scene2D({ model, frame = 'wide' }: { model: SceneModel; frame?: 
         <rect x="1110" y="648" width="20" height="26" rx="4" fill="#ffd166" stroke="#3a2f12" strokeWidth="2" />
         <rect className="drill-bit" x="1116" y="676" width="8" height="108" rx="3" fill="#aeb3c4" />
         <ellipse cx="1120" cy="784" rx="26" ry="6" fill="#0b0d18" />
+        <ellipse className="cast-shadow" cx="1168" cy="792" rx="54" ry="8" fill="#04050d" opacity="0.8" />
         <g className="sample-rack">
           <rect x="1176" y="760" width={24 + rack.length * 26} height="26" rx="5" fill="#1b2034" stroke="#8f93a3" strokeWidth="2" />
           {rack.map((filled, index) => (
@@ -332,10 +335,12 @@ export function Scene2D({ model, frame = 'wide' }: { model: SceneModel; frame?: 
         </g>
         <g className="crew crew-working">
           <g transform="translate(1056 760)">
+            <ellipse className="cast-shadow" cx="18" cy="10" rx="16" ry="5" fill="#04050d" opacity="0.85" />
             <circle cx="0" cy="-26" r="9" />
             <rect x="-8" y="-17" width="16" height="24" rx="6" />
           </g>
           <g transform="translate(1304 806)">
+            <ellipse className="cast-shadow" cx="18" cy="10" rx="16" ry="5" fill="#04050d" opacity="0.85" />
             <circle cx="0" cy="-26" r="9" />
             <rect x="-8" y="-17" width="16" height="24" rx="6" />
           </g>
@@ -350,6 +355,7 @@ export function Scene2D({ model, frame = 'wide' }: { model: SceneModel; frame?: 
         <circle cx="1400" cy="832" r="15" fill="#10121d" stroke="#6b7086" strokeWidth="4" />
         <circle cx="1470" cy="832" r="15" fill="#10121d" stroke="#6b7086" strokeWidth="4" />
         <circle className="rover-light" cx="1494" cy="806" r="4" />
+        <ellipse className="cast-shadow" cx="1455" cy="848" rx="70" ry="8" fill="#04050d" opacity="0.8" />
       </g>
 
       {/* Foreground lip and rocks. Warm faces point at the Sun; cool faces fall away from it. */}

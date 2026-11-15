@@ -16,7 +16,7 @@ interface Props {
 export function Briefing({ mission, canResume, saveStatus, onStart, onResume }: Props) {
   return (
     <div className="briefing">
-      <SceneHost model={BRIEFING_SCENE} dimmed />
+      <SceneHost model={BRIEFING_SCENE} dimmed framing="briefing" />
       <section className="briefing-card" aria-labelledby="briefing-title">
         <p className="briefing-kicker mono">Moon base mission briefing</p>
         <h1 id="briefing-title">{MISSION_NAME}</h1>

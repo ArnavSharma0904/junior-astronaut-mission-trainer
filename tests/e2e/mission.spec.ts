@@ -31,10 +31,35 @@ test.describe('complete mission', () => {
     await expect(page.getByTestId('decision-log')).toContainText('rushed');
   });
 
+  test('an oxygen value of 0 keeps the same meter rows as a two-digit value', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await start(page);
+    const offsets = () =>
+      page.locator('[data-testid="meter-oxygen"]').evaluate((root) => {
+        const top = (selector: string) => {
+          const node = root.querySelector(selector);
+          return node ? node.getBoundingClientRect().top - root.getBoundingClientRect().top : Number.NaN;
+        };
+        return { state: top('.meter-state'), value: top('.meter-number'), unit: top('.meter-unit') };
+      });
+    const twoDigits = await offsets();
+    expect(await page.getByTestId('value-oxygen').innerText()).toBe('70');
+    await playThrough(page, ['drill-1', 'stock-2', 'drill-3', 'shelter-4', 'rest-5', 'drill-6']);
+    expect(await page.getByTestId('value-oxygen').innerText()).toBe('0');
+    const zero = await offsets();
+    expect(Math.abs(twoDigits.state - zero.state)).toBeLessThanOrEqual(2);
+    expect(Math.abs(twoDigits.value - zero.value)).toBeLessThanOrEqual(2);
+    expect(Math.abs(twoDigits.unit - zero.unit)).toBeLessThanOrEqual(2);
+  });
+
   test('working outside in the storm pauses the mission and says why', async ({ page }) => {
     await start(page);
     await playThrough(page, UNSAFE);
     await expect(page.getByTestId('outcome')).toHaveText('Mission paused: crew safe');
+    await page.setViewportSize({ width: 390, height: 844 });
+    const buttonWidths = await page.locator('.debrief-actions .button').evaluateAll((nodes) => nodes.map((node) => Math.round(node.getBoundingClientRect().width)));
+    expect(buttonWidths).toHaveLength(3);
+    expect(Math.max(...buttonWidths) - Math.min(...buttonWidths)).toBeLessThanOrEqual(1);
     await expect(page.getByTestId('pause-reason')).toContainText('brought everyone inside');
     await expect(page.getByTestId('decision-log')).toContainText('Keep working outside');
     await expect(page.getByTestId('chip-crew')).toContainText('In shelter');
@@ -52,7 +77,27 @@ test.describe('complete mission', () => {
 
   test('the scene and status chips react to decisions', async ({ page }) => {
     await start(page);
-    await expect(page.getByTestId('scene-caption')).toHaveText('The streaks are a game illustration. You cannot see these particles.');
+    await expect(page.getByTestId('scene-caption')).toContainText('The streaks are a game illustration. You cannot see these particles.');
+    await page.setViewportSize({ width: 390, height: 844 });
+    const phoneLandmarks = await page.evaluate(() => {
+      const frame = document.querySelector('.console .scene-frame')?.getBoundingClientRect();
+      const seen = (selector: string) => {
+        const rect = document.querySelector(selector)?.getBoundingClientRect();
+        if (!frame || !rect) return false;
+        const width = Math.min(rect.right, frame.right) - Math.max(rect.left, frame.left);
+        const height = Math.min(rect.bottom, frame.bottom) - Math.max(rect.top, frame.top);
+        return width > 6 && height > 6;
+      };
+      return { earth: seen('.scene-earth'), rim: seen('.crater-rim'), drill: seen('.module-drill'), sky: seen('.scene-stars') };
+    });
+    expect(phoneLandmarks).toEqual({ earth: true, rim: true, drill: true, sky: true });
+    await page.setViewportSize({ width: 1440, height: 900 });
+    const captionClearsRover = await page.evaluate(() => {
+      const caption = document.querySelector('[data-testid="scene-caption"]')?.getBoundingClientRect();
+      const rover = document.querySelector('.scene-rover')?.getBoundingClientRect();
+      return Boolean(caption && rover && caption.bottom < rover.top);
+    });
+    expect(captionClearsRover).toBe(true);
     const scene = page.locator('.scene');
     await expect(scene).toHaveAttribute('data-stocked', 'false');
     await playThrough(page, ['charge-1']);

@@ -42,6 +42,42 @@ test.describe('accessibility and settings', () => {
     await expect(page.getByTestId('outcome')).toHaveText('Mission complete');
   });
 
+  test('a full mission can be played with Tab, arrows, Space and Enter and no scripted focus', async ({ page }) => {
+    test.setTimeout(120_000);
+    await page.goto('/');
+    const start = page.getByTestId('start');
+    for (let presses = 0; presses < 12 && !(await start.evaluate((element) => element === document.activeElement)); presses += 1) {
+      await page.keyboard.press('Tab');
+    }
+    await expect(start).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('heading', { name: 'Morning check' })).toBeFocused();
+    for (const id of WIN) {
+      const target = page.locator(`#action-${id}`);
+      for (let presses = 0; presses < 16 && !(await page.evaluate(() => document.activeElement?.id?.startsWith('action-') ?? false)); presses += 1) {
+        await page.keyboard.press('Tab');
+      }
+      for (let presses = 0; presses < 4 && !(await target.isChecked()); presses += 1) {
+        await page.keyboard.press('ArrowDown');
+      }
+      await expect(target).toBeChecked();
+      const confirm = page.getByTestId('confirm');
+      for (let presses = 0; presses < 8 && !(await confirm.evaluate((element) => element === document.activeElement)); presses += 1) {
+        await page.keyboard.press('Tab');
+      }
+      await expect(confirm).toBeFocused();
+      await page.keyboard.press('Enter');
+      await expect(page.getByTestId('explanation')).toBeVisible();
+      const next = page.getByTestId('next');
+      for (let presses = 0; presses < 40 && !(await next.evaluate((element) => element === document.activeElement)); presses += 1) {
+        await page.keyboard.press('Tab');
+      }
+      await expect(next).toBeFocused();
+      await page.keyboard.press('Enter');
+    }
+    await expect(page.getByTestId('outcome')).toHaveText('Mission complete');
+  });
+
   test('each decision is announced once as a single sentence', async ({ page }) => {
     await start(page);
     await decide(page, 'drill-1');
@@ -110,14 +146,19 @@ test.describe('accessibility and settings', () => {
     await page.getByTestId('open-settings').click();
     await page.getByRole('radio', { name: 'Reduce motion' }).check();
     await expect(page.locator('html')).toHaveAttribute('data-motion', 'reduced');
+    await expect(page.locator('.streak')).not.toHaveCount(0);
     await page.getByRole('switch', { name: 'Low effects' }).check();
     await expect(page.locator('html')).toHaveAttribute('data-effects', 'low');
+    await expect(page.locator('.streak')).toHaveCount(0);
     const scanAfter = await page.locator('.scene-frame').evaluate((element) => getComputedStyle(element, '::after').display);
     const conduit = await page.locator('.scene .conduit').first().evaluate((element) => getComputedStyle(element).animationName);
     expect(scanAfter).toBe('none');
     expect(conduit).toBe('none');
     await page.keyboard.press('Escape');
     await expect(page.getByTestId('open-settings')).toBeFocused();
+    await playThrough(page, ['charge-1', 'drill-2', 'stock-3']);
+    await expect(page.getByRole('heading', { name: 'Particle storm' })).toBeVisible();
+    await expect(page.locator('.streak')).toHaveCount(0);
     await page.reload();
     await expect(page.locator('html')).toHaveAttribute('data-effects', 'low');
     await expect(page.locator('html')).toHaveAttribute('data-motion', 'reduced');
@@ -251,13 +292,26 @@ test.describe('accessibility and settings', () => {
           const clear = hit !== null && !document.querySelector('.briefing-card')?.contains(hit);
           return { width, height, clear };
         };
+        const seen = (selector: string) => {
+          const rect = document.querySelector(selector)?.getBoundingClientRect();
+          if (!frame || !rect) return false;
+          const width = Math.min(rect.right, frame.right) - Math.max(rect.left, frame.left);
+          const height = Math.min(rect.bottom, frame.bottom) - Math.max(rect.top, frame.top);
+          return width > 6 && height > 6;
+        };
         return {
           gap: frame && card ? frame.left - card.right : 0,
           hab: visibleInFrame('.module-hab'),
           dome: visibleInFrame('.module-dome'),
+          earth: seen('.scene-earth'),
+          solar: seen('.module-array'),
+          drill: seen('.module-drill'),
         };
       });
       expect(layout.gap).toBeGreaterThan(12);
+      expect(layout.earth).toBe(true);
+      expect(layout.solar).toBe(true);
+      expect(layout.drill).toBe(true);
       expect(layout.hab.width).toBeGreaterThan(120);
       expect(layout.hab.height).toBeGreaterThan(28);
       expect(layout.hab.clear).toBe(true);

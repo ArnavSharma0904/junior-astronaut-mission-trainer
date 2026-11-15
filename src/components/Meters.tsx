@@ -13,25 +13,25 @@ function ResourceMeter({ id, label, icon, value, preview }: { id: string; label:
   const afterFilled = after === null ? filled : Math.ceil(after / 10);
   return (
     <div className="meter" data-band={level} data-testid={`meter-${id}`}>
-      <div className="meter-head">
+      <div className="meter-label-row">
         <Icon name={icon} />
         <span className="meter-label">{label}</span>
-        <span className="meter-band">
-          {level === 'low' ? <Icon name="warning" size={16} /> : null}
-          {BAND_WORD[level]}
-        </span>
       </div>
-      <div className="meter-value">
+      <div className="meter-state" data-testid={`state-${id}`}>
+        {level === 'low' ? <Icon name="warning" size={16} /> : null}
+        <span className="meter-band">{BAND_WORD[level]}</span>
+      </div>
+      <div className="meter-number-row">
         <span className="mono meter-number" data-testid={`value-${id}`}>
           {value}
         </span>
-        <span className="meter-unit">of 100 game units</span>
         {after !== null && preview !== 0 ? (
           <span className="meter-preview mono" data-testid={`preview-${id}`}>
             <span aria-hidden="true">→</span> <span className="visually-hidden">would become</span> {after}
           </span>
         ) : null}
       </div>
+      <span className="meter-unit">of 100 game units</span>
       <div className="meter-bar" aria-hidden="true">
         {Array.from({ length: 10 }, (_, index) => {
           const on = index < filled;
@@ -52,16 +52,17 @@ export function Meters({ state, mission, preview }: { state: GameState; mission:
       <ResourceMeter id="power" label="Power" icon="bolt" value={state.resources.power} preview={net ? net.power : null} />
       <ResourceMeter id="oxygen" label="Oxygen" icon="leaf" value={state.resources.oxygen} preview={net ? net.oxygen : null} />
       <div className="meter meter-samples" data-testid="meter-samples">
-        <div className="meter-head">
+        <div className="meter-label-row">
           <Icon name="sample" />
           <span className="meter-label">Ice samples</span>
         </div>
-        <div className="meter-value">
+        <div className="meter-state" data-testid="state-samples" aria-hidden="true" />
+        <div className="meter-number-row">
           <span className="mono meter-number" data-testid="value-samples">
             {state.samples}
           </span>
-          <span className="meter-unit">of {mission.goalSamples} needed</span>
         </div>
+        <span className="meter-unit">of {mission.goalSamples} needed</span>
         <div className="sample-pips" aria-hidden="true">
           {Array.from({ length: Math.max(mission.goalSamples, state.samples) }, (_, index) => (
             <span key={index} className="sample-pip" data-on={index < state.samples} />
