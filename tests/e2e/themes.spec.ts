@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { expectNoHorizontalOverflow, expectVisibleUncovered } from './helpers';
+import { expectEntirelyReachable, expectNoHorizontalOverflow, expectVisibleUncovered, playThrough } from './helpers';
 
 const THEMES = ['flight-deck', 'fieldbook', 'night-shift'] as const;
 const VIEWPORTS = [
@@ -9,6 +9,46 @@ const VIEWPORTS = [
   { width: 800, height: 500 },
   { width: 1280, height: 640 },
 ];
+
+async function surfaceContrast(page: Page, selector: string) {
+  return page.evaluate((sel) => {
+    const target = document.querySelector(sel);
+    if (!target) return 0;
+    const parse = (value: string) => {
+      const match = /rgba?\((\d+), (\d+), (\d+)(?:, ([0-9.]+))?/.exec(value);
+      if (!match) return null;
+      return { r: Number(match[1]), g: Number(match[2]), b: Number(match[3]), a: match[4] === undefined ? 1 : Number(match[4]) };
+    };
+    const over = (fg: { r: number; g: number; b: number; a: number }, bg: { r: number; g: number; b: number }) => ({
+      r: fg.r * fg.a + bg.r * (1 - fg.a),
+      g: fg.g * fg.a + bg.g * (1 - fg.a),
+      b: fg.b * fg.a + bg.b * (1 - fg.a),
+    });
+    const chain: Element[] = [];
+    let node: Element | null = target;
+    while (node) {
+      chain.push(node);
+      node = node.parentElement;
+    }
+    let bg = { r: 255, g: 255, b: 255 };
+    for (const item of chain.reverse()) {
+      const color = parse(getComputedStyle(item).backgroundColor);
+      if (color && color.a > 0) bg = over(color, bg);
+    }
+    const fg = parse(getComputedStyle(target).color);
+    if (!fg) return 0;
+    const lum = (color: { r: number; g: number; b: number }) => {
+      const channel = (part: number) => {
+        const raw = part / 255;
+        return raw <= 0.03928 ? raw / 12.92 : ((raw + 0.055) / 1.055) ** 2.4;
+      };
+      return 0.2126 * channel(color.r) + 0.7152 * channel(color.g) + 0.0722 * channel(color.b);
+    };
+    const lighter = Math.max(lum(fg), lum(bg));
+    const darker = Math.min(lum(fg), lum(bg));
+    return (lighter + 0.05) / (darker + 0.05);
+  }, selector);
+}
 
 async function contrast(page: Page) {
   return page.evaluate(() => {
@@ -62,6 +102,28 @@ test.describe('themes and keyboard route', () => {
     await expect(page.getByTestId('settings-save-failed')).not.toContainText('Saved');
   });
 
+  test('a normal settings write persists and does not warn', async ({ page }) => {
+    await page.goto('/');
+    await page.getByTestId('open-settings').click();
+    await page.getByTestId('theme-fieldbook').click();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'fieldbook');
+    await expect(page.getByTestId('settings-save-failed')).toHaveCount(0);
+    await page.reload();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'fieldbook');
+    await expect(page.getByTestId('settings-save-failed')).toHaveCount(0);
+  });
+
+  test('a denied settings read falls back to Flight deck', async ({ page }) => {
+    await page.addInitScript(() => {
+      Storage.prototype.getItem = () => {
+        throw new DOMException('SecurityError', 'SecurityError');
+      };
+    });
+    await page.goto('/');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'flight-deck');
+    await expect(page.locator('html')).toHaveAttribute('data-effects', 'full');
+  });
+
   for (const theme of THEMES) {
     for (const viewport of VIEWPORTS) {
       test(`${theme} stays in the viewport at ${viewport.width}x${viewport.height}`, async ({ page }) => {
@@ -100,6 +162,10 @@ test.describe('themes and keyboard route', () => {
     await expect(page.getByRole('heading', { name: 'Morning check' })).toBeFocused();
     await page.keyboard.press('Tab');
     await page.keyboard.press('Space');
+    await page.keyboard.press('ArrowDown');
+    await expect(page.getByTestId('choice-charge-1')).toHaveAttribute('data-selected', 'true');
+    await page.keyboard.press('ArrowUp');
+    await expect(page.getByTestId('choice-drill-1')).toHaveAttribute('data-selected', 'true');
     const confirm = page.getByTestId('confirm');
     for (let presses = 0; presses < 8 && !(await confirm.evaluate((element) => element === document.activeElement)); presses += 1) {
       await page.keyboard.press('Tab');
@@ -116,6 +182,97 @@ test.describe('themes and keyboard route', () => {
     await page.keyboard.press('Escape');
     await expect(page.getByRole('dialog')).toBeHidden();
   });
+
+  test('the phone briefing shows the outpost above the card', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/');
+    const layout = await page.evaluate(() => {
+      const card = document.querySelector('.briefing-card')?.getBoundingClientRect();
+      const frame = document.querySelector('.briefing .scene-frame')?.getBoundingClientRect();
+      const hab = document.querySelector('.module-hab')?.getBoundingClientRect();
+      return {
+        frameTop: frame?.top ?? 0,
+        frameBottom: frame?.bottom ?? 0,
+        cardTop: card?.top ?? 0,
+        habWidth: hab?.width ?? 0,
+        covered: Boolean(card && frame && card.top < frame.top + frame.height / 2 && card.bottom > frame.top),
+      };
+    });
+    expect(layout.frameBottom).toBeLessThanOrEqual(layout.cardTop + 2);
+    expect(layout.habWidth).toBeGreaterThan(80);
+    expect(layout.covered).toBe(false);
+  });
+
+  for (const theme of THEMES) {
+    test(`${theme} consequence, evidence, critical and ending stay readable`, async ({ page }) => {
+      test.setTimeout(90_000);
+      await page.setViewportSize({ width: 1024, height: 768 });
+      await page.goto('/');
+      await page.getByTestId('open-settings').click();
+      await page.getByTestId(`theme-${theme}`).click();
+      await expect(page.getByTestId('settings-save-failed')).toHaveCount(0);
+      expect(await surfaceContrast(page, '#settings-drawer button:disabled')).toBeGreaterThanOrEqual(4.5);
+      await page.getByRole('switch', { name: 'Low effects' }).click();
+      await page.getByRole('radio', { name: 'Reduce motion' }).click();
+      await page.keyboard.press('Escape');
+      await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+      await expect(page.locator('html')).toHaveAttribute('data-effects', 'low');
+      await expect(page.locator('html')).toHaveAttribute('data-motion', 'reduced');
+      await page.getByTestId('start').click();
+      await page.getByTestId('choice-drill-1').click();
+      expect(await surfaceContrast(page, '.choice[data-selected="true"] .choice-title')).toBeGreaterThanOrEqual(4.5);
+      const choice = await page.getByTestId('choice-drill-1').boundingBox();
+      expect(choice!.height).toBeGreaterThanOrEqual(44);
+      await expectVisibleUncovered(page, page.getByTestId('confirm'));
+      await page.getByTestId('confirm').click();
+      await expect(page.getByTestId('explanation')).toBeVisible();
+      expect(await surfaceContrast(page, '.evidence-row-text')).toBeGreaterThanOrEqual(4.5);
+      expect(await surfaceContrast(page, '.evidence-row-tag')).toBeGreaterThanOrEqual(4.5);
+      expect(await surfaceContrast(page, '.evidence-row .link-button')).toBeGreaterThanOrEqual(4.5);
+      const source = await page.locator('.evidence-row .link-button').first().boundingBox();
+      expect(source!.height).toBeGreaterThanOrEqual(44);
+      await page.getByTestId('next').click();
+      await playThrough(page, ['stock-2', 'drill-3', 'shelter-4']);
+      await expect(page.getByTestId('critical')).toBeVisible();
+      expect(await surfaceContrast(page, '.critical-banner')).toBeGreaterThanOrEqual(4.5);
+      await page.getByTestId('choice-rest-5').click();
+      await page.getByTestId('confirm').click();
+      await page.getByTestId('next').click();
+      await page.getByTestId('choice-drill-6').click();
+      await page.getByTestId('confirm').click();
+      await page.getByTestId('next').click();
+      await expect(page.getByRole('heading', { name: 'Mission paused' })).toBeVisible();
+      expect(await surfaceContrast(page, '.debrief-panel')).toBeGreaterThanOrEqual(4.5);
+      await page.getByTestId('open-sources').click();
+      await expect(page.getByRole('dialog')).toBeVisible();
+      expect(await surfaceContrast(page, '.drawer')).toBeGreaterThanOrEqual(4.5);
+      await page.keyboard.press('Escape');
+    });
+
+    test(`${theme} at 200% hit-tests Confirm before the click`, async ({ page }) => {
+      test.setTimeout(90_000);
+      await page.setViewportSize({ width: 1024, height: 768 });
+      await page.addInitScript((name) => {
+        localStorage.setItem('jamt.settings.v1', JSON.stringify({ muted: true, reducedMotion: 'system', lowEffects: false, theme: name }));
+        Storage.prototype.setItem = () => {
+          throw new DOMException('QuotaExceededError', 'QuotaExceededError');
+        };
+      }, theme);
+      await page.goto('/');
+      await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
+      await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+      await page.getByTestId('start').click();
+      await expect(page.getByTestId('save-failed')).toBeVisible();
+      await page.getByTestId('choice-grow-1').click();
+      await expectVisibleUncovered(page, page.getByTestId('confirm'));
+      await page.getByTestId('confirm').click();
+      await expect(page.getByTestId('explanation')).toBeVisible();
+      await expectVisibleUncovered(page, page.getByTestId('next'));
+      const source = page.locator('.evidence-row').first().getByRole('button', { name: /^Source/ });
+      await expectEntirelyReachable(page, source);
+      await expectNoHorizontalOverflow(page);
+    });
+  }
 
   test('forced colors keep the primary action labeled', async ({ page }) => {
     await page.emulateMedia({ forcedColors: 'active' });

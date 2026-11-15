@@ -1,8 +1,9 @@
 {
   "verification": "later-verification",
   "notOriginalAcquisition": true,
-  "retrievedAt": "2026-11-15T11:08:43Z",
-  "httpDate": "Sun, 15 Nov 2026 11:08:43 GMT",
+  "retrievedAt": "2026-11-15T11:47:04Z",
+  "httpDate": "Sun, 15 Nov 2026 11:47:04 GMT",
+  "rawPath": "src/data/verification/osd476-raw.json",
   "url": "https://visualization.osdr.nasa.gov/biodata/api/v2/dataset/OSD-476/",
   "httpStatus": 200,
   "contentType": "application/json",

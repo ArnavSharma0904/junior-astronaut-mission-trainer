@@ -1,0 +1,13 @@
+{
+  "verification": "later-verification",
+  "notOriginalAcquisition": true,
+  "retrievedAt": "2026-11-15T11:47:06Z",
+  "httpDate": "Sun, 15 Nov 2026 11:47:06 GMT",
+  "url": "https://ccmc.gsfc.nasa.gov/DONKI-API/get/WSAEnlilSimulations?startDate=2024-05-09&endDate=2024-05-10",
+  "httpStatus": 200,
+  "contentType": "application/json",
+  "bytes": 19325,
+  "sha256": "01ed4e776bd17639a3b2955055d3a11c059585f3feb8b27f828717cf3962bedc",
+  "recordCount": 17,
+  "note": "A later GET returned the same bytes as the 2026-11-14 hash. This file is the later verification, not the original acquisition body, which was never stored."
+}

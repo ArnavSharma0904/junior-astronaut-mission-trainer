@@ -6,18 +6,53 @@ import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-/** A later download must hash to its own receipt and must not be labeled as the original raw body. */
+const DONKI_HOSTS = new Set(['ccmc.gsfc.nasa.gov', 'api.nasa.gov']);
+
+/** CCMC and the public api.nasa.gov mirror are the same DONKI route when the path and query match. */
+export function sameDonkiQuery(actualUrl, expectedUrl) {
+  let actual;
+  let expected;
+  try {
+    actual = new URL(actualUrl);
+    expected = new URL(expectedUrl);
+  } catch {
+    return false;
+  }
+  if (!DONKI_HOSTS.has(actual.hostname) || !DONKI_HOSTS.has(expected.hostname)) return false;
+  const route = (pathname) => pathname.replace(/^\/(?:DONKI-API|DONKI)\/get\//, '').replace(/\/$/, '');
+  if (route(actual.pathname) !== route(expected.pathname)) return false;
+  const keys = new Set([...actual.searchParams.keys(), ...expected.searchParams.keys()].filter((key) => key !== 'api_key'));
+  for (const key of keys) {
+    if (actual.searchParams.get(key) !== expected.searchParams.get(key)) return false;
+  }
+  return true;
+}
+
+/**
+ * A later download must hash to its own receipt and must not be labeled as the original raw body.
+ * The body array length, HTTP 200, and the canonical query are required. A different hash is drift, not a failure.
+ */
 export function verifyLaterReceipt(body, meta, original) {
-  const sha256 = createHash('sha256').update(body).digest('hex');
-  const bytes = Buffer.byteLength(body);
+  const text = Buffer.isBuffer(body) ? body.toString('utf8') : String(body);
+  const sha256 = createHash('sha256').update(text).digest('hex');
+  const bytes = Buffer.byteLength(text);
   if (sha256 !== meta.sha256) return { ok: false, reason: 'body-hash' };
   if (bytes !== meta.bytes) return { ok: false, reason: 'bytes' };
   if (!String(meta.contentType ?? '').toLowerCase().includes('application/json')) return { ok: false, reason: 'mime' };
   if (meta.verification !== 'later-verification') return { ok: false, reason: 'label' };
   if (String(meta.url ?? '').includes('api_key')) return { ok: false, reason: 'key' };
+  if (meta.httpStatus !== 200) return { ok: false, reason: 'status' };
+  if (!sameDonkiQuery(meta.url, original.url)) return { ok: false, reason: 'endpoint' };
+  let parsed;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    return { ok: false, reason: 'json' };
+  }
+  if (!Array.isArray(parsed)) return { ok: false, reason: 'schema' };
+  if (meta.recordCount !== parsed.length) return { ok: false, reason: 'count' };
   if (!(Date.parse(meta.retrievedAt) > Date.parse(original.retrievedAt))) return { ok: false, reason: 'date' };
-  if (meta.recordCount !== undefined && meta.recordCount !== original.recordCount && meta.recordCount < 0) return { ok: false, reason: 'count' };
-  return { ok: true, drift: sha256 !== original.sha256 };
+  return { ok: true, drift: sha256 !== original.sha256 || meta.recordCount !== original.recordCount };
 }
 
 export class FetchFailure extends Error {
@@ -60,13 +95,14 @@ export function receiptUrl(url) {
  * Returns the raw body untouched. Throws FetchFailure for timeouts, HTTP errors, wrong MIME and non-array JSON.
  * An empty array is a valid empty result. The last attempt does not sleep. Retry-After is not shortened.
  */
-export async function fetchQuery(url, { fetchImpl = fetch, timeoutMs = 20000, retries = 2, deadlineMs = 90000, sleep = (ms) => new Promise((r) => setTimeout(r, ms)), now = () => Date.now() } = {}) {
-  const started = now();
+export async function fetchQuery(url, { fetchImpl = fetch, timeoutMs = 20000, retries = 2, deadlineMs = 90000, deadlineAt, sleep = (ms) => new Promise((r) => setTimeout(r, ms)), now = () => Date.now() } = {}) {
+  const endAt = deadlineAt ?? now() + deadlineMs;
+  const remaining = () => endAt - now();
   let lastFailure;
   for (let attempt = 0; attempt <= retries; attempt += 1) {
-    if (now() - started > deadlineMs) throw new FetchFailure('Overall deadline exceeded', 'deadline');
+    if (remaining() <= 0) throw new FetchFailure('Overall deadline exceeded', 'deadline');
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    const timer = setTimeout(() => controller.abort(), Math.min(timeoutMs, remaining()));
     try {
       const response = await fetchImpl(url, { signal: controller.signal, headers: { accept: 'application/json' } });
       if (response.status === 429 || response.status >= 500) {
@@ -74,7 +110,7 @@ export async function fetchQuery(url, { fetchImpl = fetch, timeoutMs = 20000, re
         if (attempt === retries) break;
         const requested = retryDelayMs(response.headers.get('retry-after'), now());
         const wait = requested == null ? Math.min(1000 * 2 ** attempt, 8000) : requested;
-        if (now() + wait - started > deadlineMs) throw new FetchFailure('Retry-After exceeds the deadline', 'deadline');
+        if (now() + wait > endAt) throw new FetchFailure('Retry-After exceeds the deadline', 'deadline');
         await sleep(wait);
         continue;
       }
@@ -83,6 +119,7 @@ export async function fetchQuery(url, { fetchImpl = fetch, timeoutMs = 20000, re
       if (/text\/html/i.test(contentType)) throw new FetchFailure('HTML returned instead of JSON', 'html');
       if (!/application\/json/i.test(contentType)) throw new FetchFailure(`MIME is not JSON (${contentType || 'missing'})`, 'mime');
       const body = await response.text();
+      if (now() > endAt) throw new FetchFailure('Overall deadline exceeded', 'deadline');
       if (body.trimStart().startsWith('<')) throw new FetchFailure('HTML returned instead of JSON', 'html');
       let parsed;
       try {
@@ -118,13 +155,17 @@ export async function fetchQuery(url, { fetchImpl = fetch, timeoutMs = 20000, re
  * for a rate limit, server error, timeout, or network drop. A 404 does not switch hosts.
  */
 export async function fetchWithPolicy(url, options = {}) {
+  const now = options.now ?? (() => Date.now());
+  const endAt = options.deadlineAt ?? now() + (options.deadlineMs ?? 90000);
+  const shared = { ...options, deadlineAt: endAt, now };
   try {
-    return await fetchQuery(url, options);
+    return await fetchQuery(url, shared);
   } catch (error) {
     const retryable = error instanceof FetchFailure && ['rate-limited', 'server-error', 'timeout', 'network'].includes(error.kind);
     const mirror = options.allowMirror ? mirrorUrl(url) : null;
     if (!retryable || !mirror) throw error;
-    return fetchQuery(mirror, { ...options, retries: 0 });
+    if (now() >= endAt) throw new FetchFailure('Overall deadline exceeded', 'deadline');
+    return fetchQuery(mirror, { ...shared, retries: 0 });
   }
 }
 

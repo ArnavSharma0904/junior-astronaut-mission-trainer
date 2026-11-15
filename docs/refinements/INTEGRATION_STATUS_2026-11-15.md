@@ -4,9 +4,9 @@ This file is the current classification. It does not edit protected kit document
 
 ## Retrieval dated this session
 
-OSD-476 metadata was fetched again on 2026-11-15T11:08:43Z from `https://visualization.osdr.nasa.gov/biodata/api/v2/dataset/OSD-476/`. HTTP 200, `application/json`, 15068 bytes, SHA-256 `a6d16e63e419f426c4d2fb63f22ace51c47f486fdb8ea29de00b447db3c3f454`. That matches the parent audit's hash. The body is not stored in the repository. The receipt in `src/data/osd476-verification.json` is a later verification, not the original acquisition, and not an oxygen-yield model.
+OSD-476 was fetched again on 2026-11-15T11:47:04Z from `https://visualization.osdr.nasa.gov/biodata/api/v2/dataset/OSD-476/`. HTTP 200, `application/json`, 15068 bytes, SHA-256 `a6d16e63e419f426c4d2fb63f22ace51c47f486fdb8ea29de00b447db3c3f454`. The body is stored at `src/data/verification/osd476-raw.json`. The receipt is a later verification. The study is an Earth ground study of Arabidopsis in Apollo regolith, not an oxygen-yield model.
 
-The original DONKI raw bodies from 2026-11-14 were never written into the source package. A later `npm run data:fetch` must not be labeled as those original bytes.
+The four DONKI queries in the snapshot were fetched again from CCMC on 2026-11-15T11:47:05Z and 11:47:06Z. Each body is stored under `src/data/verification/donki/` with its own later-verification receipt. Those bytes match the 14 November hashes. They are still later files. The original acquisition was never written down, and these files are not renamed into it.
 
 ## Resource matrix
 
@@ -14,7 +14,7 @@ The original DONKI raw bodies from 2026-11-14 were never written into the source
 |---|---|---|
 | DONKI FLR, SEP, CME, WSA-ENLIL (CCMC, no key) | Implemented, archived | 19 curated records in the snapshot. Observations and model runs stay distinct. No live fetch in the app. |
 | api.nasa.gov DONKI mirror with the public DEMO_KEY | Implemented only as an explicit opt-in after the CCMC call fails | Not used for the committed snapshot. Receipts strip `api_key`. No private key. |
-| OSD-476 | Reference, later-verification receipt pinned | Earth ground study of Arabidopsis in Apollo regolith. Not lunar oxygen production. |
+| OSD-476 | Later-verification body and receipt in the package | Earth ground study of Arabidopsis in Apollo regolith. Not lunar oxygen production. |
 | CSA food-production toolkit | Reference only | Educational credit. Not an API and not an endorsement. |
 | science.nasa.gov radiation-protection article | Reference only | Supports "shielding can reduce exposure," not a safety guarantee. |
 | RadLab | Deferred | The 2026-11-15 probe saw an error page. ISS data would not become a lunar dose. |
@@ -25,4 +25,4 @@ The original DONKI raw bodies from 2026-11-14 were never written into the source
 
 ## Checks
 
-`npm run data:validate` runs without the missing original raw bodies. It checks the committed 19-record snapshot, the OSD-476 receipt, and injected fetch faults. It does not pretend a fresh DONKI download is the 14 November body. Live NASA calls stay outside the five canonical app checks.
+`npm run data:validate` reads the tracked later bodies. On this machine before the canonical check it passed 15 tests and skipped none. A matching hash is recorded as drift-free, and the receipt label stays `later-verification`. Live NASA calls stay outside the five canonical app checks.

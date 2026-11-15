@@ -1,0 +1,13 @@
+{
+  "verification": "later-verification",
+  "notOriginalAcquisition": true,
+  "retrievedAt": "2026-11-15T11:47:05Z",
+  "httpDate": "Sun, 15 Nov 2026 11:47:05 GMT",
+  "url": "https://ccmc.gsfc.nasa.gov/DONKI-API/get/FLR?startDate=2024-05-09&endDate=2024-05-11&class=X",
+  "httpStatus": 200,
+  "contentType": "application/json",
+  "bytes": 4489,
+  "sha256": "801ebf256dcd5987050bde23b8c2c44407f8897ccae676a0d392f67eeb272add",
+  "recordCount": 5,
+  "note": "A later GET returned the same bytes as the 2026-11-14 hash. This file is the later verification, not the original acquisition body, which was never stored."
+}

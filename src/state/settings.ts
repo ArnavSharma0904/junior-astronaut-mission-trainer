@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { z } from 'zod';
 import { readJson, SETTINGS_KEY, writeJson } from './storage';
 
@@ -49,6 +49,7 @@ const systemPrefersReduced = () => window.matchMedia(QUERY).matches;
 
 export function useSettings() {
   const [settings, setSettings] = useState<Settings>(loadSettings);
+  const current = useRef(settings);
   const systemReduced = useSyncExternalStore(subscribe, systemPrefersReduced);
   const reducedMotion = settings.reducedMotion === 'on' || (settings.reducedMotion === 'system' && systemReduced);
 
@@ -60,12 +61,10 @@ export function useSettings() {
   }, [reducedMotion, settings.lowEffects, settings.theme]);
 
   const update = useCallback((patch: Partial<Settings>) => {
-    let saved = false;
-    setSettings((current) => {
-      const next = { ...current, ...patch };
-      saved = writeJson(SETTINGS_KEY, next);
-      return next;
-    });
+    const next = { ...current.current, ...patch };
+    const saved = writeJson(SETTINGS_KEY, next);
+    current.current = next;
+    setSettings(next);
     return saved;
   }, []);
 

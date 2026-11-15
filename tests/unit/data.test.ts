@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { DonkiFormatError, minutesBetween, normalizeCmes, normalizeEnlil, normalizeFlares, normalizeSeps, parseDonkiBody } from '../../src/adapters/donki';
 import { mission } from '../../src/content/mission';
 import { eventsForSource, getEvent, getSource, snapshot, sources } from '../../src/data';
-import { snapshotSchema, sourceManifestSchema } from '../../src/data/schema';
+import { isUtcTimestamp, snapshotSchema, sourceManifestSchema } from '../../src/data/schema';
 import fixtures from './fixtures/donki-raw.json' with { type: 'json' };
 
 const committed = (type: string) => snapshot.events.filter((event) => event.type === type);
@@ -72,6 +72,25 @@ describe('committed NASA snapshot and source manifest', () => {
     expect(snapshotSchema.safeParse({ ...snapshot, events: [{ ...flare, timeUtc: '09/05/2024 08:45' }] }).success).toBe(false);
     expect(snapshotSchema.safeParse({ ...snapshot, events: [{ ...flare, doseSv: 1 }] }).success).toBe(false);
   });
+
+  it('checks the calendar, including a leap day, and does not require one global clock order', () => {
+    expect(isUtcTimestamp('2024-02-29T00:00Z')).toBe(true);
+    expect(isUtcTimestamp('2023-02-29T00:00Z')).toBe(false);
+    expect(isUtcTimestamp('2024-02-30T12:00Z')).toBe(false);
+    expect(isUtcTimestamp('2024-05-11T24:00Z')).toBe(false);
+    const flare = snapshot.events.find((event) => event.type === 'FLR')!;
+    expect(snapshotSchema.safeParse({ ...snapshot, events: [{ ...flare, timeUtc: '2024-02-30T00:00Z' }] }).success).toBe(false);
+    expect(snapshotSchema.safeParse({ ...snapshot, events: [...snapshot.events].reverse() }).success).toBe(true);
+  });
+
+  it('rejects a duplicate query, a mixed instrument, a flare out of order, and a duplicate source id', () => {
+    expect(snapshotSchema.safeParse({ ...snapshot, queries: [snapshot.queries[0], snapshot.queries[0]] }).success).toBe(false);
+    const sep = snapshot.events.find((event) => event.type === 'SEP' && !event.isModelDerived)!;
+    expect(snapshotSchema.safeParse({ ...snapshot, events: [{ ...sep, instrument: 'GOES-16 + MODEL:forecast' }] }).success).toBe(false);
+    const flare = snapshot.events.find((event) => event.type === 'FLR')!;
+    expect(snapshotSchema.safeParse({ ...snapshot, events: [{ ...flare, peakTimeUtc: '2024-05-01T00:00Z' }] }).success).toBe(false);
+    expect(sourceManifestSchema.safeParse({ ...sources, records: [sources.records[0], sources.records[0]] }).success).toBe(false);
+  });
 });
 
 describe('DONKI normalizer', () => {
@@ -98,6 +117,15 @@ describe('DONKI normalizer', () => {
     ['a JSON object instead of an array', '{"error":"OVER_RATE_LIMIT"}'],
   ])('rejects %s', (_label, body) => {
     expect(() => parseDonkiBody(body)).toThrow(DonkiFormatError);
+  });
+
+  it('rejects a particle record that mixes an observation with a model', () => {
+    expect(() =>
+      normalizeSeps(
+        [{ sepID: '2024-05-11T02:10:00-SEP-001', eventTime: '2024-05-11T02:10Z', instruments: [{ displayName: 'GOES-16 SEISS' }, { displayName: 'MODEL:forecast' }], versionId: 1 }],
+        'sep',
+      ),
+    ).toThrow(/mixes/);
   });
 
   it('rejects a record that is missing a required time or id', () => {

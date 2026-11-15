@@ -17,7 +17,7 @@
   color: var(--text);
   font-weight: 600;
   cursor: pointer;
-  transition: background var(--fast) var(--ease), border-color var(--fast) var(--ease), transform var(--fast) var(--ease);
+  transition: transform var(--fast) var(--ease);
 }
 
 .button:hover:not(:disabled) {
@@ -31,7 +31,7 @@
 
 .button:disabled {
   cursor: not-allowed;
-  color: var(--text-2);
+  color: var(--text);
   border-style: dashed;
 }
 
@@ -52,7 +52,7 @@
 .button-primary:disabled {
   background: var(--panel);
   border-color: var(--edge);
-  color: var(--text-2);
+  color: var(--text);
 }
 
 .button-quiet {
@@ -77,12 +77,12 @@
 .link-button {
   background: none;
   border: 0;
-  padding: 0 2px;
+  padding: 8px 4px;
   color: var(--cyan);
   text-decoration: underline;
   text-underline-offset: 3px;
   cursor: pointer;
-  min-height: 24px;
+  min-height: 44px;
 }
 
 .app-footer .link-button {
@@ -159,9 +159,10 @@
   padding: var(--s2) var(--s3);
   border: 2px solid var(--amber);
   border-radius: var(--r1);
-  color: var(--amber);
+  color: var(--text);
   font-weight: 600;
-  background: rgba(255, 209, 102, 0.08);
+  background: var(--panel-2);
+  border-color: var(--critical);
 }
 
 /* Decision cards */
@@ -239,7 +240,6 @@
   border-width: 3px;
   padding: calc(var(--s3) - 1px) calc(var(--s4) - 1px);
   background: var(--panel-2);
-  box-shadow: 0 0 24px rgba(102, 227, 255, 0.22);
 }
 
 .choice[data-available='false'] {
@@ -634,7 +634,8 @@
   gap: 2px;
   padding: var(--s2) var(--s3);
   border-left: 4px solid var(--cyan);
-  background: rgba(7, 11, 22, 0.6);
+  background: var(--panel-2);
+  color: var(--text);
   border-radius: 0 var(--r1) var(--r1) 0;
 }
 
@@ -663,7 +664,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--text-2);
+  color: var(--text);
 }
 
 .explanation-lesson {
@@ -944,7 +945,7 @@
 
 .switch input:checked {
   border-color: var(--cyan);
-  background: rgba(102, 227, 255, 0.2);
+  background: color-mix(in srgb, var(--cyan) 22%, var(--panel));
 }
 
 .switch input:checked::after {

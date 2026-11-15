@@ -116,3 +116,15 @@ What changed:
 - Tests added for settings migration, fetch faults, theme viewports, a real Tab/Space/Enter/Escape route, and forced colors. The previous 73 unit and 44 browser cases remain. `npm run data:validate` was run on this machine before the canonical check: 11 passed and 5 skipped because the original raw bodies are not in the package.
 
 The commit that contains this note is the SHA for `node scripts/run-checks.mjs`. c6e5939 and run-1794697425362-xca0r3fm are not reused. Nothing was pushed. Safari, a physical phone, a screen reader, and frame rate were not measured. Eligibility is not claimed.
+
+## Redesign repair 2, 2026-11-15 about 4:05 AM Pacific (writer: cursor)
+Independent and browser reviews of 4b5f00d5b0f23567fddc6f935f2f2d528686be36 were both FIX. This is round-6. It does not award a visual score. 4b5f00d stays the parent. The acceptance sheet was not edited.
+
+What changed:
+- The outpost drawing now has a crater-rim skyline, a pressure-shell habitat with a hatch and rails, greenhouse ribs and planted beds, tilted solar cells, a regolith berm over the shelter, and an Earth disk with ocean, land, cloud, and a dark phase. The sky stays black. Streaks remain a labeled game illustration. The phone briefing puts that world above the card instead of behind it.
+- Evidence rows, tags, and disabled controls use the theme tokens. A successful settings write reports the storage result directly, so a saved theme does not show the unsaved warning.
+- The four DONKI responses and the OSD-476 response from 2026-11-15T11:47Z are stored as later-verification fixtures. The validator checks the real bytes, the query, and the status. The 19 curated records are unchanged. The original 14 November files are still described as never stored.
+- Fetch uses one deadline for the attempt, the body, the retry wait, and the mirror. Calendar dates, duplicate ids, mixed instruments, and each event's own order are checked. The file is not required to be one global timeline.
+- Tests cover the three themes through a decision, the evidence, a low reserve, and an ending, plus 200% Confirm before the click. Unit tests before this check: 82 passed. `npm run data:validate`: 15 passed, 0 skipped.
+
+The commit that contains this note is the SHA for `node scripts/run-checks.mjs`. run-1794741399508-j80jpp2b is not reused. Nothing was pushed. No slide deck was built. Safari, a physical phone, a screen reader, and frame rate were not measured.

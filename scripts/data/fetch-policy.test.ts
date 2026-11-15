@@ -6,6 +6,7 @@ const original = {
   retrievedAt: '2026-11-14T18:41:31.405Z',
   sha256: 'ab'.repeat(32),
   recordCount: 1,
+  url: 'https://ccmc.gsfc.nasa.gov/DONKI-API/get/FLR',
 };
 
 const asFetch = (impl: unknown) => impl as typeof fetch;
@@ -93,10 +94,44 @@ describe('DONKI fetch policy', () => {
       url: 'https://ccmc.gsfc.nasa.gov/DONKI-API/get/FLR',
       retrievedAt: '2026-11-15T11:00:00Z',
       recordCount: 0,
+      httpStatus: 200,
     };
     expect(verifyLaterReceipt(body, meta, original).ok).toBe(true);
+    expect(verifyLaterReceipt(body, meta, original).drift).toBe(true);
     expect(verifyLaterReceipt(body, { ...meta, sha256: '0'.repeat(64) }, original)).toMatchObject({ ok: false, reason: 'body-hash' });
     expect(verifyLaterReceipt(body, { ...meta, verification: 'original-acquisition' }, original)).toMatchObject({ ok: false, reason: 'label' });
     expect(verifyLaterReceipt(body, { ...meta, url: 'https://api.nasa.gov/DONKI/get/FLR?api_key=DEMO_KEY' }, original)).toMatchObject({ ok: false, reason: 'key' });
+    expect(verifyLaterReceipt(body, { ...meta, recordCount: 999 }, original)).toMatchObject({ ok: false, reason: 'count' });
+    expect(verifyLaterReceipt(body, { ...meta, httpStatus: 500 }, original)).toMatchObject({ ok: false, reason: 'status' });
+    expect(verifyLaterReceipt(body, { ...meta, url: 'https://example.test/FLR' }, original)).toMatchObject({ ok: false, reason: 'endpoint' });
+    expect(verifyLaterReceipt(body, { ...meta, url: 'https://api.nasa.gov/DONKI/get/FLR' }, original).ok).toBe(true);
+  });
+
+  it('rejects a valid body that arrives after the shared deadline', async () => {
+    let clock = 0;
+    const fetchImpl = async () => {
+      clock = 1000;
+      return jsonResponse('[]', 200, { 'content-type': 'application/json' });
+    };
+    await expect(fetchQuery('https://ccmc.gsfc.nasa.gov/DONKI-API/get/FLR', { fetchImpl: asFetch(fetchImpl), retries: 0, deadlineMs: 100, now: () => clock })).rejects.toMatchObject({ kind: 'deadline' });
+  });
+
+  it('does not give the mirror a fresh deadline', async () => {
+    let clock = 0;
+    const calls: string[] = [];
+    const fetchImpl = async (url: string) => {
+      calls.push(url);
+      if (url.includes('ccmc.gsfc.nasa.gov')) {
+        clock = 80;
+        return jsonResponse('[]', 503, { 'retry-after': '0' });
+      }
+      clock = 500;
+      return jsonResponse('[]', 200, { 'content-type': 'application/json' });
+    };
+    const primary = 'https://ccmc.gsfc.nasa.gov/DONKI-API/get/FLR?startDate=2024-05-09&endDate=2024-05-11';
+    await expect(
+      fetchWithPolicy(primary, { fetchImpl: asFetch(fetchImpl), allowMirror: true, retries: 0, deadlineMs: 100, now: () => clock, sleep: async () => undefined }),
+    ).rejects.toMatchObject({ kind: 'deadline' });
+    expect(calls).toHaveLength(2);
   });
 });

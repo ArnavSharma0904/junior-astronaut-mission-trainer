@@ -50,3 +50,6 @@ Same Cursor session, model reported as Grok 4.7, after the FIX reviews of 2531b9
 
 ## Owner-requested redesign, 2026-11-15 about 3:15 AM Pacific
 Same Cursor session, model reported as Grok 4.7. The owner asked for a broader science, theme, and test pass after reading NASA pages and design references. Aside's research and acceptance notes were copied into docs/refinements without being rewritten to fit the code. The assistant wrote the theme settings, the fieldbook layout, the black-sky scene hatch, the DONKI fetch policy, the OSD-476 later-verification receipt, and the new tests. One real GET of the OSD-476 metadata URL was made at 2026-11-15T11:08:43Z. No image, video, or audio generator was used. No NASA logo was added. No private API key was added. The check that counts is the one on the commit that contains this sentence.
+
+## Redesign repair 2, 2026-11-15 about 4:05 AM Pacific
+Same Cursor session, model reported as Grok 4.7. After the FIX reviews of 4b5f00d, the assistant redrew the SVG outpost, fixed the settings save result, themed the evidence surfaces, and stored later DONKI and OSD-476 response bodies from GETs at 2026-11-15T11:47:04Z through 11:47:06Z. No image, video, or audio generator was used. No NASA logo was added. No private API key was added. The check that counts is the one on the commit that contains this sentence.

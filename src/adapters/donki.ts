@@ -60,13 +60,17 @@ export function normalizeFlares(records: unknown[], queryId: string): Normalized
 export function normalizeSeps(records: unknown[], queryId: string, keepLinksFor: readonly string[] = []): NormalizedEvent[] {
   return records.map((record) => {
     const sep = check(rawSep, record, 'SEP');
-    const instrument = sep.instruments.map((item) => item.displayName).join(' + ');
+    const names = sep.instruments.map((item) => item.displayName);
+    const modelled = names.some((name) => name.startsWith('MODEL:'));
+    const observed = names.some((name) => !name.startsWith('MODEL:'));
+    if (modelled && observed) throw new DonkiFormatError('SEP mixes an observation instrument with a model instrument');
+    const instrument = names.join(' + ');
     const ids = linkedIds(sep.linkedEvents);
     const kept = ids.filter((id) => keepLinksFor.includes(id));
     return {
       type: 'SEP', rawId: sep.sepID, queryId, timeUtc: sep.eventTime, instrument,
       // DONKI lists forecast-model particle alerts next to measured ones. They must stay labelled as model output.
-      isModelDerived: instrument.startsWith('MODEL:'), upstreamVersionId: sep.versionId,
+      isModelDerived: modelled, upstreamVersionId: sep.versionId,
       ...(kept.length > 0 ? { linkedRawIds: kept, linkedCount: ids.length } : {}),
     };
   });
