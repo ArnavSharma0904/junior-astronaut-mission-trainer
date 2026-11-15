@@ -9,10 +9,14 @@ const url = 'https://ccmc.gsfc.nasa.gov/DONKI-API/get/FLR?startDate=2024-05-09&e
 
 describe('DONKI acquisition script', () => {
   it('returns the raw body with status, size and hash', async () => {
-    const body = '[{"flrID":"x"}]';
+    const body = JSON.stringify([{ flrID: '2024-05-09T08:45:00-FLR-001', beginTime: '2024-05-09T08:45Z', peakTime: '2024-05-09T09:13Z', endTime: '2024-05-09T09:36Z', classType: 'X1.0', instruments: [{ displayName: 'GOES' }] }]);
     const result = await fetchQuery(url, { fetchImpl: async () => response(200, body), sleep: noSleep });
     expect(result).toMatchObject({ httpStatus: 200, contentType: 'application/json', bytes: body.length, recordCount: 1, body });
     expect(result.sha256).toMatch(/^[a-f0-9]{64}$/);
+  });
+
+  it('rejects an unrelated object instead of counting it as a flare', async () => {
+    await expect(fetchQuery(url, { fetchImpl: async () => response(200, '[{"unrelated":"not a flare"}]'), sleep: noSleep })).rejects.toMatchObject({ kind: 'schema' });
   });
 
   it('accepts an empty array as a valid empty result', async () => {

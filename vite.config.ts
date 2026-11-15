@@ -1,16 +1,12 @@
-import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
+import { resolveBuildSha } from './scripts/build-sha.mjs';
+
+const appRoot = fileURLToPath(new URL('.', import.meta.url));
 
 function buildSha(): string {
-  try {
-    const sha = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
-    if (/^[a-f0-9]{40}$/.test(sha)) return sha;
-  } catch {
-    // Not a Git checkout (for example a CI tarball): fall through.
-  }
-  const fromEnv = process.env.GITHUB_SHA;
-  return fromEnv && /^[a-f0-9]{40}$/.test(fromEnv) ? fromEnv : 'unknown';
+  return resolveBuildSha(appRoot);
 }
 
 export default defineConfig({

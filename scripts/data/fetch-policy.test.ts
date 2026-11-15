@@ -105,6 +105,25 @@ describe('DONKI fetch policy', () => {
     expect(verifyLaterReceipt(body, { ...meta, httpStatus: 500 }, original)).toMatchObject({ ok: false, reason: 'status' });
     expect(verifyLaterReceipt(body, { ...meta, url: 'https://example.test/FLR' }, original)).toMatchObject({ ok: false, reason: 'endpoint' });
     expect(verifyLaterReceipt(body, { ...meta, url: 'https://api.nasa.gov/DONKI/get/FLR' }, original).ok).toBe(true);
+    const swapped = 'https://ccmc.gsfc.nasa.gov/DONKI-API/get/FLR?endDate=2024-05-11&startDate=2024-05-09';
+    const ordered = {
+      ...meta,
+      url: 'https://api.nasa.gov/DONKI/get/FLR?startDate=2024-05-09&endDate=2024-05-11',
+    };
+    const canonical = { ...original, url: swapped };
+    expect(verifyLaterReceipt(body, ordered, canonical).ok).toBe(true);
+    expect(verifyLaterReceipt(body, { ...meta, url: meta.url.replace('https:', 'http:') }, original).ok).toBe(false);
+    expect(verifyLaterReceipt(body, { ...meta, url: 'https://ccmc.gsfc.nasa.gov:444/DONKI-API/get/FLR' }, original).ok).toBe(false);
+    expect(verifyLaterReceipt(body, { ...meta, url: 'https://fake:fake@ccmc.gsfc.nasa.gov/DONKI-API/get/FLR' }, original).ok).toBe(false);
+    expect(verifyLaterReceipt(body, { ...meta, url: `${meta.url}?startDate=2024-05-09&startDate=1900-01-01` }, original).ok).toBe(false);
+    expect(verifyLaterReceipt(body, { ...meta, contentType: 'application/jsonp' }, original)).toMatchObject({ ok: false, reason: 'mime' });
+    expect(verifyLaterReceipt(body, { ...meta, contentType: 'application/json; charset=utf-8' }, original).ok).toBe(true);
+    expect(verifyLaterReceipt(body, { ...meta, retrievedAt: '2027-02-30T00:00:00Z' }, original)).toMatchObject({ ok: false, reason: 'date' });
+    const invalid = Buffer.concat([Buffer.from('["'), Buffer.from([255]), Buffer.from('"]')]);
+    const decoded = invalid.toString('utf8');
+    expect(
+      verifyLaterReceipt(invalid, { ...meta, sha256: createHash('sha256').update(decoded).digest('hex'), bytes: Buffer.byteLength(decoded), recordCount: 1 }, original).ok,
+    ).toBe(false);
   });
 
   it('rejects a valid body that arrives after the shared deadline', async () => {
