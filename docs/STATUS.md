@@ -128,3 +128,17 @@ What changed:
 - Tests cover the three themes through a decision, the evidence, a low reserve, and an ending, plus 200% Confirm before the click. Unit tests before this check: 82 passed. `npm run data:validate`: 15 passed, 0 skipped.
 
 The commit that contains this note is the SHA for `node scripts/run-checks.mjs`. run-1794741399508-j80jpp2b is not reused. Nothing was pushed. No slide deck was built. Safari, a physical phone, a screen reader, and frame rate were not measured.
+
+## Redesign repair 3, 2026-11-15 about 12:40 PM Pacific (writer: cursor)
+Independent and browser reviews of 706817b9331986b2a1df1cbdc227b2441d115999 were both FIX (request redesign-r2). This is round-7, the third repair iteration. It does not award a visual score. 706817b stays the parent. The acceptance sheet was not edited.
+
+Live checks had already shown two screenshot flags were capture artifacts, so they were not treated as bugs: the right-edge gap matches the scrollbar, and the fixed action bar does not cover choices, status, or timeline buttons. Extra bottom padding was added so mission text can sit above that bar.
+
+What changed:
+- Power, oxygen, and ice samples use the same label, state, value, and unit rows at 1024 and 800 in all three themes. A one-digit oxygen value keeps those rows.
+- Low effects no longer draws storm streaks. The illustration sentence stays when streaks are shown, in the sky rather than over the rover. Cyan lines are labeled as power cables.
+- The phone scene and the briefing keep sky, crater rim, Earth, and the drill in frame. Earth is a small blue-white disk. Mountain color follows the low Sun instead of a blue haze. The ice pit in front of the habitat is a pit, and the drill, crew, and rover cast shadows to the right. Debrief actions are equal width at 390.
+- A later DONKI receipt must be HTTPS on the CCMC host or the NASA mirror, with no userinfo, no extra port, no repeated query key, a real UTC calendar time, and exact application/json. The hash is of the original bytes. An unrelated JSON object is not counted as a flare. Empty arrays stay valid and do not replace the 19 curated records. `npm run data:validate` still checks the tracked fixtures, not a fresh download.
+- The build SHA is this app's git root. A copy nested in another repository uses GITHUB_SHA or unknown, not the outer HEAD.
+
+The commit that contains this note is the SHA for `node scripts/run-checks.mjs`. run-1794744190874-jgrr6uz7 at 706817b is not reused. Nothing was pushed. No visual score is claimed. Safari, a physical phone, a screen reader, and frame rate were not measured.

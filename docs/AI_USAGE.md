@@ -39,6 +39,9 @@ At the owner's direction (D014) the application source, tests, styles, scene art
 - Human decisions in this period: reassigning the writer role, and choosing to proceed.
 - Not done by a human yet: review of the mission design, numbers, wording, science claims and visuals. The team should play it, change what it wants to own, and record that here.
 
+## Redesign repair 3, 2026-11-15 about 12:40 PM Pacific
+Cursor session, model reported as Grok 4.7, after redesign-r2 FIX on 706817b. The assistant wrote the resource-row layout, the 2D scene framing and light, the receipt and acquisition checks, and the build-root SHA rule. No image, video, or audio generator was used. The 19 curated DONKI records were not replaced. The team still has not played and owned the wording. No visual score is claimed.
+
 ## Review fixes 2026-11-14 about 12:20-12:45 Pacific
 Cursor session, model reported as Grok 4.7, after the independent FIX review of 5f419e0. The assistant wrote the repair commits listed in docs/STATUS.md (save validation, honest save failure, storm rescue, reserve oxygen, layout, tests, and the Node 25 JSON import attribute). No image, video, or audio generator was used. The NASA snapshot files were not replaced. Checks: run-1794689033550-mlsecgte PASS at fd2e381 on the owner's Mac. The team still has not played and owned the wording.
 

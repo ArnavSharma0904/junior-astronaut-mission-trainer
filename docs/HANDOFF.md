@@ -221,3 +221,22 @@ No dev server was left running by this handoff.
 
 ### Still unauthorized
 Push, deployment, account creation, purchases, protected-contract changes (including ADR-P1), submission, and any eligibility claim.
+
+## HANDOFF 2026-11-15 about 12:40 PM Pacific: redesign repair 3 committed, check follows this commit (writer cursor)
+- Tool and model: Cursor session, model reported as Grok 4.7. The owner handed this session the writer role. Aside's launcher stays paused. No other agent was started.
+- Repository: /Users/arnavsharma/Downloads/nasa-hackathon-kit 2, branch main. Nothing has been pushed.
+- Parent: 706817b9331986b2a1df1cbdc227b2441d115999. Code commits c6e1fcf and 3973f0c. This handoff is in the commit that `node scripts/run-checks.mjs` must check. Do not reuse run-1794744190874-jgrr6uz7.
+- Lease: cursor/build, released only after request redesign-r3 is filed and the tree is clean.
+- Reviews in force: redesign-r2 independent FIX and browser FIX. No self-approval and no visual score.
+- F2 gutter overflow and F3 dock occlusion were live-disproven before this repair. They are not claimed as fixes.
+
+### Next
+1. Full canonical check on this commit, plus `npm run data:validate`. Keep any failed run. A fix is a new commit and a new run.
+2. After a PASS, request redesign-r3 with that run id and SHA. Write ignored `.agent-bus/autonomy/builder-result.json` with order round-7 and status WAITING_REVIEW. Release the lease.
+3. The seven-slide demo stays pending. M06 stays skipped.
+
+### Processes
+No dev server was left running by this handoff.
+
+### Still unauthorized
+Push, deployment, account creation, purchases, protected-contract changes (including ADR-P1), submission, and any eligibility claim.
